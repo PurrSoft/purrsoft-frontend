@@ -1,7 +1,6 @@
-import { ButtonBase } from "@mui/material"
+import { useTheme } from "@mui/material"
 
 function App() {
-
   return (
     <>
       'Hello, guys!'
