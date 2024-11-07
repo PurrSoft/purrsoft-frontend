@@ -1,13 +1,17 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import App from './App.tsx'
-import { ThemeProvider } from '@emotion/react'
-import { appTheme } from './theme.ts'
+import { createRoot } from 'react-dom/client';
+import { Provider } from 'react-redux';
+import { store } from './store';
+import React from 'react';
+import App from './App.tsx';
+import { ThemeProvider } from '@emotion/react';
+import { appTheme } from './theme.ts';
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
+  <React.StrictMode>
     <ThemeProvider theme={appTheme}>
-      <App />
+      <Provider store={store}>
+        <App />
+      </Provider>
     </ThemeProvider>
-  </StrictMode>,
-)
+  </React.StrictMode>,
+);

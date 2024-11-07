@@ -1,11 +1,5 @@
-import { useTheme } from "@mui/material"
-
 function App() {
-  return (
-    <>
-      'Hello, guys!'
-    </>
-  )
+  return <>'Hello, guys!'</>;
 }
 
-export default App
+export default App;
