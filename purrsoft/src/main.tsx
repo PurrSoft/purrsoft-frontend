@@ -3,7 +3,7 @@ import { Provider } from 'react-redux';
 import { store } from './store';
 import React from 'react';
 import App from './App.tsx';
-import { ThemeProvider } from '@emotion/react';
+import { ThemeProvider } from '@mui/material/styles';
 import { appTheme } from './theme.ts';
 
 createRoot(document.getElementById('root')!).render(
