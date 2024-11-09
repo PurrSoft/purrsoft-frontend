@@ -1,9 +1,9 @@
-import { Container } from '@mui/material';
+import { Container, Paper } from '@mui/material';
 
 export const Program = () => {
   return (
     <>
-      <Container>
+      <Container maxWidth={false} component={Paper}>
         <h1>Program</h1>
       </Container>
     </>
