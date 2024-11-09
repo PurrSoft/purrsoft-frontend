@@ -28,8 +28,8 @@ export const Navbar = () => {
   const isMediumScreen = useMediaQuery(theme.breakpoints.between('sm', 'md'));
 
   useEffect(() => {
-    if (location.pathname === '/managment') {
-      navigate('/managment/program', { replace: true });
+    if (location.pathname === '/management') {
+      navigate('/management/program', { replace: true });
     } else {
       setActiveTab(location.pathname);
     }
@@ -38,18 +38,18 @@ export const Navbar = () => {
   const routes: RouteObject[] = [
     {
       label: 'Program',
-      value: '/managment/program',
-      url: '/managment/program',
+      value: '/management/program',
+      url: '/management/program',
     },
     {
       label: 'Animalute',
-      value: '/managment/animalute',
-      url: '/managment/animalute',
+      value: '/management/animalute',
+      url: '/management/animalute',
     },
     {
       label: 'Evenimente',
-      value: '/managment/evenimente',
-      url: '/managment/evenimente',
+      value: '/management/evenimente',
+      url: '/management/evenimente',
     },
   ];
 

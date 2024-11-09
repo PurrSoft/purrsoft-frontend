@@ -26,7 +26,7 @@ const authenticatedRoutesConfig = [
   ...publicRoutes,
 
   {
-    path: '/managment',
+    path: '/management',
     element: <Layout />,
     children: [
       {
