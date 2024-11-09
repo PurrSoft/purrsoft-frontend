@@ -1,14 +1,8 @@
-import { ThemeProvider } from "@mui/material";
-import { Login } from "./pages/Login";
-import { Test } from "./pages/Test";
-import AppTheme from "./theme/AppTheme";
+import { LoginPage } from "./features/Login";
 
 function App() {
   return (
-    <ThemeProvider theme={AppTheme}>
-      <Login />
-      <Test />
-    </ThemeProvider>
+    <LoginPage />
   )
 }
 
