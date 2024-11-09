@@ -10,7 +10,8 @@ import { Home } from './scenes/Home';
 import { Program } from './scenes/Program';
 import { updateToken, useAppDispatch, useAppStateSelector } from './store';
 
-const publicRoutes = createBrowserRouter([
+// Define the base routes for public access - we need for the auth to have access to the public route
+const publicRoutes = [
   {
     path: '/',
     element: <Home />,
@@ -19,56 +20,81 @@ const publicRoutes = createBrowserRouter([
     path: '/home',
     element: <Home />,
   },
-]);
-/*
-  for path'/' when authenticated it will go to layout . Layout is for almost every path,
-  if path goes into layout put it as a child
-  if not put it separately in auth route (if u need to be auth)
-*/
-const authenticatedRoutes = createBrowserRouter([
+];
+
+const authenticatedRoutesConfig = [
+  ...publicRoutes,
+
   {
-    path: '/',
+    path: '/managment',
     element: <Layout />,
     children: [
       {
         index: true,
+        element: <Navigate to="program" replace />,
+      },
+      {
+        path: 'program',
         element: <Program />,
       },
       {
-        path: '/Program',
-        element: <Program />,
-      },
-      {
-        path: '/Animalute',
+        path: 'animalute',
         element: <Animalute />,
       },
       {
-        path: '/Evenimente',
+        path: 'evenimente',
         element: <Evenimente />,
       },
     ],
   },
+
   {
     path: '/login',
     element: <Navigate replace to="/" />,
   },
-
   {
     path: '*',
-    element: <Home />,
+    element: <Navigate replace to="/" />,
   },
-]);
+];
+
+// Create separate routers based on authentication
+const publicRouter = createBrowserRouter(publicRoutes, {
+  future: {
+    v7_relativeSplatPath: true,
+    v7_fetcherPersist: true,
+    v7_normalizeFormMethod: true,
+    v7_partialHydration: true,
+    v7_skipActionErrorRevalidation: true,
+  },
+});
+
+const authenticatedRouter = createBrowserRouter(authenticatedRoutesConfig, {
+  future: {
+    v7_relativeSplatPath: true,
+    v7_fetcherPersist: true,
+    v7_normalizeFormMethod: true,
+    v7_partialHydration: true,
+    v7_skipActionErrorRevalidation: true,
+  },
+});
 
 export const App = () => {
-  const token = useAppStateSelector((state) => state.auth.token);
+  const token = useAppStateSelector((state) => state.auth.token); // will need it for the future
   const tokenCookies = document.cookie.split('=')[1];
   const dispatch = useAppDispatch();
+
   if (tokenCookies) {
     dispatch(updateToken(tokenCookies));
   }
+
   return (
     <>
-      <RouterProvider router={token ? authenticatedRoutes : publicRoutes} />
+      {/* Use authenticatedRouter if the user is authenticated, otherwise use publicRouter */}
+      {/* <RouterProvider router={token ? authenticatedRouter : publicRouter} /> */}{' '}
+      {/* Uncomment this line to enable authentication */}
+      <RouterProvider router={authenticatedRouter} />{' '}
+      {/* Comment this line after login is done */}
     </>
   );
 };

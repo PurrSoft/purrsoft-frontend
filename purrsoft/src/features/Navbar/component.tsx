@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Tabs, Tab, AppBar, Grid, IconButton } from '@mui/material';
-import { useLocation, Link } from 'react-router-dom';
+import { useLocation, Link, useNavigate } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
 import HouseIcon from '@mui/icons-material/House';
 
+//types
 type RouteLabel = 'Home' | 'Program' | 'Animalute' | 'Evenimente';
 
 type RouteObject = {
@@ -14,17 +15,36 @@ type RouteObject = {
 
 export const Navbar = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<string>(location.pathname);
   const theme = useTheme();
-
+  // so the component renders the correct tab when the user navigates to /managment
   useEffect(() => {
-    setActiveTab(location.pathname);
-  }, [location.pathname]);
+    if (location.pathname === '/managment') {
+      navigate('/managment/program', { replace: true });
+    } else {
+      setActiveTab(location.pathname);
+    }
+  }, [location.pathname, navigate]);
+
+  //routes
 
   const routes: RouteObject[] = [
-    { label: 'Program', value: '/Program', url: '/Program' },
-    { label: 'Animalute', value: '/Animalute', url: '/Animalute' },
-    { label: 'Evenimente', value: '/Evenimente', url: '/Evenimente' },
+    {
+      label: 'Program',
+      value: '/managment/program',
+      url: '/managment/program',
+    },
+    {
+      label: 'Animalute',
+      value: '/managment/animalute',
+      url: '/managment/animalute',
+    },
+    {
+      label: 'Evenimente',
+      value: '/managment/evenimente',
+      url: '/managment/evenimente',
+    },
   ];
 
   return (
@@ -50,8 +70,6 @@ export const Navbar = () => {
           flexWrap: 'nowrap',
         }}
       >
-        {/* Left Section with Menu or Logo */}
-
         {/* Centered Tabs Section */}
         <Grid item xs>
           <Tabs
@@ -105,9 +123,9 @@ export const Navbar = () => {
                   '&.Mui-selected': {
                     backgroundColor: theme.palette.accent?.lightBeige,
                     color: theme.palette.accent?.darkGreen,
-                    borderRadius: '16px 16px 0 0', // Flat bottom for active tab only
-                    borderBottom: `38px solid ${theme.palette.accent?.lightBeige}`, // Thick bottom border for active tab
-                    paddingBottom: '14px', // Additional padding to simulate the "touching" effect
+                    borderRadius: '16px 16px 0 0',
+                    borderBottom: `38px solid ${theme.palette.accent?.lightBeige}`,
+                    paddingBottom: '14px',
                     transition:
                       'margin-bottom 0.3s ease, padding-bottom 0.3s ease, border-bottom 0.3s ease', // Transition for active tab
                   },
@@ -142,5 +160,3 @@ export const Navbar = () => {
     </AppBar>
   );
 };
-
-export default Navbar;

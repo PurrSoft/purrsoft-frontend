@@ -1,6 +1,7 @@
-import Navbar from '../Navbar/component';
 import { Box, Paper, Typography } from '@mui/material';
 import { Outlet } from 'react-router-dom';
+import { Navbar } from '../Navbar';
+
 export const Layout = () => {
   return (
     <>
@@ -27,23 +28,22 @@ export const Layout = () => {
             position: 'absolute',
             top: 20,
             left: 40,
-            width: '320px', // Fixed width for the menu
-            height: '100vh', // Full height to overlay the navbar and content
+            width: '320px',
+            height: '100vh',
             backgroundColor: '#ECEADA',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             padding: 2,
-            borderRadius: '16px 16px 16px 16px', // Rounded right corners
-            boxShadow: '4px 0px 10px rgba(0, 0, 0, 0.1)', // Slight shadow on the right
-            zIndex: 15, // Higher than the navbar to overlay
+            borderRadius: '16px 16px 16px 16px',
+            boxShadow: '4px 0px 10px rgba(0, 0, 0, 0.1)',
+            zIndex: 15,
           }}
         >
           <Typography variant="h6" sx={{ mb: 2 }}>
             Menu
           </Typography>
           <Typography variant="body1">Profile</Typography>
-          {/* Add more items as needed */}
         </Box>
 
         {/* Main Content Area */}
@@ -51,7 +51,7 @@ export const Layout = () => {
           overflow="auto"
           height="100%"
           flexGrow={1}
-          paddingLeft="400px" // Offset to make room for the overlayed menu
+          paddingLeft="400px" // may change
         >
           <Outlet />
         </Box>
