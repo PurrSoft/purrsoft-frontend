@@ -9,7 +9,7 @@ import {
 } from '@reduxjs/toolkit';
 import { useSelector, useDispatch } from 'react-redux';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-export const API_PATH = import.meta.env.API_PATH as string;
+export const API_PATH = import.meta.env.VITE_API_PATH as string;
 //verify in what state u are
 const isRootState = (state: unknown): state is RootState =>
   typeof state === 'object' && state !== null && 'auth' in state;

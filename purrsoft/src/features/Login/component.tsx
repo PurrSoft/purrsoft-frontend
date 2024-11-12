@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useState } from 'react';
-import greencatsLogo from '../../assets/greencats-logo.svg';
+import greencatsLogo from '/green-cats-logo.png';
 import { useAppDispatch, useLoginMutation, updateToken } from '../../store/store';
 import { Controller, useForm } from 'react-hook-form';
 import * as yup from 'yup';
@@ -27,7 +27,7 @@ const initialValues: LoginFormData = {
   password: '',
 };
 
-export const LoginPage = () => {
+export const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const dispatch = useAppDispatch();
   const [onLogin, { isLoading, isSuccess }] = useLoginMutation();
@@ -37,7 +37,7 @@ export const LoginPage = () => {
       email: yup.string().email('Email invalid').required('Câmp obligatoriu'),
       password: yup
         .string()
-        .min(8, 'Parola trebuie să aibă cel puțin 8 caractere')
+        .min(5, 'Parola trebuie să aibă cel puțin 5 caractere')
         .required('Câmp obligatoriu'),
     })
     .required();
@@ -67,7 +67,7 @@ export const LoginPage = () => {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'accent.darkGreen',
+        backgroundColor: 'background.default',
       }}
     >
       <Container maxWidth="sm">
@@ -137,6 +137,10 @@ export const LoginPage = () => {
                   helperText={errors.password?.message}
                   slotProps={{
                     input: {
+                      startAdornment: (
+                        // to display label above the text box
+                        <InputAdornment position="start" />
+                      ),
                       endAdornment: (
                         <InputAdornment position="end">
                           <IconButton
@@ -178,11 +182,10 @@ export const LoginPage = () => {
                 fullWidth
                 variant="outlined"
                 sx={{
-                  borderColor: '#4B7F52',
-                  color: '#4B7F52',
-                  backgroundColor: '#F8F7F6',
+                  borderColor: '#617d54',
+                  color: '#617d54',
+                  backgroundColor: '#ebe7e0',
                   '&:hover': {
-                    borderColor: '#4B7F52',
                     backgroundColor: 'transparent',
                   },
                 }}

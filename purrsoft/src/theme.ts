@@ -1,31 +1,37 @@
 import { createTheme } from '@mui/material/styles';
-
-declare module '@mui/material/styles/createPalette' {
+import { TypeBackground } from '@mui/material';
+declare module '@mui/material/styles' {
   interface Palette {
     accent?: {
       darkGreen: string;
       beige: string;
+      green: string;
+      lightBeige: string;
     };
+    background: TypeBackground; // For Palette, background is TypeBackground
   }
+
   interface PaletteOptions {
     accent?: {
       darkGreen: string;
       beige: string;
+      green: string;
+      lightBeige: string;
     };
+    background?: Partial<TypeBackground>; // For PaletteOptions, background is Partial<TypeBackground> | undefined
   }
 }
 
 export const appTheme = createTheme({
   palette: {
-    primary: {
-      main: '#4B7F52',
-    },
-    background: {
-      default: '#F5F1EE',
-    },
     accent: {
+      green: '#617d54',
       darkGreen: '#63806F',
       beige: '#ECEADA',
+      lightBeige: '#ebe7e0',
+    },
+    background: {
+      default: '#ebe7e0',
     },
   },
   typography: {
@@ -97,10 +103,10 @@ export const appTheme = createTheme({
       styleOverrides: {
         root: {
           '& .MuiOutlinedInput-root': {
-            backgroundColor: '#F8F7F6',
+            backgroundColor: '#ebe7e0',
             borderRadius: '16px',
             '&:hover fieldset': {
-              borderColor: '#4B7F52',
+              borderColor: '#617d54',
             },
           },
         },
