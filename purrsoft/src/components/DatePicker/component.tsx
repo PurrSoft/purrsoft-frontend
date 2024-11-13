@@ -2,11 +2,13 @@ import React, { useState } from 'react'
 import {Box, Button, Paper, Typography, useTheme} from '@mui/material'
 import { Redo, Undo } from '@mui/icons-material';
 
-type Props = {}
+type Props = {
+    specialDates: Date[];
+}
 
 export const DatePicker = (props: Props) => {
 const theme = useTheme();
-
+const specialDates = [new Date('December 17, 2024 03:24:00'), new Date('November 7, 2024 03:24:00'), new Date('December 25, 2024')]
 const [currentDate, setCurrentDate] = useState(new Date());
 
 const days = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
@@ -25,7 +27,9 @@ const lastDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(
  });
 
  // Calculate the current month's days
- const currentMonthDays = [...Array(lastDayOfMonth.getDate()).keys()].map(day => day + 1);
+ const currentMonthDays = [...Array(lastDayOfMonth.getDate()).keys()].map(day => {
+    return new Date(currentDate.getFullYear(), currentDate.getMonth(), day + 1);
+ });
 
  // Calculate the next month's overflow days to fill the rows
  const totalDays = previousMonthOverflow.length + currentMonthDays.length;
@@ -60,20 +64,31 @@ const lastDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(
             marginTop: 2
         }}>
             {days.map(day => (
-                <Typography key={day} variant='h6' sx={{ textAlign: 'center', color: 'text.secondary' }}>
-                    {day}
-                </Typography>
+                    <Typography key={day} variant='h6' sx={{ textAlign: 'center', color: 'text.secondary' }}>
+                        {day}
+                    </Typography>
+                
             ))}
             {previousMonthOverflow.map((day, index) => (
                 <Typography sx={{ textAlign: 'center', color: 'transparent' }}>
                     {day}
                 </Typography>
             ))}
-            {currentMonthDays.map((day) => (
-                <Typography sx={{ textAlign: 'center' }}>
-                    {day}
-                </Typography>
-            ))}
+            {currentMonthDays.map((day) => {
+              const isSpecialDay = specialDates.some((d) => d.toDateString() == day.toDateString());  
+                return (
+                    <Box 
+                        borderRadius={'50%'} 
+                        width={'24px'}
+                        height={'24px'}
+                        padding={'1px'}
+                        sx={{backgroundColor: isSpecialDay ? theme.palette.accent?.beige : undefined}}>
+                        <Typography sx={{ textAlign: 'center' }}>
+                            {day.getDate()}
+                        </Typography>
+                    </Box>
+                )
+            })}
             {nextMonthOverflow.map((day, index) => (
                 <Typography sx={{ textAlign: 'center', color: 'transparent' }}>
                     {day}
