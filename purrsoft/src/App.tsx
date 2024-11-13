@@ -1,7 +1,7 @@
 import { DatePicker } from "./components/DatePicker";
 
 function App() {
-  return (<DatePicker />);
+  return <>'Hello, guys!'</>;
 }
 
 export default App;
