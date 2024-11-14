@@ -68,7 +68,7 @@ export const SecondaryNavbar = () => {
         </Button>
         <Button
           component={Link}
-          to="/about"
+          to="/DespreNoi"
           color="inherit"
           sx={{
             color: theme.palette.accent?.green,
