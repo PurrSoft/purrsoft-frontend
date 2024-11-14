@@ -1,0 +1,33 @@
+/* index.css */
+
+/* Body Grotesque Bold */
+@font-face {
+  font-family: 'Body Grotesque';
+  src: url('/fonts/Body-Grotesque-Bold-trial.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+/* Body Grotesque Fit Bold */
+@font-face {
+  font-family: 'Body Grotesque Fit';
+  src: url('/fonts/Body-Grotesque-Fit-Bold-trial.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+/* Body Grotesque Large Bold */
+@font-face {
+  font-family: 'Body Grotesque Large';
+  src: url('/fonts/Body-Grotesque-Large-Bold-trial.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+/* Body Grotesque Slim Bold */
+@font-face {
+  font-family: 'Body Grotesque Slim';
+  src: url('/fonts/Body-Grotesque-Slim-Bold-trial.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}

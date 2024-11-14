@@ -1,0 +1,1 @@
+export { SecondaryNavbar } from './component';

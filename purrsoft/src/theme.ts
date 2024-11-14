@@ -1,5 +1,7 @@
 import { createTheme } from '@mui/material/styles';
 import { TypeBackground } from '@mui/material';
+
+// Define the additional palette types
 declare module '@mui/material/styles' {
   interface Palette {
     accent?: {
@@ -22,7 +24,17 @@ declare module '@mui/material/styles' {
   }
 }
 
+// Define the theme
 export const appTheme = createTheme({
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 600,
+      md: 800,
+      lg: 1200,
+      xl: 1536,
+    },
+  },
   palette: {
     accent: {
       green: '#617d54',
@@ -35,10 +47,17 @@ export const appTheme = createTheme({
     },
   },
   typography: {
+    fontFamily: 'Poppins, Arial, sans-serif', // Set default font family to Poppins
+
+    // Set up h1 with Body Grotesque Large
     h1: {
+      fontFamily: 'Body Grotesque Large, Arial, sans-serif', // Use Body Grotesque Large for h1
       fontSize: '3.5rem',
       fontWeight: 700,
+      color: '#63806F', // Set dark green color for h1
     },
+
+    // Other header and body styles
     h2: {
       fontSize: '2.5rem',
       fontWeight: 700,
@@ -46,17 +65,19 @@ export const appTheme = createTheme({
     h3: {
       fontSize: '2.25rem',
       fontWeight: 400,
+      color: '#63806F', // Set dark green color for h3
     },
     h4: {
       fontSize: '1.5rem',
       fontWeight: 500,
     },
     h5: {
-      fontSize: '1.25rem',
+      fontSize: '1rem',
       fontWeight: 500,
+      color: '#63806F', // Set dark green color for h3
     },
     h6: {
-      fontSize: '1rem',
+      fontSize: '0.75rem',
       fontWeight: 700,
     },
     subtitle1: {
@@ -67,14 +88,24 @@ export const appTheme = createTheme({
       fontSize: '0.88rem',
       fontWeight: 700,
     },
+
+    // Set up body1 with Poppins and green color
     body1: {
       fontSize: '1rem',
       fontWeight: 400,
+      fontFamily: 'Poppins, Arial, sans-serif',
+      color: '#617d54', // Set green color for body text
     },
+
+    // Set up body2
     body2: {
       fontSize: '0.88rem',
       fontWeight: 400,
+      fontFamily: 'Poppins, Arial, sans-serif',
+      color: '#617d54',
     },
+
+    // Other typography styles
     button: {
       fontSize: '0.88rem',
       fontWeight: 500,
