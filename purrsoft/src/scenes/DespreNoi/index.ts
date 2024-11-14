@@ -1,0 +1,1 @@
+export { DespreNoi } from './component';

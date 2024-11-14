@@ -21,6 +21,7 @@ declare module '@mui/material/styles' {
       green: string;
       lightGreen: string;
       lightBeige: string;
+      white: string;
     };
     background?: Partial<TypeBackground>; // For PaletteOptions, background is Partial<TypeBackground> | undefined
   }
@@ -44,6 +45,7 @@ export const appTheme = createTheme({
       darkGreen: '#63806F',
       beige: '#ECEADA',
       lightBeige: '#ebe7e0',
+      white: '#fff',
     },
     background: {
       default: '#ebe7e0',
