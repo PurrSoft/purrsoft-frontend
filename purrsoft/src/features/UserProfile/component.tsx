@@ -67,12 +67,15 @@ export const UserProfile = (props: Props) => {
                       <Typography variant="body1">Urmatorul Shift</Typography>
                       {closestDate && (
                         <Typography variant="body1">
-                          {closestDate.toLocaleDateString('ro-RO', {
+                          {closestDate.toLocaleDateString('en-EN', {
                             weekday: 'long',
-                            year: 'numeric',
-                            month: 'long',
                             day: 'numeric',
-                          })}, 10:00 AM
+                            month: 'long',
+                          })}, {closestDate.toLocaleTimeString('en-EN', {
+                            hour: '2-digit',
+                            minute: '2-digit',
+                            hour12: true
+                          })}
                         </Typography>
                       )}
                       <Typography>Locatie: La Casuta</Typography>
