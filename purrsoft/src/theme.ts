@@ -6,6 +6,7 @@ declare module '@mui/material/styles' {
       darkGreen: string;
       beige: string;
       green: string;
+      lightGreen: string;
       lightBeige: string;
     };
     background: TypeBackground; // For Palette, background is TypeBackground
@@ -16,6 +17,7 @@ declare module '@mui/material/styles' {
       darkGreen: string;
       beige: string;
       green: string;
+      lightGreen: string;
       lightBeige: string;
       white: string;
     };
@@ -26,6 +28,7 @@ declare module '@mui/material/styles' {
 export const appTheme = createTheme({
   palette: {
     accent: {
+      lightGreen: '#86AC7A',
       green: '#617d54',
       darkGreen: '#63806F',
       beige: '#ECEADA',
