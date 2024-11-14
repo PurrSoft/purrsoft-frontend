@@ -11,7 +11,7 @@ import {
   Container,
 } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import greencatsLogo from '/green-cats-logo.png';
 import { useAppDispatch, useLoginMutation, updateToken } from '../../store/store';
 import { Controller, useForm } from 'react-hook-form';
@@ -30,22 +30,24 @@ const initialValues: LoginFormData = {
 export const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const dispatch = useAppDispatch();
-  const [onLogin, { isLoading, isSuccess }] = useLoginMutation();
+  const [onLogin, { isLoading, isSuccess, isError }] = useLoginMutation();
 
   const loginFormSchema = yup
-    .object({
-      email: yup.string().email('Email invalid').required('Câmp obligatoriu'),
-      password: yup
-        .string()
-        .min(5, 'Parola trebuie să aibă cel puțin 5 caractere')
-        .required('Câmp obligatoriu'),
-    })
-    .required();
+  .object({
+    email: yup.string().email('Email invalid').required('Câmp obligatoriu'),
+    password: yup
+      .string()
+      .min(8, 'Parola trebuie să aibă cel puțin 8 caractere')
+      .matches(/\d/, 'Parola trebuie să conțină cel puțin o cifră')
+      .required('Câmp obligatoriu'),
+  })
+  .required();
 
   const {
     control,
     handleSubmit,
     formState: { errors, isValid },
+    setValue,
   } = useForm({
     resolver: yupResolver(loginFormSchema),
     defaultValues: initialValues,
@@ -55,10 +57,31 @@ export const Login = () => {
   const onSubmit = (data: LoginFormData) => {
     onLogin(data)
       .then(({ data }) => {
-        if (!data?.result.token) return;
-        dispatch(updateToken(data?.result.token));
+        if (data?.result){
+          console.log(data?.result.token);
+          dispatch(updateToken(data?.result.token));
+        }
       });
   };
+  
+  const token = document.cookie.split('=')[1];
+
+  useEffect(() => {
+    if (token) {
+      console.log('Token found in cookies and updated:', token);
+      dispatch(updateToken(token));
+    } else {
+      console.log('No token found in cookies');
+    }
+  }, []);
+
+  useEffect(() => {
+    // TO DO - change with snackbar
+    if (isError) {
+      alert('Credentialele sunt gresite');
+      setValue('password', '');
+    }
+  }, [isError, setValue]);
 
   return (
     <Box
@@ -159,7 +182,7 @@ export const Login = () => {
               />
 
               <Box sx={{ textAlign: 'right', mb: 3 }}>
-                <Link href="#" underline="none" sx={{ color: '#4B7F52', fontSize: '0.875rem' }}>
+                <Link href="#" underline="none" sx={{ color: 'accent.green', fontSize: '0.875rem' }}>
                   Forgot Password?
                 </Link>
               </Box>
@@ -170,7 +193,13 @@ export const Login = () => {
                 variant="contained"
                 disabled={!isValid || isLoading || isSuccess}
                 sx={{
+                  backgroundColor: 'accent.green',
+                  color: 'accent.lightBeige',
+                  borderColor: 'accent.beige',
                   mb: 2,
+                  '&:hover': {
+                    backgroundColor: 'accent.darkGreen',
+                  },
                 }}
               >
                 Log in
@@ -182,9 +211,9 @@ export const Login = () => {
                 fullWidth
                 variant="outlined"
                 sx={{
-                  borderColor: '#617d54',
-                  color: '#617d54',
-                  backgroundColor: '#ebe7e0',
+                  borderColor: 'accent.green',
+                  color: 'accent.green',
+                  backgroundColor: 'accent.lightBeige',
                   '&:hover': {
                     backgroundColor: 'transparent',
                   },
