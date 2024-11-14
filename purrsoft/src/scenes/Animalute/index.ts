@@ -1,0 +1,1 @@
+export { Animalute } from './component';
