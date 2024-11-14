@@ -11,6 +11,7 @@ import { Outlet } from 'react-router-dom';
 import { Navbar } from '../Navbar';
 import { useState } from 'react';
 import { useMediaQuery } from '@mui/material';
+import { UserProfile } from '../UserProfile';
 
 export const Layout = () => {
   const theme = useTheme();
@@ -63,50 +64,11 @@ export const Layout = () => {
             },
           }}
         >
-          <Box
-            component={Paper}
-            sx={{
-              width: '100%',
-              height: '100%',
-              backgroundColor: '#ECEADA',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              padding: 2,
-            }}
-          >
-            <Typography variant="h6" sx={{ mb: 2 }}>
-              Menu
-            </Typography>
-            <Typography variant="body1">Profile</Typography>
-            {/* Additional sidebar content */}
-          </Box>
+          <UserProfile />
         </Drawer>
       ) : (
-        <Box
-          component={Paper}
-          sx={{
-            position: 'fixed', // Fixed sidebar on tablet and larger screens
-            top: '16px',
-            left: '32px',
-            width: '320px',
-            height: '80vh',
-            backgroundColor: '#ECEADA',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            padding: 2,
-            borderRadius: '16px 16px 16px 16px',
-            boxShadow: '4px 0px 10px rgba(0, 0, 0, 0.1)',
-            zIndex: 10,
-          }}
-        >
-          <Typography variant="h6" sx={{ mb: 2 }}>
-            Menu
-          </Typography>
-          <Typography variant="body1">Profile</Typography>
-          {/* Additional sidebar content */}
-        </Box>
+        
+          <UserProfile />
       )}
 
       {/* Main Content Area */}

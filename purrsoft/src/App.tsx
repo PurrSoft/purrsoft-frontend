@@ -99,9 +99,9 @@ export const App = () => {
   return (
     <>
       {/* Use authenticatedRouter if the user is authenticated, otherwise use publicRouter */}
-      <RouterProvider router={token ? authenticatedRouter : publicRouter} />{' '}
+      {/* <RouterProvider router={token ? authenticatedRouter : publicRouter} />{' '} */}
       {/* Uncomment this line to enable authentication */}
-      {/* <RouterProvider router={authenticatedRouter} />{' '} */}
+      <RouterProvider router={authenticatedRouter} />{' '}
       {/* Comment this line after login is done */}
     </>
   );
