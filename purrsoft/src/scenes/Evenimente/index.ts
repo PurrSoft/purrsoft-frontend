@@ -1,0 +1,1 @@
+export { Evenimente } from './component';
