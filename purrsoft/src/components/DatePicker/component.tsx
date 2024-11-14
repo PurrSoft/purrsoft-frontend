@@ -6,9 +6,8 @@ type Props = {
     specialDates: Date[];
 }
 
-export const DatePicker = (props: Props) => {
+export const DatePicker = ({specialDates}: Props) => {
 const theme = useTheme();
-const specialDates = [new Date('December 17, 2024 03:24:00'), new Date('November 7, 2024 03:24:00'), new Date('December 25, 2024')]
 const [currentDate, setCurrentDate] = useState(new Date());
 
 const days = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
@@ -47,7 +46,7 @@ const lastDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(
             maxWidth: 300, 
             padding: theme.spacing(2), 
             bgcolor: theme.palette.accent?.darkGreen, 
-            borderRadius: theme.shape.borderRadius 
+            borderRadius: '24px'
         }}
     >
         <Box 
