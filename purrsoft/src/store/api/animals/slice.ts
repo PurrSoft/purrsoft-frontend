@@ -6,17 +6,25 @@ import {
     FetchBaseQueryMeta
 } from "@reduxjs/toolkit/query";
 
+const animalTag = 'Animal';
+type TagTypes = typeof animalTag;
+
 export type Animal = {
     id: string;
     animalType: string;
     name: string;
     yearOfBirth: number;
-    gander: string;
+    gender: string;
     sterilized: boolean;
     imageUrl: string;
 }
 
-export const endpoints = (
+export type AnimalsPaginatedRepsonse = {
+  records: Array<Omit<Animal, 'animalTags'> & { tags: string[] }>;
+  totalNumbersOfRecords: number;
+}
+
+export const endpoints = <Tags extends string> (
     builder: EndpointBuilder<
       BaseQueryFn<
         string | FetchArgs,
@@ -25,12 +33,13 @@ export const endpoints = (
         object,
         FetchBaseQueryMeta
       >,
-      string,
+      Tags | TagTypes,
       'api'
     >,
   ) => ({
-    getAnimals: builder.query<Animal[], void>({
-        query: () => ({
+    getAnimals: builder.query<AnimalsPaginatedRepsonse, void>({
+      providesTags: [animalTag],  
+      query: () => ({
             url: '/Animal/GetAnimals',
             method: 'GET'
         }),

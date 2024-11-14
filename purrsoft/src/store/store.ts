@@ -33,10 +33,9 @@ export const api = createApi({
   //tagtypes
   endpoints: () => ({}),
 }).injectEndpoints({
-  endpoints: (builder) => ({
-    ...authEndpoints(builder),
-    ...animalsEndpoints(builder),
-  }),
+  endpoints: authEndpoints,
+}).injectEndpoints({
+  endpoints: animalsEndpoints,
 });
 //root reducer
 const rootReducer = combineReducers({

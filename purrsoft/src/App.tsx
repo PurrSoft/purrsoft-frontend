@@ -10,6 +10,7 @@ import { Home } from './scenes/Home';
 import { Program } from './scenes/Program';
 import { updateToken, useAppDispatch, useAppStateSelector } from './store';
 import { Login } from './scenes/Login';
+import { DespreNoi } from './scenes/DespreNoi';
 
 
 // Define the base routes for public access - we need for the auth to have access to the public route
@@ -25,6 +26,10 @@ const publicRoutes = [
   {
     path: '/login',
     element: <Login />
+  },
+  {
+    path: '/DespreNoi',
+    element: <DespreNoi />,
   }
 ];
 
