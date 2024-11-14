@@ -1,5 +1,7 @@
+import { DespreNoi } from "./scenes/DespreNoi";
+
 function App() {
-  return <>'Hello, guys!'</>;
+  return <DespreNoi/>;
 }
 
 export default App;

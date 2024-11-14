@@ -1,5 +1,6 @@
 import { authSlice } from './auth';
 import { authEndpoints } from './api';
+import { animalsEndpoints } from './api';
 import {
   combineReducers,
   configureStore,
@@ -32,7 +33,10 @@ export const api = createApi({
   //tagtypes
   endpoints: () => ({}),
 }).injectEndpoints({
-  endpoints: authEndpoints,
+  endpoints: (builder) => ({
+    ...authEndpoints(builder),
+    ...animalsEndpoints(builder),
+  }),
 });
 //root reducer
 const rootReducer = combineReducers({
@@ -66,6 +70,7 @@ export const {
   useLoginMutation,
   useRegisterMutation,
   useLogoutMutation,
+  useGetAnimalsQuery,
 } = api;
 
 export { resetAuth, updateToken } from './auth';
