@@ -69,7 +69,7 @@ export const endpoints = (
   }),
   login: builder.mutation<LoginResponse, LoginRequest>({
     query: (credentials) => ({
-      url: '/Auth/login',
+      url: '/Auth/Login',
       method: 'POST',
       body: credentials,
     }),

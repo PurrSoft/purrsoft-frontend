@@ -9,6 +9,7 @@ import { Evenimente } from './scenes/Evenimente';
 import { Home } from './scenes/Home';
 import { Program } from './scenes/Program';
 import { updateToken, useAppDispatch, useAppStateSelector } from './store';
+import { Login } from './scenes/Login';
 
 // Define the base routes for public access - we need for the auth to have access to the public route
 const publicRoutes = [
@@ -20,10 +21,14 @@ const publicRoutes = [
     path: '/home',
     element: <Home />,
   },
+  {
+    path: '/login',
+    element: <Login />
+  }
 ];
 
 const authenticatedRoutesConfig = [
-  ...publicRoutes,
+  ...publicRoutes.filter((route) => route.path !== '/login'),
 
   {
     path: '/management',
@@ -31,7 +36,7 @@ const authenticatedRoutesConfig = [
     children: [
       {
         index: true,
-        element: <Navigate to="program" replace />,
+        element: <Navigate replace to="program" />,
       },
       {
         path: 'program',
@@ -50,7 +55,7 @@ const authenticatedRoutesConfig = [
 
   {
     path: '/login',
-    element: <Navigate replace to="/" />,
+    element: <Navigate replace to="/management" />,
   },
   {
     path: '*',
@@ -85,15 +90,18 @@ export const App = () => {
   const dispatch = useAppDispatch();
 
   if (tokenCookies) {
+    console.log('Token found in cookies:', tokenCookies);
     dispatch(updateToken(tokenCookies));
+  } else {
+    console.log('No token found in cookies');
   }
 
   return (
     <>
       {/* Use authenticatedRouter if the user is authenticated, otherwise use publicRouter */}
-      {/* <RouterProvider router={token ? authenticatedRouter : publicRouter} /> */}{' '}
+      <RouterProvider router={token ? authenticatedRouter : publicRouter} />{' '}
       {/* Uncomment this line to enable authentication */}
-      <RouterProvider router={authenticatedRouter} />{' '}
+      {/* <RouterProvider router={authenticatedRouter} />{' '} */}
       {/* Comment this line after login is done */}
     </>
   );
