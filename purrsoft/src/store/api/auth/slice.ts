@@ -72,6 +72,7 @@ export const endpoints = (
       url: '/Auth/Login',
       method: 'POST',
       body: credentials,
+      credentials: 'include',
     }),
   }),
   register: builder.mutation<RegisterResponse, RegisterRequest>({
@@ -85,6 +86,7 @@ export const endpoints = (
     query: () => ({
       url: '/Auth/Logout',
       method: 'POST',
+      credentials: 'include',
     }),
   }),
 });
