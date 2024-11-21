@@ -13,6 +13,7 @@ import {
 } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 import { useTheme } from '@mui/material';
+import { PopOver } from './AlaturatePopOver';
 
 export const SecondaryNavbar = () => {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
@@ -67,7 +68,7 @@ export const SecondaryNavbar = () => {
         >
           <Typography variant="h5">Despre noi</Typography>
         </Button>
-        <Button
+        {/* <Button
           onClick={handlePopoverOpen}
           endIcon={<ExpandMoreIcon />}
           style={{
@@ -78,9 +79,9 @@ export const SecondaryNavbar = () => {
           }}
         >
           <Typography variant="h5">Implică-te!</Typography>
-        </Button>
+        </Button> */}
         {/* Accordion Button for "Implică-te!" */}
-        <Popover
+        {/* <Popover
           open={open}
           anchorEl={anchorEl}
           onClose={handlePopoverClose}
@@ -114,7 +115,8 @@ export const SecondaryNavbar = () => {
               Donate
             </Button>
           </Grid>
-        </Popover>
+        </Popover> */}
+        <PopOver />
 
         {/* User Profile Icon */}
         <IconButton edge="end" color="inherit">
