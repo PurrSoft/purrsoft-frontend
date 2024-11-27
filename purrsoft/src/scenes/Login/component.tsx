@@ -17,6 +17,8 @@ import { useAppDispatch, useLoginMutation, updateToken } from '../../store/store
 import { Controller, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useVisibility } from '../../hooks/useVisibility';
+import { AppSnackbar } from '../../components/AppSnackbar';
 
 type LoginFormData = {
   email: string;
@@ -30,7 +32,13 @@ const initialValues: LoginFormData = {
 export const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const dispatch = useAppDispatch();
-  const [onLogin, { isLoading, isSuccess, isError }] = useLoginMutation();
+  const {
+    visibility: snackbarOpen,
+    onOpen: onSnackbarOpen,
+    onClose: onSnackbarClose,
+  } = useVisibility();
+
+  const [onLogin, { isLoading, isSuccess, isError, error }] = useLoginMutation();
 
   const loginFormSchema = yup
   .object({
@@ -47,7 +55,6 @@ export const Login = () => {
     control,
     handleSubmit,
     formState: { errors, isValid },
-    setValue,
   } = useForm({
     resolver: yupResolver(loginFormSchema),
     defaultValues: initialValues,
@@ -57,10 +64,14 @@ export const Login = () => {
   const onSubmit = (data: LoginFormData) => {
     onLogin(data)
       .then(({ data }) => {
-        if (data?.result){
-          console.log(data?.result.token);
-          dispatch(updateToken(data?.result.token));
+        if (!data?.result) {
+          return onSnackbarOpen();
         }
+
+        dispatch(updateToken(data?.result.token));
+      })
+      .catch(() => {
+        onSnackbarOpen();
       });
   };
   
@@ -68,20 +79,9 @@ export const Login = () => {
 
   useEffect(() => {
     if (token) {
-      console.log('Token found in cookies and updated:', token);
       dispatch(updateToken(token));
-    } else {
-      console.log('No token found in cookies');
     }
   }, []);
-
-  useEffect(() => {
-    // TO DO - change with snackbar
-    if (isError) {
-      alert('Credentialele sunt gresite');
-      setValue('password', '');
-    }
-  }, [isError, setValue]);
 
   return (
     <Box
@@ -227,6 +227,13 @@ export const Login = () => {
                 />
                 Log in with Google
               </Button>
+              <AppSnackbar
+                open={snackbarOpen && isError}
+                onClose={onSnackbarClose}
+                severity="error"
+              >
+                {error && 'Credentialele sunt gresite'}
+              </AppSnackbar>
             </form>
           </Box>
         </Card>
