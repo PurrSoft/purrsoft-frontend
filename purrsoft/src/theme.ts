@@ -17,10 +17,13 @@ declare module '@mui/material/styles' {
   interface PaletteOptions {
     accent?: {
       darkGreen: string;
-      beige: string;
-      green: string;
+      mutedGreen: string;
       lightGreen: string;
-      lightBeige: string;
+      green: string;
+      beige: string;
+      darkerBeige: string;
+      tealGreen: string;
+      black: string;
       white: string;
     };
     background?: Partial<TypeBackground>; // For PaletteOptions, background is Partial<TypeBackground> | undefined
@@ -40,15 +43,18 @@ export const appTheme = createTheme({
   },
   palette: {
     accent: {
+      darkGreen: '#43752C',
+      mutedGreen: '#526B5C',
       lightGreen: '#86AC7A',
-      green: '#617d54',
-      darkGreen: '#63806F',
-      beige: '#ECEADA',
-      lightBeige: '#ebe7e0',
-      white: '#fff',
+      green: '#617D54',
+      beige: '#EBE7E0',
+      darkerBeige: '#ECEADA',
+      tealGreen: '#63806F',
+      black: '#000',
+      white: '#FFF',
     },
     background: {
-      default: '#ebe7e0',
+      default: '#EBE7E0',
     },
   },
   typography: {
