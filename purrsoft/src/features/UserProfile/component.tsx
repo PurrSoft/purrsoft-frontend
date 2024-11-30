@@ -6,7 +6,11 @@ type Props = {}
 
 export const UserProfile = (props: Props) => {
     const theme = useTheme();
-    const specialDates = [new Date('December 17, 2024 03:24:00'), new Date('November 7, 2024 03:24:00'), new Date('December 25, 2024')]
+    const specialDates = [
+      new Date('December 17, 2024 03:24:00'),
+      new Date('November 7, 2024 03:24:00'),
+      new Date('December 25, 2024')
+    ];
 
     const today = new Date();
     const closestDate = specialDates
@@ -15,79 +19,123 @@ export const UserProfile = (props: Props) => {
 
   return (
     <Box
-          component={Paper}
+      component={Paper}
+      sx={{
+        position: 'fixed', // Fixed sidebar on tablet and larger screens
+        top: '16px',
+        left: '16px',
+        width: { xs: '280px', sm: '320px' },
+        maxHeight: '100vh',
+        backgroundColor: theme.palette.accent?.beige,
+        display: 'flex',
+        flexDirection: 'column',
+        gap: theme.spacing(1),
+        alignItems: 'center',
+        padding: theme.spacing(1),
+        borderRadius: '24px',
+        border: `10px solid ${theme.palette.accent?.lightGreen}`,
+        boxShadow: '4px 0px 10px rgba(0, 0, 0, 0.1)',
+        zIndex: 10,
+        overflow: 'auto',
+      }}
+    >
+      <Box
+        component="img"
+        src='../../../public/green-cats-logo.png'
+        alt="description"
+        sx={{
+            width: '40%',
+            height: 'auto',
+            borderRadius: '8px',
+        }}
+      />
+      <Box 
+        sx={{
+          backgroundColor: theme.palette.accent?.lightGreen,
+          width: '100%',
+          textAlign: 'center',
+          padding: theme.spacing(2),
+          borderRadius: theme.shape.borderRadius,
+        }}
+      >
+        <Typography 
+          variant="body1"
           sx={{
-            position: 'fixed', // Fixed sidebar on tablet and larger screens
-            top: '16px',
-            left: '32px',
-            width: '320px',
-            height: '80vh',
-            backgroundColor: theme.palette.accent?.beige,
-            display: 'flex',
-            flexDirection: 'column',
-            gap: theme.spacing(3),
-            alignItems: 'center',
-            padding: 2,
-            borderRadius: '24px',
-            border: `10px solid ${theme.palette.accent?.lightGreen}`,
-            boxShadow: '4px 0px 10px rgba(0, 0, 0, 0.1)',
-            zIndex: 10,
+            fontSize: { xs: '0.8rem', sm: '1rem' },
           }}
         >
-            <Box
-                component="img"
-                src='../../../public/green-cats-logo.png'
-                alt="description"
-                sx={{
-                    width: '50%',
-                    height: 'auto',
-                    borderRadius: '8px',
-                }}
-                />
-                <Box 
-                    sx={{
-                        backgroundColor: theme.palette.accent?.lightGreen,
-                        width: '100%',
-                        textAlign: 'center',
-                        padding: theme.spacing(2),
-                        borderRadius: theme.shape.borderRadius,
-                    }}>
-                    <Typography variant="body1">Username</Typography>
-                </Box>
-                <DatePicker specialDates={specialDates}/>
-                <Box
-                  sx={{
-                          backgroundColor: theme.palette.accent?.lightGreen,
-                          width: '100%',
-                          textAlign: 'center',
-                          padding: theme.spacing(2,0),
-                          borderRadius: '30px',
-                      }}
-                  >
-                      <Typography variant="body1">Urmatorul Shift</Typography>
-                      {closestDate && (
-                        <Typography variant="body1">
-                          {closestDate.toLocaleDateString('en-EN', {
-                            weekday: 'long',
-                            day: 'numeric',
-                            month: 'long',
-                          })}, {closestDate.toLocaleTimeString('en-EN', {
-                            hour: '2-digit',
-                            minute: '2-digit',
-                            hour12: true
-                          })}
-                        </Typography>
-                      )}
-                      <Typography>Locatie: La Casuta</Typography>
-                </Box>
-                <Button
-                  sx={{
-                    backgroundColor: theme.palette.accent?.darkGreen,
-                    width: '100%',
-                    color: 'black',
-                  }}>Contul meu</Button>
+          Username
+        </Typography>
+      </Box>
+      <Box
+        sx={{
+          width: '100%',
+          minHeight: '300px',
+          overflow: 'auto',
+          position: 'relative',
+          zIndex: 1,
+        }}
+      >
+        <DatePicker specialDates={specialDates}/>
+      </Box>
+      <Box
+        sx={{
+          backgroundColor: theme.palette.accent?.lightGreen,
+          width: '100%',
+          textAlign: 'center',
+          padding: theme.spacing(1),
+          borderRadius: '30px',
+        }}
+      >
+        <Typography 
+          variant="body1"
+          sx={{
+            fontSize: { xs: '0.8rem', sm: '1rem' },
+          }}
+        >
+          Urmatorul Shift
+        </Typography>
+        {closestDate && (
+          <Typography 
+            variant="body1"
+            sx={{
+              fontSize: { xs: '0.8rem', sm: '1rem' },
+            }}
+          >
+            {closestDate.toLocaleDateString('en-EN', {
+              weekday: 'long',
+              day: 'numeric',
+              month: 'long',
+            })}
+            ,{' '}
+            {closestDate.toLocaleTimeString('en-EN', {
+              hour: '2-digit',
+              minute: '2-digit',
+              hour12: true
+            })}
+          </Typography>
+        )}
+        <Typography
+          sx={{
+            fontSize: { xs: '0.8rem', sm: '1rem' },
+          }}
+        >
+          Locatie: La Casuta
+        </Typography>
+      </Box>
+      <Button
+        sx={{
+          backgroundColor: theme.palette.accent?.darkGreen,
+          width: '100%',
+          color: 'black',
+          fontSize: { xs: '0.8rem', sm: '1rem' },
+          marginBottom: theme.spacing(3),
+        }}
+      >
+        Contul meu
+      </Button>
 
-            {/* Additional sidebar content */}
-          </Box>
-  )
-}
+        {/* Additional sidebar content */}
+    </Box>
+  );
+};
