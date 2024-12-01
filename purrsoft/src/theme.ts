@@ -1,5 +1,6 @@
 import { createTheme } from '@mui/material/styles';
 import { TypeBackground } from '@mui/material';
+
 declare module '@mui/material/styles' {
   interface Palette {
     accent?: {

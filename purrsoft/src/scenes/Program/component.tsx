@@ -1,4 +1,4 @@
-import { Container, Grid, Paper, Typography } from '@mui/material';
+import { Container, Paper } from '@mui/material';
 
 export const Program = () => {
   return (
