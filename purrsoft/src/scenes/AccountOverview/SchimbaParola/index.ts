@@ -1,0 +1,1 @@
+export { SchimbaParola } from './component';

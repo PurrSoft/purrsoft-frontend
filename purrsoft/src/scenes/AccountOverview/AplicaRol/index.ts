@@ -1,0 +1,1 @@
+export { AplicaRol } from './component';

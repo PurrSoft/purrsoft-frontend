@@ -1,0 +1,1 @@
+export { RolurileMele } from './component';

@@ -22,19 +22,6 @@ type RouteObject = {
 export const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<string>(location.pathname);
-  const theme = useTheme();
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
-  const isMediumScreen = useMediaQuery(theme.breakpoints.between('sm', 'md'));
-
-  useEffect(() => {
-    if (location.pathname === '/management') {
-      navigate('/management/program', { replace: true });
-    } else {
-      setActiveTab(location.pathname);
-    }
-  }, [location.pathname, navigate]);
-
   const routes: RouteObject[] = [
     {
       label: 'Program',
@@ -52,6 +39,23 @@ export const Navbar = () => {
       url: '/management/evenimente',
     },
   ];
+
+  const [activeTab, setActiveTab] = useState<string>(
+    routes.find((route) => route.value === location.pathname)?.value ||
+      '/management/program',
+  );
+
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const isMediumScreen = useMediaQuery(theme.breakpoints.between('sm', 'md'));
+
+  useEffect(() => {
+    if (location.pathname === '/management') {
+      navigate('/management/program', { replace: true });
+    } else {
+      setActiveTab(location.pathname);
+    }
+  }, [location.pathname, navigate]);
 
   return (
     <AppBar
@@ -114,8 +118,8 @@ export const Navbar = () => {
                   color: theme.palette.accent?.darkGreen,
                   backgroundColor:
                     activeTab === route.value
-                      ? theme.palette.accent?.lightBeige
-                      : theme.palette.accent?.lightBeige,
+                      ? theme.palette.accent?.beige
+                      : theme.palette.accent?.beige,
                   borderRadius: '16px',
                   fontSize: theme.typography.body1.fontSize,
                   fontWeight: theme.typography.button.fontWeight,
@@ -137,10 +141,10 @@ export const Navbar = () => {
                     color: theme.palette.accent?.green,
                   },
                   '&.Mui-selected': {
-                    backgroundColor: theme.palette.accent?.lightBeige,
+                    backgroundColor: theme.palette.accent?.beige,
                     color: theme.palette.accent?.darkGreen,
                     borderRadius: '16px 16px 0 0',
-                    borderBottom: `38px solid ${theme.palette.accent?.lightBeige}`,
+                    borderBottom: `38px solid ${theme.palette.accent?.beige}`,
                     paddingBottom: '14px',
                     transition:
                       'margin-bottom 0.3s ease, padding-bottom 0.3s ease, border-bottom 0.3s ease',

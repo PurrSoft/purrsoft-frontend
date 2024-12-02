@@ -11,7 +11,11 @@ import { Program } from './scenes/Program';
 import { updateToken, useAppDispatch, useAppStateSelector } from './store';
 import { Login } from './scenes/Login';
 import { DespreNoi } from './scenes/DespreNoi';
-
+import { AccountOverview } from './scenes/AccountOverview/component';
+import { ContulMeu } from './scenes/AccountOverview/ContulMeu';
+import { RolurileMele } from './scenes/AccountOverview/RolurileMele';
+import { SchimbaParola } from './scenes/AccountOverview/SchimbaParola';
+import { AplicaRol } from './scenes/AccountOverview/AplicaRol';
 
 // Define the base routes for public access - we need for the auth to have access to the public route
 const publicRoutes = [
@@ -25,12 +29,12 @@ const publicRoutes = [
   },
   {
     path: '/login',
-    element: <Login />
+    element: <Login />,
   },
   {
     path: '/DespreNoi',
     element: <DespreNoi />,
-  }
+  },
 ];
 
 const authenticatedRoutesConfig = [
@@ -58,10 +62,36 @@ const authenticatedRoutesConfig = [
       },
     ],
   },
+  {
+    path: '/account-overview',
+    element: <AccountOverview />,
+    children: [
+      {
+        index: true,
+        element: <Navigate replace to="contul-meu" />,
+      },
+      {
+        path: 'contul-meu',
+        element: <ContulMeu />,
+      },
+      {
+        path: 'rolurile-mele',
+        element: <RolurileMele />,
+      },
+      {
+        path: 'aplica-rol',
+        element: <AplicaRol />,
+      },
+      {
+        path: 'schimba-parola',
+        element: <SchimbaParola />,
+      },
+    ],
+  },
 
   {
     path: '/login',
-    element: <Navigate replace to="/management" />,
+    element: <Navigate replace to="/management/program" />,
   },
   {
     path: '*',
@@ -105,9 +135,9 @@ export const App = () => {
   return (
     <>
       {/* Use authenticatedRouter if the user is authenticated, otherwise use publicRouter */}
-      {/* <RouterProvider router={token ? authenticatedRouter : publicRouter} />{' '} */}
+      <RouterProvider router={token ? authenticatedRouter : publicRouter} />{' '}
       {/* Uncomment this line to enable authentication */}
-      <RouterProvider router={authenticatedRouter} />{' '}
+      {/* <RouterProvider router={authenticatedRouter} />{' '} */}
       {/* Comment this line after login is done */}
     </>
   );

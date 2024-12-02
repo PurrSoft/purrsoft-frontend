@@ -2,9 +2,16 @@ import React from 'react';
 import { Card, CardContent, Box, Typography, useTheme } from '@mui/material';
 
 type CustomCardProps = {
-  width?: string;
-  height?: string;
+  width?: string | { xs: string; sm: string; md: string; lg: string };
+  height?: string | { xs: string; sm: string; md: string; lg: string };
   align?: 'center' | 'flex-start' | 'flex-end';
+  justify?:
+    | 'center'
+    | 'space-between'
+    | 'space-around'
+    | 'flex-start'
+    | 'flex-end';
+  padding?: string;
   title?: string;
   subtitle?: string;
   children: React.ReactNode;
@@ -14,7 +21,9 @@ export const CustomCard = ({
   width = '300px',
   height = '400px',
   align = 'center',
+  justify = 'center',
   title,
+  padding = '0px',
   subtitle = '',
   children,
 }: CustomCardProps) => {
@@ -26,20 +35,21 @@ export const CustomCard = ({
         position: 'relative',
         width,
         height,
+        padding,
       }}
     >
       {/* Shadow Layer */}
       <Box
         sx={{
           position: 'absolute',
-          top: '10px',
-          left: '-12px',
+          top: { xs: '40px', sm: '8px', md: '10px', lg: '12px' },
+          left: { xs: '-10px', sm: '-8px', md: '-10px', lg: '-12px' },
           width: '100%',
           height: '100%',
           borderRadius: '15px',
           backgroundColor: theme.palette.accent?.darkGreen, // Shadow color
           border: `2px solid #000`, // Shadow border
-          zIndex: 0,
+          zIndex: 1,
         }}
       ></Box>
 
@@ -48,8 +58,8 @@ export const CustomCard = ({
         elevation={3}
         sx={{
           position: 'relative',
-          width: '100%',
-          height: '100%',
+          width: width,
+          height: height,
           borderRadius: '15px', // Match shadow corners
           backgroundColor: theme.palette.accent?.beige, // Main card color
           overflow: 'hidden',
@@ -110,7 +120,7 @@ export const CustomCard = ({
             sx={{
               width: '28px',
               height: '28px',
-              backgroundColor: theme.palette.accent?.darkGreen,
+              backgroundColor: theme.palette.accent?.mutedGreen,
               borderRadius: '50%',
               border: '2px solid #000',
             }}
@@ -135,7 +145,8 @@ export const CustomCard = ({
               flexGrow: 1,
               display: 'flex',
               flexDirection: 'column',
-              justifyContent: align,
+              justifyContent: justify,
+              alignItems: align,
             }}
           >
             {children}
