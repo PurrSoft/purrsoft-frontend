@@ -5,10 +5,14 @@ declare module '@mui/material/styles' {
   interface Palette {
     accent?: {
       darkGreen: string;
-      beige: string;
-      green: string;
+      mutedGreen: string;
       lightGreen: string;
-      lightBeige: string;
+      green: string;
+      beige: string;
+      darkerBeige: string;
+      tealGreen: string;
+      black: string;
+      white: string;
     };
     background: TypeBackground; // For Palette, background is TypeBackground
   }
