@@ -25,19 +25,20 @@ export const UserProfile = (props: Props) => {
       sx={{
         position: 'fixed', // Fixed sidebar on tablet and larger screens
         top: '16px',
-        left: '32px',
-        width: '320px',
-        height: '80vh',
+        left: '16px',
+        width: { xs: '280px', sm: '320px' },
+        maxHeight: '100vh',
         backgroundColor: theme.palette.accent?.beige,
         display: 'flex',
         flexDirection: 'column',
-        gap: theme.spacing(3),
+        gap: theme.spacing(1),
         alignItems: 'center',
-        padding: 2,
+        padding: theme.spacing(1),
         borderRadius: '24px',
         border: `10px solid ${theme.palette.accent?.lightGreen}`,
         boxShadow: '4px 0px 10px rgba(0, 0, 0, 0.1)',
         zIndex: 10,
+        overflow: 'auto',
       }}
     >
       <Box
@@ -45,7 +46,7 @@ export const UserProfile = (props: Props) => {
         src="../../../public/green-cats-logo.png"
         alt="description"
         sx={{
-          width: '50%',
+          width: '40%',
           height: 'auto',
           borderRadius: '8px',
         }}
@@ -59,21 +60,50 @@ export const UserProfile = (props: Props) => {
           borderRadius: theme.shape.borderRadius,
         }}
       >
-        <Typography variant="body1">Username</Typography>
+        <Typography
+          variant="body1"
+          sx={{
+            fontSize: { xs: '0.8rem', sm: '1rem' },
+          }}
+        >
+          Username
+        </Typography>
       </Box>
-      <DatePicker specialDates={specialDates} />
+      <Box
+        sx={{
+          width: '100%',
+          minHeight: '300px',
+          overflow: 'auto',
+          position: 'relative',
+          zIndex: 1,
+        }}
+      >
+        <DatePicker specialDates={specialDates} />
+      </Box>
       <Box
         sx={{
           backgroundColor: theme.palette.accent?.lightGreen,
           width: '100%',
           textAlign: 'center',
-          padding: theme.spacing(2, 0),
+          padding: theme.spacing(1),
           borderRadius: '30px',
         }}
       >
-        <Typography variant="body1">Urmatorul Shift</Typography>
+        <Typography
+          variant="body1"
+          sx={{
+            fontSize: { xs: '0.8rem', sm: '1rem' },
+          }}
+        >
+          Urmatorul Shift
+        </Typography>
         {closestDate && (
-          <Typography variant="body1">
+          <Typography
+            variant="body1"
+            sx={{
+              fontSize: { xs: '0.8rem', sm: '1rem' },
+            }}
+          >
             {closestDate.toLocaleDateString('en-EN', {
               weekday: 'long',
               day: 'numeric',
@@ -87,7 +117,13 @@ export const UserProfile = (props: Props) => {
             })}
           </Typography>
         )}
-        <Typography>Locatie: La Casuta</Typography>
+        <Typography
+          sx={{
+            fontSize: { xs: '0.8rem', sm: '1rem' },
+          }}
+        >
+          Locatie: La Casuta
+        </Typography>
       </Box>
       <Button
         onClick={() => {
@@ -98,6 +134,8 @@ export const UserProfile = (props: Props) => {
           backgroundColor: theme.palette.accent?.darkGreen,
           width: '100%',
           color: 'black',
+          fontSize: { xs: '0.8rem', sm: '1rem' },
+          marginBottom: theme.spacing(3),
         }}
       >
         Contul meu

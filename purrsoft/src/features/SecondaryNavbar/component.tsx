@@ -30,23 +30,25 @@ export const SecondaryNavbar = () => {
   return (
     <Grid
       container
-      width={'60%'}
+      width={'70%'}
       flexDirection={'row'}
       sx={{
         flex: 1,
-        justifyContent: 'space-between', // Adjust alignment to avoid overflow
+        justifyContent: 'space-between',
+        alignItems: 'center', // Center elements vertically
         margin: 0,
-        gap: 20,
-        zindex: 4,
+        gap: 30, // Increased gap between items for more spacing
+        zIndex: 4,
+        padding: '10px 0', // Extra padding for a more spacious feel
       }}
     >
-      <Toolbar>
+      <Toolbar sx={{ width: '100%' }}>
         {/* Logo */}
-        <Typography variant="h5" component="div" style={{ flexGrow: 1 }}>
+        <Typography variant="h4" component="div" sx={{ flexGrow: 1 }}>
           <img
             src="/green-cats-logo.png"
             alt="Green Cats"
-            style={{ height: 100, marginRight: 100 }}
+            style={{ height: 100, marginRight: 120, width: 100 }}
           />
         </Typography>
 
@@ -55,30 +57,45 @@ export const SecondaryNavbar = () => {
           component={Link}
           to="/"
           color="inherit"
-          style={{ color: '#4CAF50' }}
+          sx={{
+            color: theme.palette.accent?.green,
+            fontSize: '1.6rem',
+            marginRight: 3,
+            whiteSpace: 'nowrap',
+          }}
         >
           Acasă
         </Button>
         <Button
           component={Link}
-          to="/about"
+          to="/DespreNoi"
           color="inherit"
-          style={{ color: '#4CAF50' }}
+          sx={{
+            color: theme.palette.accent?.green,
+            fontSize: '1.2rem',
+            marginRight: 3,
+            whiteSpace: 'nowrap',
+          }}
         >
-          <Typography variant="h5">Despre noi</Typography>
+          <Typography variant="h4" sx={{ whiteSpace: 'nowrap' }}>
+            Despre noi
+          </Typography>
         </Button>
         <Button
           onClick={handlePopoverOpen}
           endIcon={<ExpandMoreIcon />}
-          style={{
-            backgroundColor: '#4CAF50',
+          sx={{
+            backgroundColor: theme.palette.accent?.darkGreen,
             color: '#fff',
-            borderRadius: 4,
-            padding: '5px 10px',
+            borderRadius: 0,
+            padding: '8px 40px',
+            fontSize: '1.2rem',
+            whiteSpace: 'nowrap',
           }}
         >
-          <Typography variant="h5">Implică-te!</Typography>
+          Implică-te!
         </Button>
+
         {/* Accordion Button for "Implică-te!" */}
         <Popover
           open={open}
@@ -93,14 +110,20 @@ export const SecondaryNavbar = () => {
             horizontal: 'center',
           }}
         >
-          <Grid container direction="column" style={{ padding: '10px 20px' }}>
+          <Grid container direction="column" style={{ padding: '15px 25px' }}>
             <Button
               component={Link}
               to="/volunteer"
               color="inherit"
-              style={{ color: '#4CAF50', textAlign: 'left' }}
+              style={{
+                color: theme.palette.accent?.green,
+                textAlign: 'left',
+                whiteSpace: 'nowrap',
+              }}
             >
-              <Typography variant="h6">Voluntariat</Typography>
+              <Typography variant="h5" sx={{ whiteSpace: 'nowrap' }}>
+                Voluntariat
+              </Typography>
             </Button>
             <Button
               component={Link}
@@ -109,6 +132,7 @@ export const SecondaryNavbar = () => {
               style={{
                 color: theme.palette.accent?.green,
                 textAlign: 'left',
+                whiteSpace: 'nowrap',
               }}
             >
               Donate
@@ -117,9 +141,26 @@ export const SecondaryNavbar = () => {
         </Popover>
 
         {/* User Profile Icon */}
-        <IconButton edge="end" color="inherit">
-          <AccountCircle style={{ color: theme.palette.accent?.darkGreen }} />
-          <Typography variant="h5">Login</Typography>
+
+        <IconButton
+          component={Link}
+          to="/login"
+          edge="end"
+          color="inherit"
+          sx={{ marginLeft: 3 }}
+        >
+          <AccountCircle
+            sx={{
+              color: theme.palette.accent?.darkGreen,
+              fontSize: '2.5rem',
+            }}
+          />
+          <Typography
+            variant="h4"
+            sx={{ marginLeft: 1, fontSize: '1.5rem', whiteSpace: 'nowrap' }}
+          >
+            Login
+          </Typography>
         </IconButton>
       </Toolbar>
     </Grid>
