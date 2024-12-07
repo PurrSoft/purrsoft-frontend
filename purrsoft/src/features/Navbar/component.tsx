@@ -114,8 +114,8 @@ export const Navbar = () => {
                   color: theme.palette.accent?.darkGreen,
                   backgroundColor:
                     activeTab === route.value
-                      ? theme.palette.accent?.lightBeige
-                      : theme.palette.accent?.lightBeige,
+                      ? theme.palette.accent?.beige
+                      : theme.palette.accent?.beige,
                   borderRadius: '16px',
                   fontSize: theme.typography.body1.fontSize,
                   fontWeight: theme.typography.button.fontWeight,

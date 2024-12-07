@@ -43,8 +43,11 @@ const lastDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(
     <Paper 
         elevation={3} 
         sx={{ 
-            maxWidth: 300, 
-            padding: theme.spacing(2), 
+            position: 'absolute',
+            width: '100%', 
+            height: '100%',
+            overflow: 'hidden',
+            padding: theme.spacing(1), 
             bgcolor: theme.palette.accent?.darkGreen, 
             borderRadius: '24px'
         }}
@@ -59,8 +62,8 @@ const lastDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(
         <Box sx={{
             display: 'grid',
             gridTemplateColumns: 'repeat(7, 1fr)',
-            gap: 1,
-            marginTop: 2
+            gap: 0.5,
+            marginTop: 1
         }}>
             {days.map(day => (
                     <Typography key={day} variant='h6' sx={{ textAlign: 'center', color: 'text.secondary' }}>
@@ -94,7 +97,7 @@ const lastDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(
                 </Typography>
             ))}
         </Box>
-        <Box sx={{display: 'flex', justifyContent: 'space-between', width: '100%'}}>
+        <Box sx={{display: 'flex', justifyContent: 'space-between', width: '100%', position: 'absolute', left: 0, bottom: 8}}>
             <Button onClick={() => changeMonth(-1)}><Redo fontSize='large' sx={{ transform: 'rotate(180deg)', color: 'text.secondary' }}/></Button>
             <Button onClick={() => changeMonth(1)}><Undo fontSize='large' sx={{ transform: 'rotate(180deg)', color: 'text.secondary' }}/></Button>
         </Box>
