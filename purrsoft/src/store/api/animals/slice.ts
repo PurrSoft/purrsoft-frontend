@@ -40,7 +40,7 @@ export const endpoints = <Tags extends string> (
     getAnimals: builder.query<AnimalsPaginatedRepsonse, void>({
       providesTags: [animalTag],  
       query: () => ({
-            url: '/Animal/GetAnimals',
+            url: '/Animal',
             method: 'GET'
         }),
     }),
