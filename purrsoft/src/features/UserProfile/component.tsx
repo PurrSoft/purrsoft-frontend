@@ -1,21 +1,23 @@
-import { Box, Button, Paper, Typography, useTheme } from '@mui/material'
-import React from 'react'
+import { Box, Button, Paper, Typography, useTheme } from '@mui/material';
+import React from 'react';
 import { DatePicker } from '../../components/DatePicker';
+import { useNavigate } from 'react-router-dom';
 
-type Props = {}
+type Props = {};
 
 export const UserProfile = (props: Props) => {
-    const theme = useTheme();
-    const specialDates = [
-      new Date('December 17, 2024 03:24:00'),
-      new Date('November 7, 2024 03:24:00'),
-      new Date('December 25, 2024')
-    ];
+  const theme = useTheme();
+  const specialDates = [
+    new Date('December 17, 2024 03:24:00'),
+    new Date('November 7, 2024 03:24:00'),
+    new Date('December 25, 2024'),
+  ];
 
-    const today = new Date();
-    const closestDate = specialDates
-      .filter(date => date > today) // filter future dates
-      .sort((a, b) => a.getTime() - b.getTime())[0]; // get the closest one by sorting
+  const navigate = useNavigate();
+  const today = new Date();
+  const closestDate = specialDates
+    .filter((date) => date > today) // filter future dates
+    .sort((a, b) => a.getTime() - b.getTime())[0]; // get the closest one by sorting
 
   return (
     <Box
@@ -41,15 +43,15 @@ export const UserProfile = (props: Props) => {
     >
       <Box
         component="img"
-        src='../../../public/green-cats-logo.png'
+        src="../../../public/green-cats-logo.png"
         alt="description"
         sx={{
-            width: '40%',
-            height: 'auto',
-            borderRadius: '8px',
+          width: '40%',
+          height: 'auto',
+          borderRadius: '8px',
         }}
       />
-      <Box 
+      <Box
         sx={{
           backgroundColor: theme.palette.accent?.lightGreen,
           width: '100%',
@@ -58,7 +60,7 @@ export const UserProfile = (props: Props) => {
           borderRadius: theme.shape.borderRadius,
         }}
       >
-        <Typography 
+        <Typography
           variant="body1"
           sx={{
             fontSize: { xs: '0.8rem', sm: '1rem' },
@@ -76,7 +78,7 @@ export const UserProfile = (props: Props) => {
           zIndex: 1,
         }}
       >
-        <DatePicker specialDates={specialDates}/>
+        <DatePicker specialDates={specialDates} />
       </Box>
       <Box
         sx={{
@@ -87,7 +89,7 @@ export const UserProfile = (props: Props) => {
           borderRadius: '30px',
         }}
       >
-        <Typography 
+        <Typography
           variant="body1"
           sx={{
             fontSize: { xs: '0.8rem', sm: '1rem' },
@@ -96,7 +98,7 @@ export const UserProfile = (props: Props) => {
           Urmatorul Shift
         </Typography>
         {closestDate && (
-          <Typography 
+          <Typography
             variant="body1"
             sx={{
               fontSize: { xs: '0.8rem', sm: '1rem' },
@@ -111,7 +113,7 @@ export const UserProfile = (props: Props) => {
             {closestDate.toLocaleTimeString('en-EN', {
               hour: '2-digit',
               minute: '2-digit',
-              hour12: true
+              hour12: true,
             })}
           </Typography>
         )}
@@ -124,6 +126,10 @@ export const UserProfile = (props: Props) => {
         </Typography>
       </Box>
       <Button
+        onClick={() => {
+          console.log('Navigating to account overview');
+          navigate('/account-overview/contul-meu');
+        }}
         sx={{
           backgroundColor: theme.palette.accent?.darkGreen,
           width: '100%',
@@ -135,7 +141,7 @@ export const UserProfile = (props: Props) => {
         Contul meu
       </Button>
 
-        {/* Additional sidebar content */}
+      {/* Additional sidebar content */}
     </Box>
   );
 };

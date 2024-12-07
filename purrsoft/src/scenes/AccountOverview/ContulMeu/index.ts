@@ -1,0 +1,1 @@
+export { ContulMeu } from './component';
