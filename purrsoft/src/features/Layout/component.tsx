@@ -1,7 +1,5 @@
 import {
   Box,
-  Paper,
-  Typography,
   useTheme,
   IconButton,
   Drawer,
@@ -77,7 +75,7 @@ export const Layout = () => {
         height="100%"
         flexGrow={1}
         sx={{
-          paddingLeft: isMedium || isSmallScreen ? 0 : '400px',
+          paddingLeft: isMedium || isSmallScreen ? 0 : '350px',
           transition: 'padding-left 0.3s ease',
         }}
       >
