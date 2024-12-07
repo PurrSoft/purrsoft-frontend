@@ -102,7 +102,8 @@ export const Animalute = () => {
                     Nume: {animal.name}
                   </Typography>
                   <img
-                    src={`https://via.placeholder.com/150?text=${animal.name}`}
+                    // src={`https://via.placeholder.com/150?text=${animal.name}`} // for testing purposes
+                    src={animal.imageUrl}
                     alt={animal.name}
                     style={{ width: '80%', height: 'auto', borderRadius: '8px' }}
                   />
