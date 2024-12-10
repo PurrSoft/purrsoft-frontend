@@ -1,0 +1,1 @@
+export { Voluntari } from './component';
