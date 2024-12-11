@@ -1,0 +1,1 @@
+export { Fosteri } from './component';
