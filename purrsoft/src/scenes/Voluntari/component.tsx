@@ -9,7 +9,6 @@ import {
   InputAdornment,
   Typography,
   CircularProgress,
-  LinearProgress,
 } from '@mui/material';
 import { Search, Mic } from '@mui/icons-material';
 import { CustomCard } from '../../components/CustomCard';
@@ -33,13 +32,16 @@ export const Voluntari = () => {
             volunteer.lastName.toLowerCase()).includes(searchTerm)
     ) || [];
 
-  if (isLoading) {
-    return <LinearProgress />;
-  }
+  const statusMap: { [key: string]: string } = {
+    "Active": "Activ",           
+    "OnLeave": "În concediu",  
+    "Disabled": "Dezactivat", 
+  };
 
-  if (error) {
-    return <Typography color="error">Error loading volunteers. Please try again.</Typography>;
-  }
+  const tierMap: { [key: string]: string } = {
+    "Trial": "În probă",           
+    "FullTime": "Full Time",
+  };
 
   return (
     <Container>
@@ -88,6 +90,10 @@ export const Voluntari = () => {
       </Box>
 
       {/* Volunteer Cards */}
+      {(isLoading) && <CircularProgress />}
+
+      {(error) && <Typography>Eroare la încărcarea datelor.</Typography>}
+
       <Box sx={{ ml: 2, mr: 1, pb: 4 }}>
         <Grid container spacing={4}>
           {filteredVolunteers.length > 0 ? (
@@ -113,6 +119,36 @@ export const Voluntari = () => {
                     Nume: {volunteer.firstName} {volunteer.lastName}
                   </Typography>
                   <Typography
+                  sx={{
+                    backgroundColor: theme.palette.accent?.lightGreen,
+                    borderRadius: '8px',
+                    mb: 1,
+                    color: theme.palette.accent?.white,
+                    fontSize: '18px',
+                    padding: '6px',
+                  }}
+                >
+                  Email: 
+                  <Typography 
+                    sx={{
+                        backgroundColor: theme.palette.accent?.lightGreen,
+                        borderRadius: '8px',
+                        color: theme.palette.accent?.white,
+                        fontSize: '18px',
+                        }}>
+                        {volunteer.email.split('@')[0]}
+                    </Typography>
+                    <Typography sx={{
+                      backgroundColor: theme.palette.accent?.lightGreen,
+                      borderRadius: '8px',
+                      mb: 1,
+                      color: theme.palette.accent?.white,
+                      fontSize: '18px',
+                      }}>
+                        @{volunteer.email.split('@')[1]}
+                    </Typography>
+                    </Typography>
+                  <Typography
                       sx={{
                       backgroundColor: theme.palette.accent?.lightGreen,
                       borderRadius: '8px',
@@ -122,7 +158,7 @@ export const Voluntari = () => {
                       padding: '6px',
                       }}
                   >
-                      Status: {volunteer.status}
+                      Status: {statusMap[volunteer.status]}
                   </Typography>
                   <Typography
                       sx={{
@@ -134,7 +170,7 @@ export const Voluntari = () => {
                       padding: '6px',
                       }}
                   >
-                      Tier: {volunteer.tier}
+                      Tier: {tierMap[volunteer.tier]}
                   </Typography>
                   <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2 }}>
                     <Button
@@ -144,7 +180,7 @@ export const Voluntari = () => {
                             backgroundColor: theme.palette.accent?.tealGreen,
                         }}
                     >
-                        Modifica
+                        Modifică
                     </Button>
                     <Button
                         variant="contained"

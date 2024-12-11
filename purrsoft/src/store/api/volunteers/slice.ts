@@ -13,6 +13,7 @@ export type Volunteer = {
     userId: string;
     firstName: string;
     lastName: string;
+    email: string;
     status: string;
     tier: string;
 }
