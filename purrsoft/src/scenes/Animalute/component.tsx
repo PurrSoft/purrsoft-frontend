@@ -8,6 +8,7 @@ import {
   Grid,
   InputAdornment,
   Typography,
+  CircularProgress
 } from '@mui/material';
 import { Search, Mic } from '@mui/icons-material';
 import { CustomCard } from '../../components/CustomCard';
@@ -25,11 +26,24 @@ export const Animalute = () => {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '91vh' }}>
+        <CircularProgress />
+        <Typography variant="h6" sx={{ ml: 2 }}>
+          Loading...
+        </Typography>
+      </div>
+    );
   }
-
+  
   if (error) {
-    return <div>Error fetching animals!</div>;
+    return (
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '91vh' }}>
+        <Typography variant="h4" color={theme.palette.accent?.error}>
+          Error fetching animals!
+        </Typography>
+      </div>
+    );
   }
 
   return (
