@@ -72,7 +72,20 @@ export const AccountOverview = () => {
         <CustomCard
           width={{ xs: '100%', sm: '90%', md: '350px', lg: '400px' }}
           height="100%"
-          title={username}
+          title= {
+            <Typography
+              variant="h6"
+              sx={{
+                fontSize: '1rem',
+                fontWeight: 'bold',
+                color: '#000',
+                flexGrow: 1,
+                textAlign: 'center',
+              }}
+            >
+              {username}
+            </Typography>
+          }
           align="center"
           justify="space-between"
         >

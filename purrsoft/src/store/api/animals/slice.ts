@@ -44,4 +44,11 @@ export const endpoints = <Tags extends string> (
             method: 'GET'
         }),
     }),
+    deleteAnimal: builder.mutation<void, string>({
+      invalidatesTags: [animalTag],
+      query: (id) => ({
+        url: `/Animal/${id}`,
+        method: 'DELETE'
+      }),
+    }),
   });

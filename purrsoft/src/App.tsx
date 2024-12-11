@@ -4,6 +4,7 @@ import {
   createBrowserRouter,
 } from 'react-router-dom';
 import { Layout } from './features/Layout';
+import { ListaAnimalute } from './scenes/Animalute/ListaAnimalute';
 import { Animalute } from './scenes/Animalute';
 import { Evenimente } from './scenes/Evenimente';
 import { Home } from './scenes/Home';
@@ -16,6 +17,7 @@ import { ContulMeu } from './scenes/AccountOverview/ContulMeu';
 import { RolurileMele } from './scenes/AccountOverview/RolurileMele';
 import { SchimbaParola } from './scenes/AccountOverview/SchimbaParola';
 import { AplicaRol } from './scenes/AccountOverview/AplicaRol';
+import { ModificaAnimal } from './scenes/Animalute/ModificaAnimal';
 
 // Define the base routes for public access - we need for the auth to have access to the public route
 const publicRoutes = [
@@ -55,6 +57,20 @@ const authenticatedRoutesConfig = [
       {
         path: 'animalute',
         element: <Animalute />,
+        children: [
+          {
+            index: true,
+            element: <Navigate replace to="lista" />,
+          },
+          {
+            path: 'lista',
+            element: <ListaAnimalute />,
+          },
+          {
+            path: ':id',
+            element: <ModificaAnimal />,
+          }
+        ]
       },
       {
         path: 'evenimente',
