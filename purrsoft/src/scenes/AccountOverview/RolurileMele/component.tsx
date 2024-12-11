@@ -1,10 +1,14 @@
-import { Grid, Typography, useTheme } from '@mui/material';
+import { CircularProgress, Grid, Typography, useTheme } from '@mui/material';
 import { useAccountQuery } from '../../../store';
 import { AccountInfoGridItem } from '../../../components/AccountInfoGridItem';
 
 export const RolurileMele = () => {
   const theme = useTheme();
-  const { data: user } = useAccountQuery();
+  const { data: user, isLoading } = useAccountQuery();
+
+  if (isLoading) {
+    return <CircularProgress />;
+  }
 
   return (
     <Grid
@@ -12,6 +16,7 @@ export const RolurileMele = () => {
       sx={{
         width: '100%',
         height: { xs: 'auto', md: '100%' },
+        flexDirection: 'column',
         gap: theme.spacing(2),
       }}
     >
@@ -21,9 +26,10 @@ export const RolurileMele = () => {
         </Typography>
       </Grid>
       <AccountInfoGridItem
-        label="Roluri"
+        title="Roluri"
         value={user?.roles.join(', ') || ''}
       />
+      {/* {console.log(user?.roles)} */}
     </Grid>
   );
 };
