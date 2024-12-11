@@ -8,6 +8,8 @@ import {
   Grid,
   InputAdornment,
   Typography,
+  CircularProgress,
+  LinearProgress,
 } from '@mui/material';
 import { Search, Mic } from '@mui/icons-material';
 import { CustomCard } from '../../components/CustomCard';
@@ -32,11 +34,11 @@ export const Voluntari = () => {
     ) || [];
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <LinearProgress />;
   }
 
   if (error) {
-    return <div>Error fetching volunteers!</div>;
+    return <Typography color="error">Error loading volunteers. Please try again.</Typography>;
   }
 
   return (
