@@ -54,6 +54,25 @@ type ChangePasswordRequest = {
   newPassword: string;
   confirmPassword: string;
 };
+type RoleAndStatus = {
+  role: string;
+  status: string;
+};
+
+type RolesAndStatusResponse = {
+  records: RoleAndStatus[];
+  totalNumberOfRecords: number;
+};
+
+type RoleAndDates = {
+  role: string;
+  startDate: string;
+  endDate: string;
+};
+type RoleAndDatesRespone = {
+  records: RoleAndDates[];
+  totalNumberOfRecords: number;
+};
 // Define the shape of the API endpoints
 // add the endpoints to the builder
 export const endpoints = (
@@ -102,6 +121,18 @@ export const endpoints = (
       url: '/Auth/ChangePassword',
       method: 'POST',
       body: credentials,
+    }),
+  }),
+  rolesAndStatus: builder.query<RolesAndStatusResponse, string>({
+    query: (id) => ({
+      url: `/Account/${id}/GetRolesAndStatuses`,
+      method: 'GET',
+    }),
+  }),
+  rolesAndDates: builder.query<RoleAndDatesRespone, string>({
+    query: (id) => ({
+      url: `/Account/${id}/GetRolesAndDates`,
+      method: 'GET',
     }),
   }),
 });

@@ -78,6 +78,8 @@ export const {
   useGetAnimalsQuery,
   useChangePasswordMutation,
   useGetFostersQuery,
+  useRolesAndStatusQuery,
+  useRolesAndDatesQuery,
 } = api;
 
 export { resetAuth, updateToken } from './auth';
