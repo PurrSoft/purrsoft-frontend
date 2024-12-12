@@ -57,6 +57,25 @@ type ChangePasswordRequest = {
 };
 const accountTag = 'Account';
 type TagTypes = typeof accountTag;
+type RoleAndStatus = {
+  role: string;
+  status: string;
+};
+
+type RolesAndStatusResponse = {
+  records: RoleAndStatus[];
+  totalNumberOfRecords: number;
+};
+
+type RoleAndDates = {
+  role: string;
+  startDate: string;
+  endDate: string;
+};
+type RoleAndDatesRespone = {
+  records: RoleAndDates[];
+  totalNumberOfRecords: number;
+};
 // Define the shape of the API endpoints
 // add the endpoints to the builder
 export const endpoints = <Tags extends string>(
@@ -114,6 +133,18 @@ export const endpoints = <Tags extends string>(
       url: '/Account',
       method: 'PUT',
       body: { applicationUserDto },
+    }),
+  }),
+  rolesAndStatus: builder.query<RolesAndStatusResponse, string>({
+    query: (id) => ({
+      url: `/Account/${id}/GetRolesAndStatuses`,
+      method: 'GET',
+    }),
+  }),
+  rolesAndDates: builder.query<RoleAndDatesRespone, string>({
+    query: (id) => ({
+      url: `/Account/${id}/GetRolesAndDates`,
+      method: 'GET',
     }),
   }),
 });
