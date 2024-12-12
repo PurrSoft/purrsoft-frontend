@@ -16,6 +16,7 @@ export const AplicaRol = () => {
     Voluntar: 'link2',
     Foster: 'link3',
   };
+
   const descriptions = {
     Admin:
       'Administratorii coordonează activitatea shelter-ului, echipele și evenimentele. Ei iau decizii manageriale pentru a asigura buna funcționare a shelter-ului.',
@@ -24,6 +25,7 @@ export const AplicaRol = () => {
     Foster:
       'Fosterii oferă un mediu temporar sigur pentru animale, având grijă de ele acasă până la adopție. Este perfect pentru cei care pot oferi timp, spațiu și iubire animalelor.  ',
   };
+
   return (
     <Grid
       container
