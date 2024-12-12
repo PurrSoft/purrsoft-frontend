@@ -1,0 +1,1 @@
+export { ListaAnimalute } from './component';

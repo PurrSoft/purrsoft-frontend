@@ -1,6 +1,5 @@
 import { authSlice } from './auth';
-import { authEndpoints } from './api';
-import { animalsEndpoints } from './api';
+import { authEndpoints, animalProfilesEndpoints, animalsEndpoints } from './api';
 import { fostersEndpoints } from './api';
 import {
   combineReducers,
@@ -42,7 +41,9 @@ export const api = createApi({
   })
   .injectEndpoints({
     endpoints: fostersEndpoints,
-  });
+  }).injectEndpoints({
+  endpoints: animalProfilesEndpoints,
+});
 //root reducer
 const rootReducer = combineReducers({
   [api.reducerPath]: api.reducer,
@@ -78,6 +79,10 @@ export const {
   useGetAnimalsQuery,
   useChangePasswordMutation,
   useGetFostersQuery,
+  useDeleteAnimalMutation,
+  useGetAnimalProfileQuery,
+  useUpdateAnimalProfileMutation,
+  useUpdateAnimalMutation,
 } = api;
 
 export { resetAuth, updateToken } from './auth';

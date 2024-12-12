@@ -12,8 +12,11 @@ type CustomCardProps = {
     | 'flex-start'
     | 'flex-end';
   padding?: string;
-  title?: string;
+  title?: React.ReactNode;
   subtitle?: string;
+  shadow?: boolean;
+  closeButton?: boolean;
+  headerRight?: React.ReactNode;
   children: React.ReactNode;
 };
 
@@ -25,6 +28,19 @@ export const CustomCard = ({
   title,
   padding = '0px',
   subtitle = '',
+  shadow = true,
+  closeButton = true,
+  headerRight = (
+    <Box
+      sx={{
+        width: '28px',
+        height: '28px',
+        backgroundColor: 'accent.mutedGreen',
+        borderRadius: '50%',
+        border: '2px solid #000',
+      }}
+    />
+  ),
   children,
 }: CustomCardProps) => {
   const theme = useTheme();
@@ -39,19 +55,21 @@ export const CustomCard = ({
       }}
     >
       {/* Shadow Layer */}
-      <Box
-        sx={{
-          position: 'absolute',
-          top: { xs: '40px', sm: '8px', md: '10px', lg: '12px' },
-          left: { xs: '-10px', sm: '-8px', md: '-10px', lg: '-12px' },
-          width: '100%',
-          height: '100%',
-          borderRadius: '15px',
-          backgroundColor: theme.palette.accent?.darkGreen, // Shadow color
-          border: `2px solid #000`, // Shadow border
-          zIndex: 1,
-        }}
-      ></Box>
+      {shadow && 
+        <Box
+          sx={{
+            position: 'absolute',
+            top: { xs: '40px', sm: '8px', md: '10px', lg: '12px' },
+            left: { xs: '-10px', sm: '-8px', md: '-10px', lg: '-12px' },
+            width: '100%',
+            height: '100%',
+            borderRadius: '15px',
+            backgroundColor: theme.palette.accent?.darkGreen, // Shadow color
+            border: `2px solid #000`, // Shadow border
+            zIndex: 1,
+          }}
+        ></Box>
+      }
 
       {/* Main Card */}
       <Card
@@ -79,52 +97,53 @@ export const CustomCard = ({
             width: '100%',
             borderRadius: '15px 15px 0 0', // Match top corners
             border: `2px solid #000`, // Header border
+            position: 'relative',
+            minHeight: '50px', // Ensure header has a minimum height
           }}
         >
           {/* Close Button (X) */}
-          <Box
-            sx={{
-              width: '20px',
-              height: '20px',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              cursor: 'pointer',
-            }}
-          >
-            <img
-              src={'/x.svg'}
-              alt="close"
-              style={{ width: '100%', height: '100%' }}
-            />
-          </Box>
-
-          {/* Title */}
-          {title && (
-            <Typography
-              variant="h6"
+          {closeButton &&
+            <Box
               sx={{
-                fontSize: '1rem',
-                fontWeight: 'bold',
-                color: '#000',
-                flexGrow: 1,
-                textAlign: 'center',
+                width: '20px',
+                height: '20px',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                cursor: 'pointer',
               }}
             >
-              {title}
-            </Typography>
-          )}
+              <img
+                src={'/x.svg'}
+                alt="close"
+                style={{ width: '100%', height: '100%' }}
+              />
+            </Box>
+          } 
 
-          {/* Circle */}
+          {/* Title */}
           <Box
             sx={{
-              width: '28px',
-              height: '28px',
-              backgroundColor: theme.palette.accent?.mutedGreen,
-              borderRadius: '50%',
-              border: '2px solid #000',
+              position: 'absolute',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              textAlign: 'center',
+              whiteSpace: 'nowrap',
             }}
-          />
+          >
+            {title}
+          </Box>
+
+          {/* Header Right */}
+          <Box
+            sx={{
+              marginLeft: 'auto',
+              display: 'flex',
+              alignItems: 'center',
+            }}
+          >
+            {headerRight}
+          </Box>
         </Box>
 
         {/* Content Section */}
