@@ -1,0 +1,1 @@
+export { ModificaAnimal } from './component';
