@@ -179,7 +179,7 @@ export const AccountOverview = () => {
                   backgroundColor: theme.palette.accent?.darkGreen,
                   color: theme.palette.secondary.contrastText,
                 }}
-                onClick={handleLogout} // Replace with logout logic
+                onClick={handleLogout}
               >
                 <Typography variant="h6" color="black">
                   Logout
@@ -192,7 +192,7 @@ export const AccountOverview = () => {
         {/* Dynamic Content Area */}
         <Box
           sx={{
-            flexGrow: 1, // Allow content to grow
+            flexGrow: 1,
             backgroundColor: theme.palette.accent?.softSageGreen,
             borderRadius: 2,
             boxShadow: 1,
@@ -203,6 +203,10 @@ export const AccountOverview = () => {
               md: 'calc(100% - 350px)',
               lg: 'calc(100% - 400px)',
             },
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+            height: '100%',
           }}
         >
           <Outlet />

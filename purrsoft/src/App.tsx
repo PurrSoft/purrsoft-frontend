@@ -17,6 +17,7 @@ import { ContulMeu } from './scenes/AccountOverview/ContulMeu';
 import { RolurileMele } from './scenes/AccountOverview/RolurileMele';
 import { SchimbaParola } from './scenes/AccountOverview/SchimbaParola';
 import { AplicaRol } from './scenes/AccountOverview/AplicaRol';
+import { Fosteri } from './scenes/Fosteri';
 import { ModificaAnimal } from './scenes/Animalute/ModificaAnimal';
 
 // Define the base routes for public access - we need for the auth to have access to the public route
@@ -75,6 +76,10 @@ const authenticatedRoutesConfig = [
       {
         path: 'evenimente',
         element: <Evenimente />,
+      },
+      {
+        path: 'fosteri',
+        element: <Fosteri />,
       },
     ],
   },

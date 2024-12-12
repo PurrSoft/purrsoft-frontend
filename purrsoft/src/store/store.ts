@@ -1,5 +1,6 @@
 import { authSlice } from './auth';
 import { authEndpoints, animalProfilesEndpoints, animalsEndpoints } from './api';
+import { fostersEndpoints } from './api';
 import {
   combineReducers,
   configureStore,
@@ -31,11 +32,16 @@ export const api = createApi({
   }),
   //tagtypes
   endpoints: () => ({}),
-}).injectEndpoints({
-  endpoints: authEndpoints,
-}).injectEndpoints({
-  endpoints: animalsEndpoints,
-}).injectEndpoints({
+})
+  .injectEndpoints({
+    endpoints: authEndpoints,
+  })
+  .injectEndpoints({
+    endpoints: animalsEndpoints,
+  })
+  .injectEndpoints({
+    endpoints: fostersEndpoints,
+  }).injectEndpoints({
   endpoints: animalProfilesEndpoints,
 });
 //root reducer
@@ -71,6 +77,8 @@ export const {
   useRegisterMutation,
   useLogoutMutation,
   useGetAnimalsQuery,
+  useChangePasswordMutation,
+  useGetFostersQuery,
   useDeleteAnimalMutation,
   useGetAnimalProfileQuery,
   useUpdateAnimalProfileMutation,

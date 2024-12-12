@@ -2,6 +2,7 @@ import { SerializedError } from '@reduxjs/toolkit';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 export { endpoints as authEndpoints } from './auth';
 export { endpoints as animalsEndpoints } from './animals';
+export { endpoints as fostersEndpoints } from './fosters';
 export { endpoints as animalProfilesEndpoints } from './animalProfiles';
 // rename the endpoints for each slice
 type ApiSuccessResponse<TExpectedResponse> = {
