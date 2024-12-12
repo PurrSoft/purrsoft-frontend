@@ -78,6 +78,7 @@ export const {
   useLogoutMutation,
   useGetAnimalsQuery,
   useChangePasswordMutation,
+  useUpdateAccountMutation,
   useGetFostersQuery,
   useDeleteAnimalMutation,
   useGetAnimalProfileQuery,

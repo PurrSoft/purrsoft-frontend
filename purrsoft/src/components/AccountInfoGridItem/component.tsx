@@ -104,12 +104,8 @@ export const AccountInfoGridItem = ({
                   onBlur={handleBlur}
                   error={touched.value && !!errors.value}
                   helperText={touched.value && errors.value}
-                  slotProps={{
-                    input: {
-                      style: {
-                        backgroundColor: 'transparent', // Make the field transparent
-                      },
-                    },
+                  inputProps={{
+                    style: { backgroundColor: 'transparent' },
                   }}
                 />
               ) : (
