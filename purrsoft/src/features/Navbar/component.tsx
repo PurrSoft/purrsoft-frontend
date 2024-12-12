@@ -12,7 +12,7 @@ import { useTheme } from '@mui/material/styles';
 import HouseIcon from '@mui/icons-material/House';
 import { useAccountQuery } from '../../store';
 
-type RouteLabel = 'Home' | 'Program' | 'Animalute' | 'Evenimente' | 'Fosteri';
+type RouteLabel = 'Home' | 'Program' | 'Animalute' | 'Evenimente' | 'Voluntari' | 'Fosteri';
 
 type RouteObject = {
   label: RouteLabel;
@@ -40,6 +40,14 @@ export const Navbar = () => {
       url: '/management/evenimente',
     },
   ];
+
+  if (useAccountQuery().data?.roles?.includes('Manager')) {
+    routes.push({
+      label: 'Voluntari',
+      value: '/management/voluntari',
+      url: '/management/voluntari',
+    });
+  }
 
   if (useAccountQuery().data?.roles?.includes('Manager')) {
     routes.push({
