@@ -1,24 +1,19 @@
-import { useState } from 'react';
 import { Typography, Grid, CircularProgress, useTheme } from '@mui/material';
 import { AccountInfoGridItem } from '../../../components/AccountInfoGridItem';
-import { AppSnackbar } from '../../../components/AppSnackbar'; // Import Snackbar
+import { AppSnackbar } from '../../../components/AppSnackbar';
 import * as Yup from 'yup';
 import { useAccountQuery, useUpdateAccountMutation } from '../../../store';
-import { useVisibility } from '../../../hooks/useVisibility'; // Import the visibility hook
-
+import { useVisibility } from '../../../hooks/useVisibility';
+import { useState } from 'react';
+import { User } from '../../../store/api/auth/slice';
 export const ContulMeu = () => {
   // Retrieve user data
   const { data: user, isLoading } = useAccountQuery();
 
-  // State for each field
-  const [nume, setNume] = useState(user?.lastName || 'Not Found');
-  const [prenume, setPrenume] = useState(user?.firstName || 'Not Found');
-  const [email, setEmail] = useState(user?.email || 'Not Found');
-  const [isEditing, setIsEditing] = useState(false); // Track editing status for all fields
-  const theme = useTheme();
-
   // Mutation hook for updating the account
   const [updateAccount] = useUpdateAccountMutation();
+
+  const theme = useTheme();
 
   // Visibility hook for the Snackbar
   const {
@@ -33,33 +28,42 @@ export const ContulMeu = () => {
 
   // Function to handle account updates
   const handleUpdateAccount = async (
-    field: string,
+    field: keyof User,
     value: string,
-    previousValue: string,
     rollbackFn: () => void,
   ) => {
-    setIsEditing(true); // Set editing to true while waiting for API response
     try {
-      const updatedUser = { ...user, [field]: value }; // Create updated user object
-      await updateAccount(updatedUser).unwrap(); // Call the API
-      console.log(`${field} updated successfully`);
+      if (!user) return;
+
+      const updatedUser = {
+        ...user,
+        [field]: value,
+      };
+
+      // Remove null or undefined fields
+      Object.keys(updatedUser).forEach((key) => {
+        if (updatedUser[key as keyof typeof user] == null) {
+          delete updatedUser[key as keyof typeof user];
+        }
+      });
+
+      await updateAccount({ applicationUserDto: updatedUser }).unwrap(); // Call the API
+
       setSnackbarMessage(`${field} updated successfully!`);
       setSnackbarSeverity('success');
-      onSnackbarOpen(); // Show success snackbar
+      onSnackbarOpen();
     } catch (error) {
       console.error(`Error updating ${field}:`, error);
       setSnackbarMessage(`Error updating ${field}`);
       setSnackbarSeverity('error');
-      onSnackbarOpen(); // Show error snackbar
-      rollbackFn(); // Rollback the value if the API call fails
-    } finally {
-      setIsEditing(false); // Reset editing status
+      onSnackbarOpen();
+      rollbackFn();
     }
   };
 
-  return isLoading ? (
-    <CircularProgress />
-  ) : (
+  if (isLoading) return <CircularProgress />;
+
+  return (
     <>
       <Grid
         container
@@ -77,15 +81,11 @@ export const ContulMeu = () => {
           <Grid item xs={12}>
             <AccountInfoGridItem
               title="Nume:"
-              value={nume}
+              value={user?.lastName || ''}
               isValueEditable
-              isDisabled={isEditing} // Disable editing if waiting for API
-              onEditValue={(value) => {
-                const previousValue = nume; // Save the previous value
-                handleUpdateAccount('lastName', value, previousValue, () =>
-                  setNume(previousValue),
-                ); // Revert if API fails
-              }}
+              onEditValue={(value) =>
+                handleUpdateAccount('lastName', value, () => {})
+              }
               validationSchema={Yup.string().required(
                 'Numele este obligatoriu',
               )}
@@ -94,15 +94,11 @@ export const ContulMeu = () => {
           <Grid item xs={12}>
             <AccountInfoGridItem
               title="Prenume:"
-              value={prenume}
+              value={user?.firstName || ''}
               isValueEditable
-              isDisabled={isEditing} // Disable editing if waiting for API
-              onEditValue={(value) => {
-                const previousValue = prenume; // Save the previous value
-                handleUpdateAccount('firstName', value, previousValue, () =>
-                  setPrenume(previousValue),
-                ); // Revert if API fails
-              }}
+              onEditValue={(value) =>
+                handleUpdateAccount('firstName', value, () => {})
+              }
               validationSchema={Yup.string().required(
                 'Prenumele este obligatoriu',
               )}
@@ -123,16 +119,11 @@ export const ContulMeu = () => {
           <Grid item xs={12}>
             <AccountInfoGridItem
               title="Email:"
-              value={email}
+              value={user?.email || ''}
               isValueEditable
-              isDisabled={isEditing} // Disable editing if waiting for API
-              onEditValue={(value) => {
-                const previousValue = email; // Save the previous value
-                console.log('email', value);
-                handleUpdateAccount('email', value, previousValue, () =>
-                  setEmail(previousValue),
-                ); // Revert if API fails
-              }}
+              onEditValue={(value) =>
+                handleUpdateAccount('email', value, () => {})
+              }
               validationSchema={Yup.string()
                 .email('Adresa de email este invalida')
                 .required('Email-ul este obligatoriu')}

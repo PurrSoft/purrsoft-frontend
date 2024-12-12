@@ -55,9 +55,11 @@ type ChangePasswordRequest = {
   newPassword: string;
   confirmPassword: string;
 };
+const accountTag = 'Account';
+type TagTypes = typeof accountTag;
 // Define the shape of the API endpoints
 // add the endpoints to the builder
-export const endpoints = (
+export const endpoints = <Tags extends string>(
   builder: EndpointBuilder<
     BaseQueryFn<
       string | FetchArgs,
@@ -66,11 +68,12 @@ export const endpoints = (
       object,
       FetchBaseQueryMeta
     >,
-    string,
+    Tags | TagTypes,
     'api'
   >,
 ) => ({
   account: builder.query<User, void>({
+    providesTags: [accountTag],
     query: () => ({
       url: '/Account',
       method: 'GET',
@@ -105,11 +108,12 @@ export const endpoints = (
       body: credentials,
     }),
   }),
-  updateAccount: builder.mutation<User, Partial<User>>({
-    query: (user) => ({
+  updateAccount: builder.mutation<User, { applicationUserDto: Partial<User> }>({
+    invalidatesTags: [accountTag],
+    query: ({ applicationUserDto }) => ({
       url: '/Account',
       method: 'PUT',
-      body: user,
+      body: { applicationUserDto },
     }),
   }),
 });
