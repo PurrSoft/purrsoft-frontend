@@ -46,6 +46,14 @@ type RegisterRequest = {
   lastName: string;
   role: UserRole;
 };
+
+//change password request
+type ChangePasswordRequest = {
+  email: string;
+  currentPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+};
 // Define the shape of the API endpoints
 // add the endpoints to the builder
 export const endpoints = (
@@ -87,6 +95,13 @@ export const endpoints = (
       url: '/Auth/Logout',
       method: 'POST',
       credentials: 'include',
+    }),
+  }),
+  changePassword: builder.mutation<void, ChangePasswordRequest>({
+    query: (credentials) => ({
+      url: '/Auth/ChangePassword',
+      method: 'POST',
+      body: credentials,
     }),
   }),
 });
