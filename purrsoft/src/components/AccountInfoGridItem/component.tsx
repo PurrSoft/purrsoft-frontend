@@ -5,7 +5,6 @@ import {
   TextField,
   IconButton,
   Box,
-  useTheme,
 } from '@mui/material';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
@@ -26,6 +25,7 @@ type AccountInfoGridItemProps = {
   onClickedActionButton?: () => void;
   showDivider?: boolean;
   usesButtonForEdit?: boolean;
+  editButtonColor?: string;
 };
 
 export const AccountInfoGridItem = ({
@@ -42,9 +42,9 @@ export const AccountInfoGridItem = ({
   onClickedActionButton,
   showDivider = true,
   usesButtonForEdit = true,
+  editButtonColor = 'accent.beige'
 }: AccountInfoGridItemProps) => {
   const [isEditing, setIsEditing] = useState(false);
-  const theme = useTheme();
 
   return (
     <Formik
@@ -104,12 +104,8 @@ export const AccountInfoGridItem = ({
                   onBlur={handleBlur}
                   error={touched.value && !!errors.value}
                   helperText={touched.value && errors.value}
-                  slotProps={{
-                    input: {
-                      style: {
-                        backgroundColor: 'transparent', // Make the field transparent
-                      },
-                    },
+                  inputProps={{
+                    style: { backgroundColor: 'transparent' },
                   }}
                 />
               ) : (
@@ -141,9 +137,9 @@ export const AccountInfoGridItem = ({
                     }}
                   >
                     {isEditing ? (
-                      <CheckIcon sx={{ color: theme.palette.accent?.beige }} />
+                      <CheckIcon sx={{ color: editButtonColor }} />
                     ) : (
-                      <EditIcon sx={{ color: theme.palette.accent?.beige }} />
+                      <EditIcon sx={{ color: editButtonColor }} />
                     )}
                   </IconButton>
                 )}

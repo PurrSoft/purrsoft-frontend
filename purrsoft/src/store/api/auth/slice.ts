@@ -12,6 +12,7 @@ export type User = {
   id: string;
   displayName: string;
   firstName: string;
+  lastName: string;
   token: string;
   email: string;
   roles: string[];
@@ -54,6 +55,8 @@ type ChangePasswordRequest = {
   newPassword: string;
   confirmPassword: string;
 };
+const accountTag = 'Account';
+type TagTypes = typeof accountTag;
 type RoleAndStatus = {
   role: string;
   status: string;
@@ -75,7 +78,7 @@ type RoleAndDatesRespone = {
 };
 // Define the shape of the API endpoints
 // add the endpoints to the builder
-export const endpoints = (
+export const endpoints = <Tags extends string>(
   builder: EndpointBuilder<
     BaseQueryFn<
       string | FetchArgs,
@@ -84,11 +87,12 @@ export const endpoints = (
       object,
       FetchBaseQueryMeta
     >,
-    string,
+    Tags | TagTypes,
     'api'
   >,
 ) => ({
   account: builder.query<User, void>({
+    providesTags: [accountTag],
     query: () => ({
       url: '/Account',
       method: 'GET',
@@ -121,6 +125,14 @@ export const endpoints = (
       url: '/Auth/ChangePassword',
       method: 'POST',
       body: credentials,
+    }),
+  }),
+  updateAccount: builder.mutation<User, { applicationUserDto: Partial<User> }>({
+    invalidatesTags: [accountTag],
+    query: ({ applicationUserDto }) => ({
+      url: '/Account',
+      method: 'PUT',
+      body: { applicationUserDto },
     }),
   }),
   rolesAndStatus: builder.query<RolesAndStatusResponse, string>({
