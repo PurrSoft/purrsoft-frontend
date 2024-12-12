@@ -1,5 +1,4 @@
 import { Box, Button, Paper, Typography, useTheme } from '@mui/material';
-import React from 'react';
 import { DatePicker } from '../../components/DatePicker';
 import { useNavigate } from 'react-router-dom';
 
@@ -43,7 +42,7 @@ export const UserProfile = (props: Props) => {
     >
       <Box
         component="img"
-        src="../../../public/green-cats-logo.png"
+        src="/green-cats-logo.png"
         alt="description"
         sx={{
           width: '40%',
