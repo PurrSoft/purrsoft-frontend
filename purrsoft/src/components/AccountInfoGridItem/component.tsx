@@ -53,7 +53,9 @@ export const AccountInfoGridItem = ({
       onEditValue(newValue); // Notify parent with the new value
     }
   };
+
   const theme = useTheme();
+
   return (
     <Formik
       initialValues={{ value: currentValue }}
