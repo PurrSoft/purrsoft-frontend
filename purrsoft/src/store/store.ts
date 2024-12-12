@@ -6,6 +6,7 @@ import {
 } from './api';
 import { fostersEndpoints } from './api';
 import { requestsEndpoints } from './api';
+import { volunteersEndpoints } from './api';
 import {
   combineReducers,
   configureStore,
@@ -43,6 +44,8 @@ export const api = createApi({
   })
   .injectEndpoints({
     endpoints: animalsEndpoints,
+}).injectEndpoints({
+  endpoints: volunteersEndpoints,
   })
   .injectEndpoints({
     endpoints: fostersEndpoints,
@@ -86,6 +89,7 @@ export const {
   useRegisterMutation,
   useLogoutMutation,
   useGetAnimalsQuery,
+  useGetVolunteersQuery,
   useChangePasswordMutation,
   useUpdateAccountMutation,
   useGetFostersQuery,
