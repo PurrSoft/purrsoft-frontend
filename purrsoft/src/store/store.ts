@@ -73,6 +73,7 @@ export const {
   useLogoutMutation,
   useGetAnimalsQuery,
   useChangePasswordMutation,
+  useUpdateAccountMutation,
 } = api;
 
 export { resetAuth, updateToken } from './auth';

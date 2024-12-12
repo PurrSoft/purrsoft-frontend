@@ -16,17 +16,16 @@ type AccountInfoGridItemProps = {
   title: string;
   subtitle?: string;
   value?: string;
-  type?: 'text' | 'password' | 'email'; // Specify the type of field
-  isPassword?: boolean; // Whether the value should be displayed as dots
-  isDisabled?: boolean; // Whether the field is disabled
-  isValueEditable?: boolean; // Whether the value is editable
-  onEditValue?: (newValue: string) => void; // Callback when value is saved
-  validationSchema?: Yup.AnySchema; // Optional validation schema
-  actionButton?: React.ReactNode; // Custom action button/icon
-  sxActionButton?: object; // Custom styles for the action button
-  onClickedActionButton?: () => void; // Handler for the action button
-  showDivider?: boolean; // Whether to show a divider
-  usesButtonForEdit?: boolean; // Whether to use a button for editing
+  type?: 'text' | 'password' | 'email';
+  isDisabled?: boolean;
+  isValueEditable?: boolean;
+  onEditValue?: (newValue: string) => void;
+  validationSchema?: Yup.AnySchema;
+  actionButton?: React.ReactNode;
+  sxActionButton?: object;
+  onClickedActionButton?: () => void;
+  showDivider?: boolean;
+  usesButtonForEdit?: boolean;
 };
 
 export const AccountInfoGridItem = ({
@@ -44,30 +43,23 @@ export const AccountInfoGridItem = ({
   showDivider = true,
   usesButtonForEdit = true,
 }: AccountInfoGridItemProps) => {
-  const [isEditing, setIsEditing] = useState(false); // Track editing state
-  const [currentValue, setCurrentValue] = useState(value); // Track current value
-
-  const handleSave = (newValue: string) => {
-    setIsEditing(false); // Exit editing mode
-    if (onEditValue) {
-      onEditValue(newValue); // Notify parent with the new value
-    }
-  };
-
+  const [isEditing, setIsEditing] = useState(false);
   const theme = useTheme();
 
   return (
     <Formik
-      initialValues={{ value: currentValue }}
+      initialValues={{ value }}
       validationSchema={
         validationSchema ||
         Yup.object().shape({
           value: Yup.string().required('This field is required'),
         })
       }
-      onSubmit={(values) => {
-        setCurrentValue(values.value);
-        handleSave(values.value || '');
+      enableReinitialize
+      onSubmit={(values, { setSubmitting }) => {
+        setIsEditing(false);
+        if (onEditValue) onEditValue(values.value);
+        setSubmitting(false);
       }}
     >
       {({
@@ -84,10 +76,9 @@ export const AccountInfoGridItem = ({
             spacing={2}
             alignItems="center"
             sx={{
-              backgroundColor: 'transparent', // Transparent container
+              backgroundColor: 'transparent',
             }}
           >
-            {/* Title & Subtitle */}
             <Grid item xs={4}>
               <Typography variant="body1" color={isDisabled ? 'gray' : 'black'}>
                 {title}
@@ -102,32 +93,19 @@ export const AccountInfoGridItem = ({
               )}
             </Grid>
 
-            {/* Editable Field or Display */}
             <Grid item xs={5}>
               {isEditing && isValueEditable && !isDisabled ? (
                 <TextField
                   name="value"
                   fullWidth
-                  type={type} // Use the type prop
+                  type={type}
                   value={values.value}
-                  onChange={(e) => {
-                    handleChange(e); // Update Formik state
-                    setCurrentValue(e.target.value); // Sync with local state
-                  }}
-                  onBlur={(e) => {
-                    handleBlur(e);
-                    if (!usesButtonForEdit) {
-                      handleSubmit(); // Auto-save on blur
-                    }
-                  }}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
                   error={touched.value && !!errors.value}
                   helperText={touched.value && errors.value}
-                  slotProps={{
-                    input: {
-                      style: {
-                        backgroundColor: 'transparent', // Make the field transparent
-                      },
-                    },
+                  inputProps={{
+                    style: { backgroundColor: 'transparent' },
                   }}
                 />
               ) : (
@@ -135,57 +113,48 @@ export const AccountInfoGridItem = ({
                   variant="body1"
                   color={isDisabled ? 'gray' : 'black'}
                   sx={{
-                    fontFamily: type === 'password' ? 'monospace' : 'inherit', // Optional font style for passwords
+                    fontFamily: type === 'password' ? 'monospace' : 'inherit',
                   }}
                 >
                   {type === 'password'
-                    ? currentValue?.replace(/./g, '●') || '●●●●●●' // Masked dots for password
-                    : currentValue || ''}{' '}
-                  {/* Display value or "N/A" */}
+                    ? value.replace(/./g, '●') || '●●●●●●'
+                    : value || ''}
                 </Typography>
               )}
             </Grid>
 
-            {/* Action Button */}
             <Grid item xs={3}>
               <Box display="flex" justifyContent="flex-end" alignItems="center">
                 {isValueEditable && !isDisabled && usesButtonForEdit && (
                   <IconButton
-                    sx={{
-                      ...sxActionButton, // Apply custom styles
-                    }}
+                    sx={sxActionButton}
                     onClick={() => {
                       if (isEditing) {
-                        handleSubmit(); // Save value on button click
+                        handleSubmit();
                       } else {
-                        setIsEditing(true); // Enter editing mode
+                        setIsEditing(true);
                       }
                     }}
                   >
                     {isEditing ? (
-                      <CheckIcon sx={{ color: theme.palette.accent?.beige }} /> // Check icon for save
+                      <CheckIcon sx={{ color: theme.palette.accent?.beige }} />
                     ) : (
-                      <EditIcon sx={{ color: theme.palette.accent?.beige }} /> // Edit icon for edit
+                      <EditIcon sx={{ color: theme.palette.accent?.beige }} />
                     )}
                   </IconButton>
                 )}
                 {actionButton && onClickedActionButton && (
                   <IconButton
-                    sx={{ ...sxActionButton }}
-                    onClick={onClickedActionButton} // Trigger custom action
+                    sx={sxActionButton}
+                    onClick={onClickedActionButton}
                     disabled={isDisabled}
                   >
-                    {actionButton && React.isValidElement(actionButton)
-                      ? React.cloneElement(actionButton as React.ReactElement, {
-                          sx: { fontSize: 'inherit', color: 'inherit' }, // Ensure it inherits styles
-                        })
-                      : actionButton}
+                    {actionButton}
                   </IconButton>
                 )}
               </Box>
             </Grid>
 
-            {/* Divider */}
             {showDivider && (
               <Grid item xs={12}>
                 <hr />

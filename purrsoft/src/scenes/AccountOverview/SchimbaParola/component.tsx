@@ -9,7 +9,7 @@ import { AppSnackbar } from '../../../components/AppSnackbar'; // Import your Sn
 const validationSchema = Yup.object().shape({
   currentPassword: Yup.string().required('Parola curenta este obligatorie'),
   newPassword: Yup.string()
-    .min(6, 'Parola noua trebuie sa aiba cel putin 6 caractere')
+    .min(8, 'Parola noua trebuie sa aiba cel putin 8 caractere')
     .required('Parola noua este obligatorie'),
   confirmPassword: Yup.string()
     .oneOf([Yup.ref('newPassword')], 'Parolele nu corespund')

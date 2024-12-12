@@ -12,6 +12,7 @@ export type User = {
   id: string;
   displayName: string;
   firstName: string;
+  lastName: string;
   token: string;
   email: string;
   roles: string[];
@@ -102,6 +103,13 @@ export const endpoints = (
       url: '/Auth/ChangePassword',
       method: 'POST',
       body: credentials,
+    }),
+  }),
+  updateAccount: builder.mutation<User, Partial<User>>({
+    query: (user) => ({
+      url: '/Account',
+      method: 'PUT',
+      body: user,
     }),
   }),
 });
