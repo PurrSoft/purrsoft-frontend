@@ -1,27 +1,38 @@
-import { Grid, Typography, TextField, IconButton, Box } from '@mui/material';
-import { useState } from 'react';
-import { Formik, Form, Field } from 'formik';
+import React, { useState } from 'react';
+import {
+  Grid,
+  Typography,
+  TextField,
+  IconButton,
+  Box,
+  useTheme,
+} from '@mui/material';
+import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import React from 'react';
+import EditIcon from '@mui/icons-material/Edit';
+import CheckIcon from '@mui/icons-material/Check';
 
 type AccountInfoGridItemProps = {
   title: string;
   subtitle?: string;
   value?: string;
-  isDisabled?: boolean; // Whether the field is disabled
-  isValueEditable?: boolean; // Whether the value is editable
-  onEditValue?: (newValue: string) => void; // Callback when value is saved
-  validationSchema?: Yup.AnySchema; // Optional validation schema
-  actionButton?: React.ReactNode; // Custom action button/icon
-  sxActionButton?: object; // Custom styles for the action button
-  onClickedActionButton?: () => void; // Handler for the action button
-  showDivider?: boolean; // Whether to show a divider
+  type?: 'text' | 'password' | 'email';
+  isDisabled?: boolean;
+  isValueEditable?: boolean;
+  onEditValue?: (newValue: string) => void;
+  validationSchema?: Yup.AnySchema;
+  actionButton?: React.ReactNode;
+  sxActionButton?: object;
+  onClickedActionButton?: () => void;
+  showDivider?: boolean;
+  usesButtonForEdit?: boolean;
 };
 
 export const AccountInfoGridItem = ({
   title,
   subtitle,
-  value,
+  value = '',
+  type = 'text',
   isDisabled = false,
   isValueEditable = false,
   onEditValue,
@@ -30,107 +41,124 @@ export const AccountInfoGridItem = ({
   sxActionButton,
   onClickedActionButton,
   showDivider = true,
+  usesButtonForEdit = true,
 }: AccountInfoGridItemProps) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [currentValue, setCurrentValue] = useState(value);
-
-  const handleSave = (newValue: string) => {
-    setIsEditing(false);
-    if (onEditValue) onEditValue(newValue);
-  };
+  const theme = useTheme();
 
   return (
     <Formik
-      initialValues={{ value: currentValue }}
-      validationSchema={validationSchema}
-      onSubmit={(values) => {
-        setCurrentValue(values.value);
-        handleSave(values.value || '');
+      initialValues={{ value }}
+      validationSchema={
+        validationSchema ||
+        Yup.object().shape({
+          value: Yup.string().required('This field is required'),
+        })
+      }
+      enableReinitialize
+      onSubmit={(values, { setSubmitting }) => {
+        setIsEditing(false);
+        if (onEditValue) onEditValue(values.value);
+        setSubmitting(false);
       }}
     >
-      {({ errors, touched }) => (
+      {({
+        values,
+        errors,
+        touched,
+        handleChange,
+        handleBlur,
+        handleSubmit,
+      }) => (
         <Form>
-          <Grid container spacing={2} alignItems="center">
-            {/* Title & Subtitle */}
+          <Grid
+            container
+            spacing={2}
+            alignItems="center"
+            sx={{
+              backgroundColor: 'transparent',
+            }}
+          >
             <Grid item xs={4}>
-              <Grid container direction="column" spacing={0}>
-                <Grid item>
-                  <Typography
-                    variant="body1"
-                    color={isDisabled ? 'gray' : 'black'}
-                  >
-                    {title}
-                  </Typography>
-                </Grid>
-                {subtitle && (
-                  <Grid item>
-                    <Typography
-                      variant="body2"
-                      color={isDisabled ? 'gray' : 'black'}
-                    >
-                      {subtitle}
-                    </Typography>
-                  </Grid>
-                )}
-              </Grid>
+              <Typography variant="body1" color={isDisabled ? 'gray' : 'black'}>
+                {title}
+              </Typography>
+              {subtitle && (
+                <Typography
+                  variant="body2"
+                  color={isDisabled ? 'gray' : 'black'}
+                >
+                  {subtitle}
+                </Typography>
+              )}
             </Grid>
 
-            {/* Value or Input Field */}
             <Grid item xs={5}>
               {isEditing && isValueEditable && !isDisabled ? (
-                <Field
+                <TextField
                   name="value"
-                  as={TextField}
                   fullWidth
-                  disabled={isDisabled}
+                  type={type}
+                  value={values.value}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
                   error={touched.value && !!errors.value}
                   helperText={touched.value && errors.value}
+                  slotProps={{
+                    input: {
+                      style: {
+                        backgroundColor: 'transparent', // Make the field transparent
+                      },
+                    },
+                  }}
                 />
               ) : (
                 <Typography
                   variant="body1"
                   color={isDisabled ? 'gray' : 'black'}
+                  sx={{
+                    fontFamily: type === 'password' ? 'monospace' : 'inherit',
+                  }}
                 >
-                  {currentValue}
+                  {type === 'password'
+                    ? value.replace(/./g, '●') || '●●●●●●'
+                    : value || ''}
                 </Typography>
               )}
             </Grid>
 
-            {/* Action Button */}
             <Grid item xs={3}>
               <Box display="flex" justifyContent="flex-end" alignItems="center">
-                <IconButton
-                  sx={{
-                    ...sxActionButton, // Apply sx styles directly to IconButton
-                  }}
-                  onClick={() => {
-                    if (isValueEditable && !isDisabled) {
+                {isValueEditable && !isDisabled && usesButtonForEdit && (
+                  <IconButton
+                    sx={sxActionButton}
+                    onClick={() => {
                       if (isEditing) {
-                        document.querySelector('form')?.dispatchEvent(
-                          new Event('submit', {
-                            cancelable: true,
-                            bubbles: true,
-                          }),
-                        );
+                        handleSubmit();
                       } else {
                         setIsEditing(true);
                       }
-                    } else if (onClickedActionButton) {
-                      onClickedActionButton();
-                    }
-                  }}
-                  disabled={isDisabled}
-                >
-                  {actionButton && React.isValidElement(actionButton)
-                    ? React.cloneElement(actionButton as React.ReactElement, {
-                        sx: { fontSize: 'inherit', color: 'inherit' }, // Ensure it inherits styles
-                      })
-                    : actionButton}
-                </IconButton>
+                    }}
+                  >
+                    {isEditing ? (
+                      <CheckIcon sx={{ color: theme.palette.accent?.beige }} />
+                    ) : (
+                      <EditIcon sx={{ color: theme.palette.accent?.beige }} />
+                    )}
+                  </IconButton>
+                )}
+                {actionButton && onClickedActionButton && (
+                  <IconButton
+                    sx={sxActionButton}
+                    onClick={onClickedActionButton}
+                    disabled={isDisabled}
+                  >
+                    {actionButton}
+                  </IconButton>
+                )}
               </Box>
             </Grid>
 
-            {/* Divider */}
             {showDivider && (
               <Grid item xs={12}>
                 <hr />
