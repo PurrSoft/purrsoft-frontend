@@ -10,11 +10,10 @@ const animalProfileTag = 'AnimalProfile';
 type TagTypes = typeof animalProfileTag;
 
 export type AnimalProfile = {
-    id: string;
+    animalId: string;
     currentDisease?: string;
     currentMedication?: string;
     pastDisease?: string;
-    animalId: string;
     passport?: string;
     microchip?: string;
     externalDeworming?: string;

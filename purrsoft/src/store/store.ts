@@ -74,6 +74,7 @@ export const {
   useDeleteAnimalMutation,
   useGetAnimalProfileQuery,
   useUpdateAnimalProfileMutation,
+  useUpdateAnimalMutation,
 } = api;
 
 export { resetAuth, updateToken } from './auth';
