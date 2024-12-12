@@ -1,6 +1,10 @@
 import { authSlice } from './auth';
-import { authEndpoints } from './api';
-import { animalsEndpoints } from './api';
+import {
+  authEndpoints,
+  animalProfilesEndpoints,
+  animalsEndpoints,
+} from './api';
+import { fostersEndpoints } from './api';
 import { volunteersEndpoints } from './api';
 import {
   combineReducers,
@@ -33,13 +37,21 @@ export const api = createApi({
   }),
   //tagtypes
   endpoints: () => ({}),
-}).injectEndpoints({
-  endpoints: authEndpoints,
-}).injectEndpoints({
-  endpoints: animalsEndpoints,
+})
+  .injectEndpoints({
+    endpoints: authEndpoints,
+  })
+  .injectEndpoints({
+    endpoints: animalsEndpoints,
 }).injectEndpoints({
   endpoints: volunteersEndpoints,
-});
+  })
+  .injectEndpoints({
+    endpoints: fostersEndpoints,
+  })
+  .injectEndpoints({
+    endpoints: animalProfilesEndpoints,
+  });
 //root reducer
 const rootReducer = combineReducers({
   [api.reducerPath]: api.reducer,
@@ -74,6 +86,15 @@ export const {
   useLogoutMutation,
   useGetAnimalsQuery,
   useGetVolunteersQuery,
+  useChangePasswordMutation,
+  useUpdateAccountMutation,
+  useGetFostersQuery,
+  useDeleteAnimalMutation,
+  useGetAnimalProfileQuery,
+  useUpdateAnimalProfileMutation,
+  useUpdateAnimalMutation,
+  useRolesAndStatusQuery,
+  useRolesAndDatesQuery,
 } = api;
 
 export { resetAuth, updateToken } from './auth';

@@ -12,7 +12,7 @@ import { useTheme } from '@mui/material/styles';
 import HouseIcon from '@mui/icons-material/House';
 import { useAccountQuery } from '../../store';
 
-type RouteLabel = 'Home' | 'Program' | 'Animalute' | 'Evenimente' | 'Voluntari';
+type RouteLabel = 'Home' | 'Program' | 'Animalute' | 'Evenimente' | 'Voluntari' | 'Fosteri';
 
 type RouteObject = {
   label: RouteLabel;
@@ -32,7 +32,7 @@ export const Navbar = () => {
     {
       label: 'Animalute',
       value: '/management/animalute',
-      url: '/management/animalute',
+      url: '/management/animalute/lista',
     },
     {
       label: 'Evenimente',
@@ -49,8 +49,16 @@ export const Navbar = () => {
     });
   }
 
+  if (useAccountQuery().data?.roles?.includes('Manager')) {
+    routes.push({
+      label: 'Fosteri',
+      value: '/management/fosteri',
+      url: '/management/fosteri',
+    });
+  }
+
   const [activeTab, setActiveTab] = useState<string>(
-    routes.find((route) => route.value === location.pathname)?.value ||
+    routes.find((route) => location.pathname.startsWith(route.value))?.value ||
       '/management/program',
   );
 
@@ -62,9 +70,12 @@ export const Navbar = () => {
     if (location.pathname === '/management') {
       navigate('/management/program', { replace: true });
     } else {
-      setActiveTab(location.pathname);
+      const activeRoute = routes.find((route) =>
+        location.pathname.startsWith(route.value),
+      );
+      setActiveTab(activeRoute!.value);
     }
-  }, [location.pathname, navigate]);
+  }, [location.pathname, navigate, routes]);
 
   return (
     <AppBar

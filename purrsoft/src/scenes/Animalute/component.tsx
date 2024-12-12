@@ -1,11 +1,10 @@
-import { Container } from '@mui/material';
+import { Container } from "@mui/material";
+import { Outlet } from "react-router-dom";
 
 export const Animalute = () => {
   return (
-    <>
-      <Container>
-        <h1>Animalute</h1>
-      </Container>
-    </>
+    <Container>
+        <Outlet />
+    </Container>
   );
 };
