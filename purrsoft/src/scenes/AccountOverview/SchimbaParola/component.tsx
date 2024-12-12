@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Box, Button, Grid, Typography, useTheme } from '@mui/material';
+import { Button, Grid, Typography, useTheme } from '@mui/material';
 import * as Yup from 'yup';
 import { AccountInfoGridItem } from '../../../components/AccountInfoGridItem';
 import { useAccountQuery, useChangePasswordMutation } from '../../../store';
@@ -98,19 +98,20 @@ export const SchimbaParola = () => {
   };
 
   return (
-    <Box
+    <Grid
+      container
       sx={{
-        padding: theme.spacing(4),
         width: '100%',
-        maxWidth: 400,
-        margin: '0 auto',
+        height: { xs: 'auto', md: '100%' },
+        flexDirection: 'column',
+        gap: theme.spacing(2),
       }}
     >
       <Typography variant="h5" fontWeight="bold" color="black" gutterBottom>
         Schimba Parola:
       </Typography>
-      <Grid container direction="column" spacing={2}>
-        <Grid item>
+      <Grid container direction="column" spacing={2} width={'100%'}>
+        <Grid item xs={12}>
           <AccountInfoGridItem
             title="Parola curenta"
             isValueEditable={true}
@@ -185,6 +186,6 @@ export const SchimbaParola = () => {
       >
         {snackbarMessage}
       </AppSnackbar>
-    </Box>
+    </Grid>
   );
 };
