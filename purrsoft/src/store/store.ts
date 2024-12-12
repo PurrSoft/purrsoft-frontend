@@ -32,11 +32,13 @@ export const api = createApi({
   }),
   //tagtypes
   endpoints: () => ({}),
-}).injectEndpoints({
-  endpoints: authEndpoints,
-}).injectEndpoints({
-  endpoints: animalsEndpoints,
-});
+})
+  .injectEndpoints({
+    endpoints: authEndpoints,
+  })
+  .injectEndpoints({
+    endpoints: animalsEndpoints,
+  });
 //root reducer
 const rootReducer = combineReducers({
   [api.reducerPath]: api.reducer,
@@ -70,6 +72,7 @@ export const {
   useRegisterMutation,
   useLogoutMutation,
   useGetAnimalsQuery,
+  useChangePasswordMutation,
 } = api;
 
 export { resetAuth, updateToken } from './auth';
