@@ -1,0 +1,1 @@
+export { Cereri } from './component';

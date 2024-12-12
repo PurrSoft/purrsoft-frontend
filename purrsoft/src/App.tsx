@@ -18,6 +18,7 @@ import { RolurileMele } from './scenes/AccountOverview/RolurileMele';
 import { SchimbaParola } from './scenes/AccountOverview/SchimbaParola';
 import { AplicaRol } from './scenes/AccountOverview/AplicaRol';
 import { Fosteri } from './scenes/Fosteri';
+import { Cereri } from './scenes/Cereri';
 import { ModificaAnimal } from './scenes/Animalute/ModificaAnimal';
 import { Voluntari } from './scenes/Voluntari';
 
@@ -86,6 +87,10 @@ const authenticatedRoutesConfig = [
         path: 'voluntari',
         element: <Voluntari />,
       }
+      {
+        path: 'cereri',
+        element: <Cereri />,
+      },
     ],
   },
   {

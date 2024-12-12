@@ -5,6 +5,7 @@ import {
   animalsEndpoints,
 } from './api';
 import { fostersEndpoints } from './api';
+import { requestsEndpoints } from './api';
 import { volunteersEndpoints } from './api';
 import {
   combineReducers,
@@ -51,6 +52,9 @@ export const api = createApi({
   })
   .injectEndpoints({
     endpoints: animalProfilesEndpoints,
+  })
+  .injectEndpoints({
+    endpoints: requestsEndpoints,
   });
 //root reducer
 const rootReducer = combineReducers({
@@ -95,6 +99,7 @@ export const {
   useUpdateAnimalMutation,
   useRolesAndStatusQuery,
   useRolesAndDatesQuery,
+  useGetRequestsQuery,
 } = api;
 
 export { resetAuth, updateToken } from './auth';
