@@ -1,0 +1,1 @@
+export { AccountInfoGridItem } from './component';
