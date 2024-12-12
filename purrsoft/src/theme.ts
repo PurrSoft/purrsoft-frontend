@@ -43,7 +43,7 @@ export const appTheme = createTheme({
       sm: 600,
       md: 800,
       lg: 1200,
-      xl: 1536,
+      xl: 1920,
     },
   },
   palette: {
