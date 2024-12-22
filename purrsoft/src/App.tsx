@@ -72,8 +72,8 @@ const authenticatedRoutesConfig = [
           {
             path: ':id',
             element: <ModificaAnimal />,
-          }
-        ]
+          },
+        ],
       },
       {
         path: 'evenimente',
@@ -86,7 +86,7 @@ const authenticatedRoutesConfig = [
       {
         path: 'voluntari',
         element: <Voluntari />,
-      }
+      },
       {
         path: 'cereri',
         element: <Cereri />,
