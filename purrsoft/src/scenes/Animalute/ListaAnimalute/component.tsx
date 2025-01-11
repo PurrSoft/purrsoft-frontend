@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   Box,
   Button,
@@ -14,10 +14,13 @@ import { CustomCard } from '../../../components/CustomCard';
 import { useTheme } from '@mui/material/styles';
 import { useGetAnimalsQuery } from '../../../store';
 import { useNavigate } from 'react-router-dom';
+import { AddAnimalForm } from '../AddAnimalForm';
+import defaultPhoto from '/defaultPhoto.jpeg';
 
 export const ListaAnimalute = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const { data, error, isLoading } = useGetAnimalsQuery();
+  const [open, setOpen] = useState(false);
 
   const theme = useTheme();
   const navigate = useNavigate();
@@ -34,6 +37,14 @@ export const ListaAnimalute = () => {
     return <div>Error fetching animals!</div>;
   }
 
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <Container>
       {/* Sticky Search Bar */}
@@ -45,10 +56,10 @@ export const ListaAnimalute = () => {
           zIndex: 9,
         }}
       >
-        <Box sx={{ display: 'flex', justifyContent: 'left', my: 2 }}>
+        <Box sx={{ display: 'flex', my: 2 }}>
           <TextField
             variant="outlined"
-            placeholder="Search animals"
+            placeholder="Cauta animalut"
             value={searchTerm}
             onChange={handleSearchChange}
             sx={{
@@ -76,6 +87,21 @@ export const ListaAnimalute = () => {
               ),
             }}
           />
+          <Button 
+            variant="contained"
+            sx={{
+              backgroundColor: theme.palette.accent?.lightGreen,
+              color: theme.palette.accent?.white,
+              borderRadius: '50px',
+              '&:hover': {
+                backgroundColor: theme.palette.accent?.darkGreen,
+              },
+              ml: 2,
+            }} 
+            onClick={handleClickOpen}
+          >
+            Adauga animal
+          </Button>
         </Box>
       </Box>
 
@@ -103,9 +129,7 @@ export const ListaAnimalute = () => {
                     Nume: {animal.name}
                   </Typography>
                   <img
-                    // src={`https://via.placeholder.com/150?text=${animal.name}`} // for testing purposes
-                    src={animal.imageUrl}
-                    alt={animal.name}
+                    src={animal.imageUrl ? animal.imageUrl : defaultPhoto}
                     style={{ width: '80%', height: 'auto', borderRadius: '8px' }}
                   />
                   <Button
@@ -115,7 +139,6 @@ export const ListaAnimalute = () => {
                       backgroundColor: theme.palette.accent?.tealGreen,
                     }}
                     onClick={() => {
-                      console.log(animal.id);
                       navigate(`/management/animalute/${animal.id}`, { state: { animal } });
                     }}
                   >
@@ -127,6 +150,8 @@ export const ListaAnimalute = () => {
           ))}
         </Grid>
       </Box>
+
+      <AddAnimalForm open={open} onClose={handleClose} />
     </Container>
   );
 };

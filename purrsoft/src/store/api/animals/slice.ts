@@ -8,15 +8,22 @@ import {
 
 const animalTag = 'Animal';
 type TagTypes = typeof animalTag;
+type ApiErrors = Record<string, string[]>;
 
 export type Animal = {
-    id: string;
+    id?: string;
     animalType: string;
     name: string;
     yearOfBirth: number;
     gender: string;
-    sterilized: boolean;
-    imageUrl: string;
+    sterilized?: boolean;
+    imageUrl?: string;
+}
+
+export type AnimalResponse = {
+  result: string;
+  errors: ApiErrors;
+  isValid: boolean;
 }
 
 export type AnimalsPaginatedRepsonse = {
@@ -59,6 +66,23 @@ export const endpoints = <Tags extends string> (
         body: {
           animalDto: {
             id: animal.id,
+            animalType: animal.animalType,
+            name: animal.name,
+            yearOfBirth: animal.yearOfBirth,
+            gender: animal.gender,
+            sterilized: animal.sterilized,
+            imageUrl: animal.imageUrl
+          }
+        }
+      }),
+    }),
+    addAnimal: builder.mutation<AnimalResponse, Animal>({
+      invalidatesTags: [animalTag],
+      query: (animal) => ({
+        url: `/Animal`,
+        method: 'POST',
+        body: {
+          animalDto: {
             animalType: animal.animalType,
             name: animal.name,
             yearOfBirth: animal.yearOfBirth,

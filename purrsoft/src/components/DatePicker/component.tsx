@@ -56,7 +56,10 @@ const lastDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(
             textAlign={'center'}
             alignItems="center"
         >
-            <Typography variant="h6">{`${months[currentDate.getMonth()]} ${currentDate.getFullYear()}`}</Typography>
+            <Typography 
+                variant="h6"
+                sx={{ color: theme.palette.accent?.beige }}
+            >{`${months[currentDate.getMonth()]} ${currentDate.getFullYear()}`}</Typography>
             
         </Box>
         <Box sx={{
@@ -66,13 +69,25 @@ const lastDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(
             marginTop: 1
         }}>
             {days.map(day => (
-                    <Typography key={day} variant='h6' sx={{ textAlign: 'center', color: 'text.secondary' }}>
+                    <Typography 
+                        key={day} 
+                        variant='h6' 
+                        sx={{ 
+                            textAlign: 'center', 
+                            color: theme.palette.accent?.beige
+                        }}
+                    >
                         {day}
                     </Typography>
                 
             ))}
             {previousMonthOverflow.map((day, index) => (
-                <Typography sx={{ textAlign: 'center', color: 'transparent' }}>
+                <Typography 
+                    sx={{ 
+                        textAlign: 'center', 
+                        color: 'transparent' 
+                    }}
+                    >
                     {day}
                 </Typography>
             ))}
@@ -84,8 +99,16 @@ const lastDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(
                         width={'24px'}
                         height={'24px'}
                         padding={'1px'}
-                        sx={{backgroundColor: isSpecialDay ? theme.palette.accent?.beige : undefined}}>
-                        <Typography sx={{ textAlign: 'center' }}>
+                        sx={{
+                            backgroundColor: isSpecialDay ? theme.palette.accent?.lightGreen : undefined,
+                        }}
+                        >
+                        <Typography 
+                            sx={{ 
+                                textAlign: 'center',
+                                color: theme.palette.accent?.beige,
+                            }}
+                        >
                             {day.getDate()}
                         </Typography>
                     </Box>
@@ -98,8 +121,24 @@ const lastDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(
             ))}
         </Box>
         <Box sx={{display: 'flex', justifyContent: 'space-between', width: '100%', position: 'absolute', left: 0, bottom: 8}}>
-            <Button onClick={() => changeMonth(-1)}><Redo fontSize='large' sx={{ transform: 'rotate(180deg)', color: 'text.secondary' }}/></Button>
-            <Button onClick={() => changeMonth(1)}><Undo fontSize='large' sx={{ transform: 'rotate(180deg)', color: 'text.secondary' }}/></Button>
+            <Button onClick={() => changeMonth(-1)}>
+                <Redo 
+                    fontSize='large' 
+                    sx={{ 
+                        transform: 'rotate(180deg)', 
+                        color: theme.palette.accent?.beige
+                    }}
+                />
+            </Button>
+            <Button onClick={() => changeMonth(1)}>
+                <Undo 
+                    fontSize='large' 
+                    sx={{ 
+                        transform: 'rotate(180deg)', 
+                        color: theme.palette.accent?.beige
+                    }}
+                />
+            </Button>
         </Box>
     </Paper>
 );

@@ -1,0 +1,1 @@
+export { AddAnimalForm } from './component';

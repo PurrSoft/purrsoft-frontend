@@ -60,10 +60,11 @@ export const appTheme = createTheme({
       black: '#000',
       white: '#FFF',
       softSageGreen: '#BEC4B2',
-      error: '#FF0000',
+      error: '#9E5448',
     },
     background: {
       default: '#EBE7E0',
+      paper: '#DCD5C9'
     },
   },
   typography: {
@@ -81,6 +82,7 @@ export const appTheme = createTheme({
     h2: {
       fontSize: '2.5rem',
       fontWeight: 700,
+      color: '#617D54', // Set dark green color for h2
     },
     h3: {
       fontSize: '2.25rem',

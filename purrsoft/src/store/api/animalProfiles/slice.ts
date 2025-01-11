@@ -14,8 +14,10 @@ export type AnimalProfile = {
     currentDisease?: string;
     currentMedication?: string;
     pastDisease?: string;
+    //passport and microchip are required on BE
     passport?: string;
     microchip?: string;
+    
     externalDeworming?: string;
     internalDeworming?: string;
     currentTreatment?: string;
@@ -63,6 +65,14 @@ export const endpoints = <Tags extends string> (
       query: (profile) => ({
         url: `/AnimalProfile`,
         method: 'PUT',
+        body: profile
+      }),
+    }),
+    addAnimalProfile: builder.mutation<void, AnimalProfile>({
+      invalidatesTags: [animalProfileTag],
+      query: (profile) => ({
+        url: `/AnimalProfile`,
+        method: 'POST',
         body: profile
       }),
     }),
