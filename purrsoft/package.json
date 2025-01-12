@@ -15,6 +15,7 @@
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
     "@hookform/resolvers": "^3.9.1",
+    "@microsoft/signalr": "^8.0.7",
     "@mui/icons-material": "^6.1.6",
     "@mui/material": "^6.1.6",
     "@reduxjs/toolkit": "^2.3.0",
