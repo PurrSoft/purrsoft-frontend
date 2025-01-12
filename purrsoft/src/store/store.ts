@@ -113,6 +113,7 @@ export const {
   useAddShiftMutation,
   useUpdateShiftMutation,
   useRemoveShiftMutation,
+  useGetVolunteersPaginatedQuery,
 } = api;
 
 export { resetAuth, updateToken } from './auth';
