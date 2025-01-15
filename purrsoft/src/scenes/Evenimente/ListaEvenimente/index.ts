@@ -1,0 +1,1 @@
+export { ListaEvenimente } from './component';

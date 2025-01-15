@@ -7,6 +7,7 @@ import {
 import { fostersEndpoints } from './api';
 import { requestsEndpoints } from './api';
 import { volunteersEndpoints } from './api';
+import { eventsEndpoints } from './api';
 import {
   combineReducers,
   configureStore,
@@ -55,6 +56,9 @@ export const api = createApi({
   })
   .injectEndpoints({
     endpoints: requestsEndpoints,
+  })
+  .injectEndpoints({
+    endpoints: eventsEndpoints,
   });
 //root reducer
 const rootReducer = combineReducers({
@@ -100,6 +104,7 @@ export const {
   useRolesAndStatusQuery,
   useRolesAndDatesQuery,
   useGetRequestsQuery,
+  useGetEventsQuery,
 } = api;
 
 export { resetAuth, updateToken } from './auth';
