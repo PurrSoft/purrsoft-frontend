@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Box, Button, Typography, Container, Grid, CircularProgress } from '@mui/material';
 import { CustomCard } from './../../../components/CustomCard';
 import UploadIcon from '@mui/icons-material/Upload';
@@ -6,17 +6,19 @@ import PanoramaOutlinedIcon from '@mui/icons-material/PanoramaOutlined';
 import { useTheme } from '@mui/material/styles';
 import { useDeleteAnimalMutation, useGetAnimalProfileQuery, useUpdateAnimalProfileMutation, useUpdateAnimalMutation } from '../../../store';
 import { AccountInfoGridItem } from '../../../components/AccountInfoGridItem';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { AppSnackbar } from '../../../components/AppSnackbar';
 import { useVisibility } from '../../../hooks/useVisibility';
+import defaultPhoto from '/defaultPhoto.jpeg';
 
 export const ModificaAnimal = () => {
   const location = useLocation();
   const animal = location.state?.animal;
+  const { id } = useParams<{ id: string}>();
   const navigate = useNavigate();
   const theme = useTheme();
   const [deleteAnimal] = useDeleteAnimalMutation();
-  const { data: animalProfile, error, isLoading } = useGetAnimalProfileQuery(animal.id);
+  const { data: animalProfile, error, isLoading } = useGetAnimalProfileQuery(id!);
   const [updateAnimalProfile] = useUpdateAnimalProfileMutation();
   const [updateAnimal] = useUpdateAnimalMutation();
   const [showInfo, setShowInfo] = useState(''); 
@@ -25,14 +27,25 @@ export const ModificaAnimal = () => {
   const [yearOfBirth, setYearOfBirth] = useState(animal.yearOfBirth);
   const [gender, setGender] = useState(animal.gender);
   const [sterilized, setSterilized] = useState(animal.sterilized);
-  const [passport, setPassport] = useState(animalProfile?.passport);
-  const [microchip, setMicrochip] = useState(animalProfile?.microchip);
-  const [currentDisease, setCurrentDisease] = useState(animalProfile?.currentDisease);
-  const [currentMedication, setCurrentMedication] = useState(animalProfile?.currentMedication);
-  const [pastDisease, setPastDisease] = useState(animalProfile?.pastDisease);
-  const [currentTreatment, setCurrentTreatment] = useState(animalProfile?.currentTreatment);
-  const [rabiesVaccine, setRabiesVaccine] = useState(animalProfile?.rabiesVaccine);
-  const [multivalentVaccine, setMultivalentVaccine] = useState(animalProfile?.multivalentVaccine);
+  const [passport, setPassport] = useState('');
+  const [microchip, setMicrochip] = useState('');
+  const [currentDisease, setCurrentDisease] = useState('');
+  const [currentMedication, setCurrentMedication] = useState('');
+  const [pastDisease, setPastDisease] = useState('');
+  const [currentTreatment, setCurrentTreatment] = useState('');
+  const [rabiesVaccine, setRabiesVaccine] = useState('');
+  const [multivalentVaccine, setMultivalentVaccine] = useState('');
+  const [externalDeworming, setExternalDeworming] = useState('');
+  const [internalDeworming, setInternalDeworming] = useState('');
+  const [fivFeLVTest, setFivFeLVTest] = useState('');
+  const [coronavirusVaccine, setCoronavirusVaccine] = useState('');
+  const [giardiaTest, setGiardiaTest] = useState('');
+  const [earMiteTreatment, setEarMiteTreatment] = useState('');
+  const [intakeNotes, setIntakeNotes] = useState('');
+  const [additionalMedicalInfo, setAdditionalMedicalInfo] = useState('');
+  const [additionalInfo, setAdditionalInfo] = useState('');
+  const [refillReminders, setRefillReminders] = useState('');
+  const [usefulLinks, setUsefulLinks] = useState<string[]>([]);
   const [editMode, setEditMode] = useState(false);
   const [animalEdited, setAnimalEdited] = useState(false);
   const [animalProfileEdited, setAnimalProfileEdited] = useState(false);
@@ -43,6 +56,30 @@ export const ModificaAnimal = () => {
     onOpen: onSnackbarOpen,
     onClose: onSnackbarClose,
   } = useVisibility();
+
+  useEffect(() => {
+    if (animalProfile) {
+      setPassport(animalProfile.passport || '');
+      setMicrochip(animalProfile.microchip || '');
+      setCurrentDisease(animalProfile.currentDisease || '');
+      setCurrentMedication(animalProfile.currentMedication || '');
+      setPastDisease(animalProfile.pastDisease || '');
+      setCurrentTreatment(animalProfile.currentTreatment || '');
+      setRabiesVaccine(animalProfile.rabiesVaccine || '');
+      setMultivalentVaccine(animalProfile.multivalentVaccine || '');
+      setExternalDeworming(animalProfile.externalDeworming || '');
+      setInternalDeworming(animalProfile.internalDeworming || '');
+      setFivFeLVTest(animalProfile.fivFeLVTest || '');
+      setCoronavirusVaccine(animalProfile.coronavirusVaccine || '');
+      setGiardiaTest(animalProfile.giardiaTest || '');
+      setEarMiteTreatment(animalProfile.earMiteTreatment || '');
+      setIntakeNotes(animalProfile.intakeNotes || '');
+      setAdditionalMedicalInfo(animalProfile.additionalMedicalInfo || '');
+      setAdditionalInfo(animalProfile.additionalInfo || '');
+      setRefillReminders(animalProfile.refillReminders || '');
+      setUsefulLinks(animalProfile.usefulLinks || []);
+    }
+  }, [animalProfile]);
 
   const handleDeleteClick = (animalId: string) => {
     setAnimalToDelete(animalId);
@@ -86,7 +123,7 @@ export const ModificaAnimal = () => {
     if (editMode) {
       if (animalProfileEdited) {
         updateAnimalProfile({
-          animalId: animal.id,
+          animalId: id!,
           passport,
           microchip,
           currentDisease,
@@ -95,6 +132,17 @@ export const ModificaAnimal = () => {
           currentTreatment,
           rabiesVaccine,
           multivalentVaccine,
+          externalDeworming,
+          internalDeworming,
+          fivFeLVTest,
+          coronavirusVaccine,
+          giardiaTest,
+          earMiteTreatment,
+          intakeNotes,
+          additionalMedicalInfo,
+          additionalInfo,
+          refillReminders,
+          usefulLinks,
         });
       }
       if (animalEdited) {
@@ -143,6 +191,9 @@ export const ModificaAnimal = () => {
           showDivider={false}
           editButtonColor='accent.green'
           usesButtonForEdit={editMode}
+          isSelect={true}
+          selectOptions={['Caine', 'Pisica']}
+          selectValues={['Dog', 'Cat']}
         />
       </Grid>
       <Grid item xs={12}>
@@ -171,6 +222,7 @@ export const ModificaAnimal = () => {
           showDivider={false}
           editButtonColor='accent.green'
           usesButtonForEdit={editMode}
+          type='number'
         />
       </Grid>
       <Grid item xs={12}>
@@ -185,20 +237,24 @@ export const ModificaAnimal = () => {
           showDivider={false}
           editButtonColor='accent.green'
           usesButtonForEdit={editMode}
+          isSelect={true}
+          selectOptions={['Masculin', 'Feminin']}
+          selectValues={['Male', 'Female']}
         />
       </Grid>
       <Grid item xs={12}>
         <AccountInfoGridItem
-          title="Sterilized"
-          value={sterilized ? 'Yes' : 'No'}
+          title="Sterilized:"
+          value={sterilized ? 'true' : 'false'}
           isValueEditable={true}
           onEditValue={(newValue) => {
             setAnimalEdited(true);
-            newValue === 'Yes' ? setSterilized(true) : setSterilized(false)
+            newValue === 'true' ? setSterilized(true) : setSterilized(false)
           }}
           showDivider={false}
           editButtonColor='accent.green'
           usesButtonForEdit={editMode}
+          isCheckbox={true}
         />
       </Grid>
       <Grid item xs={12}>
@@ -333,6 +389,146 @@ export const ModificaAnimal = () => {
           usesButtonForEdit={editMode}
         />
       </Grid>
+      <Grid item xs={12}>
+        <AccountInfoGridItem
+          title="External Deworming:"
+          value={externalDeworming}
+          isValueEditable={true}
+          onEditValue={(newValue) => {
+            setAnimalProfileEdited(true);
+            setExternalDeworming(newValue)
+          }}
+          showDivider={false}
+          editButtonColor='accent.green'
+          usesButtonForEdit={editMode}
+        />
+      </Grid>
+      <Grid item xs={12}>
+        <AccountInfoGridItem
+          title="Internal Deworming:"
+          value={internalDeworming}
+          isValueEditable={true}
+          onEditValue={(newValue) => {
+            setAnimalProfileEdited(true);
+            setInternalDeworming(newValue)
+          }}
+          showDivider={false}
+          editButtonColor='accent.green'
+          usesButtonForEdit={editMode}
+        />
+      </Grid>
+      <Grid item xs={12}>
+        <AccountInfoGridItem
+          title="FIV/FeLV Test:"
+          value={fivFeLVTest}
+          isValueEditable={true}
+          onEditValue={(newValue) => {
+            setAnimalProfileEdited(true);
+            setFivFeLVTest(newValue)
+          }}
+          showDivider={false}
+          editButtonColor='accent.green'
+          usesButtonForEdit={editMode}
+        />
+      </Grid>
+      <Grid item xs={12}>
+        <AccountInfoGridItem
+          title="Coronavirus Vaccine:"
+          value={coronavirusVaccine}
+          isValueEditable={true}
+          onEditValue={(newValue) => {
+            setAnimalProfileEdited(true);
+            setCoronavirusVaccine(newValue)
+          }}
+          showDivider={false}
+          editButtonColor='accent.green'
+          usesButtonForEdit={editMode}
+        />
+      </Grid>
+      <Grid item xs={12}>
+        <AccountInfoGridItem
+          title="Giardia Test:"
+          value={giardiaTest}
+          isValueEditable={true}
+          onEditValue={(newValue) => {
+            setAnimalProfileEdited(true);
+            setGiardiaTest(newValue)
+          }}
+          showDivider={false}
+          editButtonColor='accent.green'
+          usesButtonForEdit={editMode}
+        />
+      </Grid>
+      <Grid item xs={12}>
+        <AccountInfoGridItem
+          title="Ear Mite Treatment:"
+          value={earMiteTreatment}
+          isValueEditable={true}
+          onEditValue={(newValue) => {
+            setAnimalProfileEdited(true);
+            setEarMiteTreatment(newValue)
+          }}
+          showDivider={false}
+          editButtonColor='accent.green'
+          usesButtonForEdit={editMode}
+        />
+      </Grid>
+      <Grid item xs={12}>
+        <AccountInfoGridItem
+          title="Intake Notes:"
+          value={intakeNotes}
+          isValueEditable={true}
+          onEditValue={(newValue) => {
+            setAnimalProfileEdited(true);
+            setIntakeNotes(newValue)
+          }}
+          showDivider={false}
+          editButtonColor='accent.green'
+          usesButtonForEdit={editMode}
+        />
+      </Grid>
+      <Grid item xs={12}>
+        <AccountInfoGridItem
+          title="Additional Medical Info:"
+          value={additionalMedicalInfo}
+          isValueEditable={true}
+          onEditValue={(newValue) => {
+            setAnimalProfileEdited(true);
+            setAdditionalMedicalInfo(newValue)
+          }}
+          showDivider={false}
+          editButtonColor='accent.green'
+          usesButtonForEdit={editMode}
+        />
+      </Grid>
+      <Grid item xs={12}>
+        <AccountInfoGridItem
+          title="Additional Info:"
+          value={additionalInfo}
+          isValueEditable={true}
+          onEditValue={(newValue) => {
+            setAnimalProfileEdited(true);
+            setAdditionalInfo(newValue)
+          }}
+          showDivider={false}
+          editButtonColor='accent.green'
+          usesButtonForEdit={editMode}
+        />
+      </Grid>
+      <Grid item xs={12}>
+        <AccountInfoGridItem
+          title="Refill Reminders:"
+          value={refillReminders}
+          isValueEditable={true}
+          onEditValue={(newValue) => {
+            setAnimalProfileEdited(true);
+            setRefillReminders(newValue)
+          }}
+          showDivider={false}
+          editButtonColor='accent.green'
+          usesButtonForEdit={editMode}
+        />
+      </Grid>
     </>
   );
 
@@ -386,7 +582,7 @@ export const ModificaAnimal = () => {
             shadow={true}
             closeButton={false}
           >
-            <img src={animal.imageUrl} style={{ width: '200px', height: 'auto', borderRadius: '16px' }} />
+            <img src={animal.imageUrl ? animal.imageUrl: defaultPhoto} style={{ width: '200px', height: 'auto', borderRadius: '16px' }} />
           </CustomCard>
           {/* Actions button result */}
           {showInfo !== '' && 
@@ -480,8 +676,7 @@ export const ModificaAnimal = () => {
                 fullWidth
                 sx={{ 
                   borderRadius: '16px',
-                  // backgroundColor: theme.palette.accent?.error,
-                  backgroundColor: 'red'
+                  backgroundColor: theme.palette.accent?.error,
                 }}
                 onClick={() => handleDeleteClick(animal.id)}
               >
@@ -491,12 +686,12 @@ export const ModificaAnimal = () => {
           </Box>
           <Button
             variant="contained"
-            color="success"
             sx={{ 
               mt: 'auto',
               mb: 'auto',
               ml: 20,
-              borderRadius: '16px' 
+              borderRadius: '16px', 
+              backgroundColor: theme.palette.accent?.darkGreen
             }}
             onClick={() => navigate('/management/animalute/lista')}
           >
