@@ -5,7 +5,7 @@ import {
     FetchBaseQueryError,
     FetchBaseQueryMeta
 } from "@reduxjs/toolkit/query";
-import { Volunteer } from "../volunteers/slice";
+// import { Volunteer } from "../volunteers/slice";
 
 const eventTag = 'Event';
 type TagTypes = typeof eventTag;
@@ -17,7 +17,7 @@ export type Eveniment = {
     where: string;
     when: string;
     description: string;
-    volunteers: Volunteer[];
+    volunteers: string[];
 }
 
 export type EventsPaginatedResponse = {
@@ -41,7 +41,7 @@ export const endpoints = <Tags extends string> (
     getEvents: builder.query<EventsPaginatedResponse, void>({
         providesTags: [eventTag],  
         query: () => ({
-            url: '/Animal',
+            url: '/Event',
             method: 'GET'
         }),
     }),
