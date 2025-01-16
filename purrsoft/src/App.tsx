@@ -12,6 +12,7 @@ import { Program } from './scenes/Program';
 import { updateToken, useAppDispatch, useAppStateSelector } from './store';
 import { Login } from './scenes/Login';
 import { DespreNoi } from './scenes/DespreNoi';
+import { DespreNoiNou } from './scenes/DespreNoiNou';
 import { AccountOverview } from './scenes/AccountOverview/component';
 import { ContulMeu } from './scenes/AccountOverview/ContulMeu';
 import { RolurileMele } from './scenes/AccountOverview/RolurileMele';
@@ -40,7 +41,7 @@ const publicRoutes = [
   },
   {
     path: '/DespreNoi',
-    element: <DespreNoi />,
+    element: <DespreNoiNou />,
   },
 ];
 
