@@ -18,6 +18,7 @@ import { useVisibility } from '../../hooks/useVisibility';
 import {
   useAccountQuery,
   useAddShiftMutation,
+  useGetShiftCountByDateQuery,
   useGetShiftsQuery,
   useGetVolunteersPaginatedQuery,
   useGetVolunteersQuery,
@@ -248,7 +249,21 @@ export const Program = () => {
 
     return false; // Placeholder return value
   };
+  //when date is selected set th enumber of shifts
+  const { data: shiftCountData, refetch: refetchShiftCount } =
+    useGetShiftCountByDateQuery({
+      date: selectedDate || '',
+    });
 
+  const totalShiftCount = shiftCountData?.totalShiftCount || 0;
+  const dayShiftsCount = shiftCountData?.dayShiftsCount || 0;
+  const nightShiftsCount = shiftCountData?.nightShiftsCount || 0;
+
+  useEffect(() => {
+    if (selectedDate) {
+      refetchShiftCount();
+    }
+  }, [selectedDate, refetchShiftCount]);
   const handleAddShiftToVolunteer = async (volunteerId: string) => {
     if (!selectedDate || !shiftChangeType) return;
 
@@ -422,35 +437,52 @@ export const Program = () => {
                     Eveniment
                   </Typography>
                 </Grid>
+            spacing={2}
+            justifyContent="center"
+            alignItems="center"
+          >
+            <Grid item>
+              <Typography
+                variant="h6"
+                sx={{
+                  backgroundColor: theme.palette.accent?.darkGreen,
+                  color: 'white',
+                  padding: '10px 20px',
+                  borderRadius: '16px',
+                }}
+              >
+                Numărul de persoane: {totalShiftCount}
+              </Typography>
+            </Grid>
 
-                <Grid item>
-                  <Typography
-                    variant="h6"
-                    sx={{
-                      backgroundColor: theme.palette.warning.main,
-                      color: 'white',
-                      padding: '10px 20px',
-                      borderRadius: '16px',
-                    }}
-                  >
-                    Tura de zi
-                  </Typography>
-                </Grid>
-                <Grid item>
-                  <Typography
-                    variant="h6"
-                    sx={{
-                      backgroundColor: theme.palette.accent?.lavenderBlue,
-                      color: 'white',
-                      padding: '10px 20px',
-                      borderRadius: '16px',
-                    }}
-                  >
-                    Tura de seară
-                  </Typography>
-                </Grid>
-              </Grid>
-            )}
+            <Grid item>
+              <Typography
+                variant="h6"
+                sx={{
+                  backgroundColor: theme.palette.warning.main,
+                  color: 'white',
+                  padding: '10px 20px',
+                  borderRadius: '16px',
+                }}
+              >
+                Numar tura de zi: {dayShiftsCount}
+              </Typography>
+            </Grid>
+            <Grid item>
+              <Typography
+                variant="h6"
+                sx={{
+                  backgroundColor: theme.palette.accent?.lavenderBlue,
+                  color: 'white',
+                  padding: '10px 20px',
+                  borderRadius: '16px',
+                }}
+              >
+                Numar tura de noapte: {nightShiftsCount}
+              </Typography>
+            </Grid>
+          </Grid>
+        )}
 
             {/* Calendar Component */}
             <Grid item xs={14} md={10}>
