@@ -74,8 +74,8 @@ const authenticatedRoutesConfig = [
           {
             path: ':id',
             element: <ModificaAnimal />,
-          }
-        ]
+          },
+        ],
       },
       {
         path: 'evenimente',
