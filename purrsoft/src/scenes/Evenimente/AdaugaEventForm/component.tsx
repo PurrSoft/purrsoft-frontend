@@ -235,7 +235,7 @@ export const AdaugaEventForm = ({ open, onClose }: { open: boolean; onClose: () 
                                         </Select>
                                     </Grid>
                                     <Grid item xs={2}>
-                                        <IconButton onClick={() => handleRemoveVolunteer(index)}>
+                                        <IconButton onClick={() => handleRemoveVolunteer(index)} sx={{ color: theme.palette.accent?.green }}>
                                             <RemoveIcon />
                                         </IconButton>
                                     </Grid>
