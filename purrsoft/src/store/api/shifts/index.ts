@@ -1,1 +1,1 @@
-export { endpoints } from './slice';
+export * from './slice';
