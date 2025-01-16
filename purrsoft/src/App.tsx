@@ -86,7 +86,7 @@ const authenticatedRoutesConfig = [
       {
         path: 'voluntari',
         element: <Voluntari />,
-      }
+      },
       {
         path: 'cereri',
         element: <Cereri />,

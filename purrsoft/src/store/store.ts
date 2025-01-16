@@ -3,6 +3,7 @@ import {
   authEndpoints,
   animalProfilesEndpoints,
   animalsEndpoints,
+  shiftsEndpoints,
 } from './api';
 import { fostersEndpoints } from './api';
 import { requestsEndpoints } from './api';
@@ -54,6 +55,9 @@ export const api = createApi({
     endpoints: animalProfilesEndpoints,
   })
   .injectEndpoints({
+    endpoints: shiftsEndpoints,
+  })
+  .injectEndpoints({
     endpoints: requestsEndpoints,
   });
 //root reducer
@@ -100,6 +104,7 @@ export const {
   useRolesAndStatusQuery,
   useRolesAndDatesQuery,
   useGetRequestsQuery,
+  useGetShiftsQuery,
 } = api;
 
 export { resetAuth, updateToken } from './auth';

@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {Box, Button, Paper, Typography, useTheme} from '@mui/material'
 import { Redo, Undo } from '@mui/icons-material';
+import { useAccountQuery, useGetShiftsQuery } from '../../store';
 
 type Props = {
     specialDates: Date[];
@@ -16,6 +17,8 @@ const months = ["January", "February", "March", "April", "May", "June", "July", 
 const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
 
 const lastDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+
+
 
 
  // Calculate the previous month's overflow days
