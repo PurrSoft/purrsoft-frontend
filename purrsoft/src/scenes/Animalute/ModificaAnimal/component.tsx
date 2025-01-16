@@ -386,7 +386,7 @@ export const ModificaAnimal = () => {
             shadow={true}
             closeButton={false}
           >
-            <img src={'https://localhost:5173/'+animal.imageUrl} style={{ width: '200px', height: 'auto', borderRadius: '16px' }} />
+            <img src={animal.imageUrl} style={{ width: '200px', height: 'auto', borderRadius: '16px' }} />
           </CustomCard>
           {/* Actions button result */}
           {showInfo !== '' && 

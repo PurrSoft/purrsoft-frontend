@@ -130,7 +130,9 @@ export const Voluntari = () => {
                 >
                   Email: 
                   <Typography 
+                    component={'span'}
                     sx={{
+                        display: 'block',
                         backgroundColor: theme.palette.accent?.lightGreen,
                         borderRadius: '8px',
                         color: theme.palette.accent?.white,
@@ -138,7 +140,10 @@ export const Voluntari = () => {
                         }}>
                         {volunteer.email.split('@')[0]}
                     </Typography>
-                    <Typography sx={{
+                    <Typography 
+                      component={'span'}
+                      sx={{
+                      display: 'inline-block',
                       backgroundColor: theme.palette.accent?.lightGreen,
                       borderRadius: '8px',
                       mb: 1,

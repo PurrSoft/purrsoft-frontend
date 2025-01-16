@@ -104,7 +104,7 @@ export const ListaAnimalute = () => {
                   </Typography>
                   <img
                     // src={`https://via.placeholder.com/150?text=${animal.name}`} // for testing purposes
-                    src={'https://localhost:5173/'+animal.imageUrl}
+                    src={animal.imageUrl}
                     alt={animal.name}
                     style={{ width: '80%', height: 'auto', borderRadius: '8px' }}
                   />

@@ -8,18 +8,17 @@ import {
   Grid,
   InputAdornment,
   Typography,
-  LinearProgress,
   CircularProgress,
 } from '@mui/material';
 import { Search, Mic } from '@mui/icons-material';
 import { CustomCard } from '../../components/CustomCard';
 import { useTheme } from '@mui/material/styles';
-import { useGetFostersQuery } from '../../store';
+import { useAccountQuery, useGetFostersQuery } from '../../store';
 
 export const Fosteri = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const { data, error, isLoading } = useGetFostersQuery();
-
+  console.log(useAccountQuery()?.data?.roles);
   const theme = useTheme();
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -127,7 +126,9 @@ return (
                 >
                   Email: 
                   <Typography 
+                    component='span'
                     sx={{
+                        display: 'block',
                         backgroundColor: theme.palette.accent?.lightGreen,
                         borderRadius: '8px',
                         color: theme.palette.accent?.white,
@@ -135,7 +136,10 @@ return (
                         }}>
                         {foster.email.split('@')[0]}
                     </Typography>
-                    <Typography sx={{
+                    <Typography 
+                      component='span'
+                      sx={{
+                      display: 'inline-block',
                       backgroundColor: theme.palette.accent?.lightGreen,
                       borderRadius: '8px',
                       mb: 1,

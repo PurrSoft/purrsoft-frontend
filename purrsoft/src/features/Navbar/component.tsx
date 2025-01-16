@@ -6,6 +6,8 @@ import {
   Grid,
   IconButton,
   useMediaQuery,
+  CircularProgress,
+  Typography,
 } from '@mui/material';
 import { useLocation, Link, useNavigate } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
@@ -23,6 +25,8 @@ type RouteObject = {
 export const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { data: accountData, isLoading, error } = useAccountQuery();
+  
   const routes: RouteObject[] = [
     {
       label: 'Program',
@@ -41,28 +45,12 @@ export const Navbar = () => {
     },
   ];
 
-  if (useAccountQuery().data?.roles?.includes('Manager')) {
-    routes.push({
-      label: 'Voluntari',
-      value: '/management/voluntari',
-      url: '/management/voluntari',
-    });
-  }
-
-  if (useAccountQuery().data?.roles?.includes('Manager')) {
-    routes.push({
-      label: 'Fosteri',
-      value: '/management/fosteri',
-      url: '/management/fosteri',
-    });
-  }
-
-  if (useAccountQuery().data?.roles?.includes('Manager')) {
-    routes.push({
-      label: 'Cereri',
-      value: '/management/cereri',
-      url: '/management/cereri',
-    });
+  if (accountData?.roles?.includes('Manager')) {
+    routes.push(
+      { label: 'Voluntari', value: '/management/voluntari', url: '/management/voluntari'},
+      { label: 'Fosteri', value: '/management/fosteri', url: '/management/fosteri' },
+      { label: 'Cereri', value: '/management/cereri', url: '/management/cereri' },
+    );
   }
 
   const [activeTab, setActiveTab] = useState<string>(
@@ -84,6 +72,14 @@ export const Navbar = () => {
       setActiveTab(activeRoute!.value);
     }
   }, [location.pathname, navigate, routes]);
+
+  if (isLoading) {
+    return <CircularProgress sx={{ margin: '20px auto', display: 'block' }} />;
+  }
+
+  if (error) {
+    return <Typography color="error">A apărut o eroare. Vă rugăm să reîncercați.</Typography>;
+  }
 
   return (
     <AppBar
