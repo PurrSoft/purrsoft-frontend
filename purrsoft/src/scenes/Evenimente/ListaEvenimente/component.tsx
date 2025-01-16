@@ -16,14 +16,15 @@ import { useTheme } from '@mui/material/styles';
 // import { useGetEventsQuery } from '../../../store';
 import { useNavigate } from 'react-router-dom';
 import { Eveniment } from '../../../store/api/events/slice';
+import { AdaugaEventForm } from '../AdaugaEventForm';
 
 const mockEvents: Eveniment[] = [
   {
     id: "1",
     title: "Animal Shelter Cleanup",
     subtitle: "A day to make the shelter clean and cozy",
-    where: "123 Green Road, Cityville",
-    when: "2025-01-20T10:00:00Z", // ISO format from C# backend
+    location: "123 Green Road, Cityville",
+    date: "2025-01-20T10:00:00Z", // ISO format from C# backend
     description: "Join us in cleaning up the animal shelter to provide a better environment for the animals.",
     volunteers: ["John Doe", "Jane Smith", "Emily Davis"],
   },
@@ -31,8 +32,8 @@ const mockEvents: Eveniment[] = [
     id: "2",
     title: "Adoption Day Event",
     subtitle: "Find loving homes for rescued animals",
-    where: "Community Park, Center Square",
-    when: "2025-02-15T09:00:00Z",
+    location: "Community Park, Center Square",
+    date: "2025-02-15T09:00:00Z",
     description: "Help us find loving homes for our rescued animals at this adoption event.",
     volunteers: ["Alice Brown", "Michael Johnson"],
   },
@@ -40,8 +41,8 @@ const mockEvents: Eveniment[] = [
     id: "3",
     title: "Fundraising Marathon",
     subtitle: "Run for a cause",
-    where: "Central High School Track",
-    when: "2025-03-10T08:30:00Z",
+    location: "Central High School Track",
+    date: "2025-03-10T08:30:00Z",
     description: "Participate in our marathon to raise funds for animal medical care.",
     volunteers: ["Chris Martin", "Sophia Taylor", "Liam Wilson"],
   },
@@ -50,6 +51,8 @@ const mockEvents: Eveniment[] = [
 export const ListaEvenimente = () => {
   const [searchTerm, setSearchTerm] = useState('');
 //   const { data, error, isLoading } = useGetAnimalsQuery();
+  const [open, setOpen] = useState(false);
+
 
   const theme = useTheme();
   const navigate = useNavigate();
@@ -80,6 +83,14 @@ export const ListaEvenimente = () => {
   const filteredEvents = mockEvents.filter(event =>
     event.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   return (
     <Container>
@@ -123,6 +134,21 @@ export const ListaEvenimente = () => {
               ),
             }}
           />
+          <Button 
+            variant="contained"
+            sx={{
+              backgroundColor: theme.palette.accent?.lightGreen,
+              color: theme.palette.accent?.white,
+              borderRadius: '50px',
+              '&:hover': {
+                backgroundColor: theme.palette.accent?.darkGreen,
+              },
+              ml: 2,
+            }} 
+            onClick={handleClickOpen}
+          >
+            Adauga eveniment
+          </Button>
         </Box>
       </Box>
 
@@ -156,13 +182,13 @@ export const ListaEvenimente = () => {
                         variant="body1"
                         sx={typographyStyle}
                       >
-                        <strong>Cand:</strong> {formatDate(event.when)}
+                        <strong>Cand:</strong> {formatDate(event.date)}
                       </Typography>
                       <Typography 
                         variant="body1"
                         sx={typographyStyle}
                       >
-                        <strong>Unde:</strong> {event.where}
+                        <strong>Unde:</strong> {event.location}
                       </Typography>
                     </Box>
 
@@ -234,7 +260,7 @@ export const ListaEvenimente = () => {
         </Grid>
       </Box>
 
-
+      <AdaugaEventForm open={open} onClose={handleClose} />
     </Container>
   );
 }

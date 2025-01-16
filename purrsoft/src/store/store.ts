@@ -105,6 +105,7 @@ export const {
   useRolesAndDatesQuery,
   useGetRequestsQuery,
   useGetEventsQuery,
+  useAddEventMutation,
 } = api;
 
 export { resetAuth, updateToken } from './auth';
