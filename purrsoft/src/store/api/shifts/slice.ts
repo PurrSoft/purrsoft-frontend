@@ -99,6 +99,17 @@ export const endpoints = <Tags extends string>(
       params,
     }),
   }),
+  getShifts2: builder.query<ShiftsPaginatedResponse, { volunteerId?: string }>({
+     providesTags: [shiftsTag],  
+     query: (params) => {
+       // Construct the URL with the volunteerId if provided
+       const queryParams = params.volunteerId ? `?volunteerId=${params.volunteerId}` : '';
+       return {
+           url: `/Shift${queryParams}`,
+           method: 'GET'
+       };
+     },
+   }),
   getShiftCountByDate: builder.query<
     ShiftCountByDateResponse,
     GetShiftCountQuery

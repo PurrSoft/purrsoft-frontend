@@ -57,6 +57,9 @@ export const api = createApi({
     endpoints: animalProfilesEndpoints,
   })
   .injectEndpoints({
+    endpoints: shiftsEndpoints,
+  })
+  .injectEndpoints({
     endpoints: requestsEndpoints,
   })
   .injectEndpoints({
