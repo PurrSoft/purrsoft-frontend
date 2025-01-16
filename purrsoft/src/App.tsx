@@ -21,6 +21,8 @@ import { Fosteri } from './scenes/Fosteri';
 import { Cereri } from './scenes/Cereri';
 import { ModificaAnimal } from './scenes/Animalute/ModificaAnimal';
 import { Voluntari } from './scenes/Voluntari';
+import { ListaEvenimente } from './scenes/Evenimente/ListaEvenimente';
+import { ModificaEveniment } from './scenes/Evenimente/ModificaEveniment';
 
 // Define the base routes for public access - we need for the auth to have access to the public route
 const publicRoutes = [
@@ -78,6 +80,20 @@ const authenticatedRoutesConfig = [
       {
         path: 'evenimente',
         element: <Evenimente />,
+        children: [
+          {
+            index: true,
+            element: <Navigate replace to="lista" />,
+          },
+          {
+            path: 'lista',
+            element: <ListaEvenimente />,
+          },
+          {
+            path: ':id',
+            element: <ModificaEveniment />,
+          }
+        ]
       },
       {
         path: 'fosteri',
@@ -86,7 +102,7 @@ const authenticatedRoutesConfig = [
       {
         path: 'voluntari',
         element: <Voluntari />,
-      }
+      },
       {
         path: 'cereri',
         element: <Cereri />,
