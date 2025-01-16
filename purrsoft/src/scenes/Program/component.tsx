@@ -10,7 +10,6 @@ import {
   useTheme,
   Switch,
   Button,
-  Box,
   ListItemButton,
 } from '@mui/material';
 import { RemoveCircle, AddCircle } from '@mui/icons-material';
@@ -18,10 +17,11 @@ import { useVisibility } from '../../hooks/useVisibility';
 import {
   useAccountQuery,
   useAddShiftMutation,
+  useGetEventsQuery,
   useGetShiftCountByDateQuery,
   useGetShiftsQuery,
+  useGetShiftVolunteersQuery,
   useGetVolunteersPaginatedQuery,
-  useGetVolunteersQuery,
   useRemoveShiftMutation,
   useUpdateShiftMutation,
 } from '../../store';
@@ -29,7 +29,6 @@ import { AppSnackbar } from '../../components/AppSnackbar';
 import { ProgramDatePicker } from '../../components/ProgramDatePicker';
 import { ShiftType } from '../../store/api/shifts';
 import Typeahead from '../../components/TypeAhead/component';
-import { Volunteer } from '../../store/api/volunteers/slice';
 import { CustomCard } from '../../components/CustomCard';
 
 type ShiftMetadata = {
@@ -37,14 +36,6 @@ type ShiftMetadata = {
     color?: string;
     tooltip?: string;
   };
-};
-
-type ShiftVolunteerData = {
-  idShift: string;
-  shiftType: ShiftType;
-  volunteerId: string;
-  fullName: string;
-  email: string;
 };
 
 export const Program = () => {
@@ -76,12 +67,14 @@ export const Program = () => {
     Take: 1000,
     ...(mode !== 'admin' && { VolunteerId: user?.id }),
   });
+
   /* i need to check if user is admin or not */
   const [selectedVolunteer, setSelectedVolunteer] = useState<{
     id: string;
     name: string;
     email: string;
   } | null>(null);
+
   const [selectedShift, setSelectedShift] = useState<{
     id: string;
     date: string;
@@ -94,16 +87,17 @@ export const Program = () => {
     onOpen: onSnackbarOpen,
     onClose: onSnackbarClose,
   } = useVisibility();
+
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>(
     'success',
   );
 
   const [shiftMetadata, setShiftMetadata] = useState<ShiftMetadata>({});
-
-  // Set admin mode if the user has the 'admin' role
-
-  // Update metadata for the calendar based on shifts
+  const { data: eventsData, isLoading: isEventsLoading } = useGetEventsQuery({
+    Skip: 0,
+    Take: 1000,
+  });
   useEffect(() => {
     if (shiftsData) {
       const metadata: ShiftMetadata = {};
@@ -118,9 +112,20 @@ export const Program = () => {
           tooltip: shift.shiftType === 'Day' ? 'Tura de zi' : 'Tura de seară',
         };
       });
+      //also add the events to the metadata
+      eventsData?.records?.forEach((event) => {
+        const eventDate = dayjs(event.date).format('YYYY-MM-DD');
+
+        metadata[eventDate] = {
+          color: theme.palette.error.main,
+          tooltip: 'Eveniment',
+        };
+      });
+      console.log(metadata);
+
       setShiftMetadata(metadata);
     }
-  }, [shiftsData, theme]);
+  }, [shiftsData, eventsData, theme]);
 
   const [shiftChangeType, setShiftChangeType] = useState<ShiftType | null>(
     null,
@@ -249,6 +254,7 @@ export const Program = () => {
 
     return false; // Placeholder return value
   };
+
   //when date is selected set th enumber of shifts
   const { data: shiftCountData, refetch: refetchShiftCount } =
     useGetShiftCountByDateQuery({
@@ -292,42 +298,24 @@ export const Program = () => {
 
   const [searchQuery, setSearchQuery] = useState<string>('');
 
-  const {
-    data: volunteerData,
-    isLoading: isVolunteerLoading,
-    refetch: refetchVolunteers,
-  } = useGetVolunteersPaginatedQuery(
-    { Skip: 0, Take: 1000, Search: searchQuery },
-    { refetchOnMountOrArgChange: true }, // Ensures it refetches on changes
-  );
+  const { data: volunteerData, isLoading: isVolunteerLoading } =
+    useGetVolunteersPaginatedQuery(
+      { Skip: 0, Take: 1000, Search: searchQuery },
+      { refetchOnMountOrArgChange: true }, // Ensures it refetches on changes
+    );
 
   // display the users that have shifts on the selected date
-  const [shiftVolunteerData, setShiftVolunteerData] = useState<{
-    records: ShiftVolunteerData[];
-    totalNumberOfRecords: number;
-  }>({ records: [], totalNumberOfRecords: 0 });
+  const { data: shiftVolunteersData, refetch: refetchShiftVolunteers } =
+    useGetShiftVolunteersQuery(
+      { dayOfShift: selectedDate || '', Skip: 0, Take: 1000 },
+      { skip: !selectedDate },
+    );
 
   useEffect(() => {
-    console.log('selectedDate', selectedDate);
     if (selectedDate) {
-      const records: ShiftVolunteerData[] = [];
-      shiftsData?.records?.forEach((shift) => {
-        if (shift.start.split('T')[0] === selectedDate) {
-          records.push({
-            idShift: shift.id,
-            shiftType: shift.shiftType,
-            volunteerId: shift.volunteerId,
-            fullName: 'Ana' + shift.volunteerId.substring(0, 5),
-            email: shift.volunteerId.substring(0, 3) + '@gmail.com',
-          });
-        }
-      });
-      setShiftVolunteerData({
-        records,
-        totalNumberOfRecords: records.length,
-      });
+      refetchShiftVolunteers();
     }
-  }, [selectedDate, shiftsData]);
+  }, [selectedDate, refetchShiftVolunteers]);
 
   /* is in admin mode or loading */
   return isUserLoading || isShiftsLoading ? (
@@ -437,52 +425,49 @@ export const Program = () => {
                     Eveniment
                   </Typography>
                 </Grid>
-            spacing={2}
-            justifyContent="center"
-            alignItems="center"
-          >
-            <Grid item>
-              <Typography
-                variant="h6"
-                sx={{
-                  backgroundColor: theme.palette.accent?.darkGreen,
-                  color: 'white',
-                  padding: '10px 20px',
-                  borderRadius: '16px',
-                }}
-              >
-                Numărul de persoane: {totalShiftCount}
-              </Typography>
-            </Grid>
 
-            <Grid item>
-              <Typography
-                variant="h6"
-                sx={{
-                  backgroundColor: theme.palette.warning.main,
-                  color: 'white',
-                  padding: '10px 20px',
-                  borderRadius: '16px',
-                }}
-              >
-                Numar tura de zi: {dayShiftsCount}
-              </Typography>
-            </Grid>
-            <Grid item>
-              <Typography
-                variant="h6"
-                sx={{
-                  backgroundColor: theme.palette.accent?.lavenderBlue,
-                  color: 'white',
-                  padding: '10px 20px',
-                  borderRadius: '16px',
-                }}
-              >
-                Numar tura de noapte: {nightShiftsCount}
-              </Typography>
-            </Grid>
-          </Grid>
-        )}
+                <Grid item>
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      backgroundColor: theme.palette.accent?.darkGreen,
+                      color: 'white',
+                      padding: '10px 20px',
+                      borderRadius: '16px',
+                    }}
+                  >
+                    Numărul de persoane: {totalShiftCount}
+                  </Typography>
+                </Grid>
+
+                <Grid item>
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      backgroundColor: theme.palette.warning.main,
+                      color: 'white',
+                      padding: '10px 20px',
+                      borderRadius: '16px',
+                    }}
+                  >
+                    Numar tura de zi: {dayShiftsCount}
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      backgroundColor: theme.palette.accent?.lavenderBlue,
+                      color: 'white',
+                      padding: '10px 20px',
+                      borderRadius: '16px',
+                    }}
+                  >
+                    Numar tura de noapte: {nightShiftsCount}
+                  </Typography>
+                </Grid>
+              </Grid>
+            )}
 
             {/* Calendar Component */}
             <Grid item xs={14} md={10}>
@@ -794,55 +779,86 @@ export const Program = () => {
           {/* for admin role we have the list here with actions */}
           {mode === 'admin' && selectedDate && (
             <Grid item container justifyContent="space-evenly">
-              <Grid item>
-                <CustomCard title="LISTA VOLUNTARI" closeButton={false}>
-                  {shiftVolunteerData.records.map((volunteer) => (
-                    <ListItemButton
-                      key={volunteer.idShift}
-                      sx={{
-                        padding: '12px',
-                        borderRadius: '8px',
-                        backgroundColor:
-                          volunteer.shiftType === 'Day'
-                            ? theme.palette.warning.main
-                            : theme.palette.accent?.lavenderBlue,
-                        boxShadow: '0 2px 6px rgba(0, 0, 0, 0.1)',
-                        '&:hover': {
+              <Grid item padding={0}>
+                <CustomCard
+                  title="LISTA VOLUNTARI"
+                  closeButton={false}
+                  padding="0"
+                  align="flex-start"
+                >
+                  <Grid
+                    container
+                    padding={0}
+                    flexDirection={'column'}
+                    alignItems={'center'}
+                    justifyContent={'center'}
+                  >
+                    {shiftVolunteersData?.records.map((volunteer) => (
+                      <ListItemButton
+                        key={volunteer.shiftId}
+                        sx={{
+                          width: '100%',
+                          padding: 4,
+                          borderRadius: '8px',
+                          display: 'flex',
+                          flexDirection: 'row', // Layout: name and email in a row
+                          justifyContent: 'space-between', // Space between name and email
+                          alignItems: 'center', // Center content vertically
+
                           backgroundColor:
                             volunteer.shiftType === 'Day'
-                              ? theme.palette.warning.dark
+                              ? theme.palette.warning.main
                               : theme.palette.accent?.lavenderBlue,
-                        },
-                      }}
-                      onClick={() => {
-                        setSelectedShift({
-                          id: volunteer.idShift,
-                          date: selectedDate,
-                          shiftType: volunteer.shiftType,
-                          nameOfVolunteer: volunteer.fullName,
-                          volunteerId: volunteer.volunteerId,
-                        });
-                      }}
-                    >
-                      <Grid container spacing={2}>
-                        <Grid item xs={4}>
-                          <Typography variant="h6">
-                            {volunteer.fullName}
-                          </Typography>
+                          boxShadow: '0 2px 6px rgba(0, 0, 0, 0.1)',
+                          '&:hover': {
+                            backgroundColor:
+                              volunteer.shiftType === 'Day'
+                                ? theme.palette.warning.dark
+                                : theme.palette.accent?.lavenderBlue,
+                          },
+                        }}
+                        onClick={() => {
+                          setSelectedShift({
+                            id: volunteer.shiftId,
+                            date: selectedDate,
+                            shiftType: volunteer.shiftType,
+                            nameOfVolunteer: volunteer.fullName,
+                            volunteerId: volunteer.volunteerId,
+                          });
+                        }}
+                      >
+                        <Grid
+                          container
+                          spacing={2}
+                          padding={0}
+                          alignItems={'center'}
+                          flexDirection={'row'}
+                        >
+                          <Grid item xs={4}>
+                            <Typography variant="h6">
+                              {volunteer.fullName}
+                            </Typography>
+                          </Grid>
+                          <Grid item xs={4}>
+                            <Typography variant="body2" color="textSecondary">
+                              {volunteer.email}
+                            </Typography>
+                          </Grid>
                         </Grid>
-                        <Grid item xs={4}>
-                          <Typography variant="body2" color="textSecondary">
-                            {volunteer.email}
-                          </Typography>
-                        </Grid>
-                      </Grid>
-                    </ListItemButton>
-                  ))}
+                      </ListItemButton>
+                    ))}{' '}
+                  </Grid>
                 </CustomCard>
               </Grid>
 
               {selectedShift && (
-                <Grid item container paddingTop={2} justifyContent={'center'}>
+                <Grid
+                  item
+                  container
+                  paddingTop={2}
+                  justifyContent={'center'}
+                  gap={2}
+                >
                   <Grid item>
                     <Typography
                       variant="h5"
@@ -852,7 +868,7 @@ export const Program = () => {
                       Selected Volunteer: {selectedShift?.nameOfVolunteer}
                     </Typography>
                   </Grid>
-                  <Grid item container justifyContent={'center'}>
+                  <Grid item container justifyContent={'center'} gap={2}>
                     <Grid item>
                       <Button
                         variant="contained"
@@ -860,6 +876,8 @@ export const Program = () => {
                         sx={{
                           backgroundColor:
                             theme.palette.error.main || 'defaultColor',
+                          fontSize: '0.80rem', // Smaller font size
+                          padding: '4px 8px', // Smaller padding
                         }}
                       >
                         Sterge din lista
@@ -871,9 +889,9 @@ export const Program = () => {
                         onClick={handleUpdateShiftType}
                         sx={{
                           backgroundColor:
-                            selectedShift?.shiftType === 'Day'
-                              ? theme.palette.warning.main
-                              : theme.palette.accent?.lavenderBlue,
+                            theme.palette.accent?.lightGreen || 'defaultColor',
+                          fontSize: '0.80rem', // Smaller font size
+                          padding: '4px 8px', // Smaller padding
                         }}
                       >
                         Schimba tura

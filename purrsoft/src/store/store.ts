@@ -8,6 +8,7 @@ import { fostersEndpoints } from './api';
 import { requestsEndpoints } from './api';
 import { volunteersEndpoints } from './api';
 import { shiftsEndpoints } from './api';
+import { eventsEndpoints } from './api';
 
 import {
   combineReducers,
@@ -61,6 +62,9 @@ export const api = createApi({
   })
   .injectEndpoints({
     endpoints: shiftsEndpoints,
+  })
+  .injectEndpoints({
+    endpoints: eventsEndpoints,
   });
 
 //root reducer
@@ -115,6 +119,9 @@ export const {
   useRemoveShiftMutation,
   useGetShiftCountByDateQuery,
   useGetVolunteersPaginatedQuery,
+  useGetShiftVolunteersQuery,
+  useGetEventsQuery,
+  useAddEventMutation,
 } = api;
 
 export { resetAuth, updateToken } from './auth';

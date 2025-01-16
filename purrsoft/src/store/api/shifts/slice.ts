@@ -5,7 +5,6 @@ import {
   FetchBaseQueryError,
   FetchBaseQueryMeta,
 } from '@reduxjs/toolkit/query';
-import { get } from 'react-hook-form';
 
 const shiftTag = 'Shift';
 type TagTypes = typeof shiftTag;
@@ -59,6 +58,25 @@ type GetShiftCountQuery = {
   date: string;
 };
 
+type GetShiftVolunteersQuery = {
+  dayOfShift: string;
+  Skip: number;
+  Take: number;
+  sortBy?: string;
+  sortOrder?: string;
+};
+
+type ShiftVolunteerDto = {
+  shiftId: string;
+  volunteerId: string;
+  shiftType: ShiftType;
+  fullName: string;
+  email: string;
+};
+type ShiftVolunteersResponse = {
+  records: Array<ShiftVolunteerDto>;
+  totalNumbersOfRecords: number;
+};
 export const endpoints = <Tags extends string>(
   builder: EndpointBuilder<
     BaseQueryFn<
@@ -75,6 +93,7 @@ export const endpoints = <Tags extends string>(
   getShifts: builder.query<ShiftsPaginatedResponse, GetShiftsEndpointParams>({
     providesTags: [shiftTag],
     query: (params: GetShiftsEndpointParams) => ({
+      providesTags: [shiftTag],
       url: '/Shift',
       method: 'GET',
       params,
@@ -86,6 +105,7 @@ export const endpoints = <Tags extends string>(
   >({
     providesTags: [shiftTag],
     query: (params: GetShiftCountQuery) => ({
+      providesTags: [shiftTag],
       url: '/Shift/GetCountByDate',
       method: 'GET',
       params,
@@ -98,6 +118,18 @@ export const endpoints = <Tags extends string>(
       method: 'GET',
     }),
   }),
+  getShiftVolunteers: builder.query<
+    ShiftVolunteersResponse,
+    GetShiftVolunteersQuery
+  >({
+    providesTags: [shiftTag],
+    query: (params: GetShiftVolunteersQuery) => ({
+      url: '/Shift/Volunteers',
+      method: 'GET',
+      params,
+    }),
+  }),
+
   addShift: builder.mutation<ShiftResponse, { shiftDto: Shift }>({
     invalidatesTags: [shiftTag],
     query: (shiftData: { shiftDto: Shift }) => ({

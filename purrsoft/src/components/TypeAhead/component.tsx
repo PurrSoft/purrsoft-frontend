@@ -8,6 +8,7 @@ import {
   Box,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
+import { useTheme } from '@mui/material';
 
 interface TypeaheadProps<T extends { id: string | number }> {
   data: T[];
@@ -21,7 +22,7 @@ const Typeahead = <T extends { id: string | number }>(
   props: TypeaheadProps<T>,
 ) => {
   const { data, isLoading = false, onSearch, onSelect, fieldsToShow } = props;
-
+  const theme = useTheme();
   const [query, setQuery] = useState('');
   const [selectedItem, setSelectedItem] = useState<T | null>(null);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -62,9 +63,14 @@ const Typeahead = <T extends { id: string | number }>(
   }, []);
 
   return (
-    <Grid container direction="column" spacing={1} ref={dropdownRef}>
-      {/* Search Input */}
-      <Grid item>
+    <Grid container direction="column" spacing={1}>
+      <Grid
+        item
+        sx={{
+          position: 'relative', // Ensure dropdown is positioned relative to this container
+        }}
+      >
+        {/* Search Input */}
         <TextField
           fullWidth
           placeholder="Search..."
@@ -80,65 +86,71 @@ const Typeahead = <T extends { id: string | number }>(
             ),
           }}
         />
+
+        {/* Loading Spinner */}
+        {isLoading && (
+          <Box
+            sx={{
+              position: 'absolute',
+              top: '50%',
+              right: '16px',
+              transform: 'translateY(-50%)',
+            }}
+          >
+            <CircularProgress size={24} />
+          </Box>
+        )}
+
+        {/* Results List */}
+        {!isLoading && showDropdown && data.length > 0 && (
+          <Box
+            ref={dropdownRef}
+            sx={{
+              maxHeight: '200px',
+              overflowY: 'auto',
+              position: 'absolute',
+              backgroundColor: theme.palette.accent?.beige,
+              boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)',
+              zIndex: 1300,
+              width: '100%',
+              marginTop: '4px',
+              borderRadius: 2,
+              padding: '4px',
+            }}
+          >
+            {data.map((item) => (
+              <Box
+                key={item.id}
+                onClick={() => handleSelect(item)}
+                sx={{
+                  padding: '8px 12px',
+                  borderBottom: '1px solid #eee',
+                  cursor: 'pointer',
+                  transition: 'background-color 0.3s',
+                  '&:hover': {
+                    backgroundColor: theme.palette.accent?.lightGreen,
+                  },
+                }}
+              >
+                {fieldsToShow.map((field) => (
+                  <Typography
+                    key={field}
+                    variant="body2"
+                    color="textPrimary"
+                    sx={{
+                      fontSize: '12px',
+                      lineHeight: '1',
+                      margin: 0,
+                    }}
+                  >
+                    {String(item[field])}
+                  </Typography>
+                ))}
+              </Box>
+            ))}
+          </Box>
+        )}
       </Grid>
-
-      {/* Loading Spinner */}
-      {isLoading && (
-        <Grid item>
-          <CircularProgress size={24} />
-        </Grid>
-      )}
-
-      {/* Results List */}
-      {!isLoading && showDropdown && data.length > 0 && (
-        <Box
-          sx={{
-            maxHeight: '100px',
-            overflowY: 'auto',
-            position: 'absolute',
-            backgroundColor: '#fff',
-            boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)',
-            zIndex: 1300,
-            width: '100%',
-            marginTop: 8,
-            borderRadius: 2,
-            padding: '4px',
-            maxWidth: '300px',
-          }}
-        >
-          {data.map((item) => (
-            <Box
-              key={item.id}
-              onClick={() => handleSelect(item)}
-              sx={{
-                padding: '8px 12px',
-                borderBottom: '1px solid #eee',
-                cursor: 'pointer',
-                backgroundColor: '#f9f9f9',
-                transition: 'background-color 0.3s',
-                '&:hover': {
-                  backgroundColor: '#e0f7fa',
-                },
-              }}
-            >
-              {fieldsToShow.map((field) => (
-                <Typography
-                  key={field}
-                  variant="body2"
-                  color="textPrimary"
-                  sx={{
-                    fontSize: '12px',
-                    lineHeight: '1',
-                    margin: 0,
-                  }}
-                >
-                  {String(item[field])}
-                </Typography>
-              ))}
-            </Box>
-          ))}
-        </Box>
-      )}
     </Grid>
   );
 };
