@@ -113,6 +113,7 @@ export const {
   useAddShiftMutation,
   useUpdateShiftMutation,
   useRemoveShiftMutation,
+  useGetShiftCountByDateQuery,
 } = api;
 
 export { resetAuth, updateToken } from './auth';

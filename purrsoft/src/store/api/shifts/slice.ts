@@ -5,6 +5,7 @@ import {
   FetchBaseQueryError,
   FetchBaseQueryMeta,
 } from '@reduxjs/toolkit/query';
+import { get } from 'react-hook-form';
 
 const shiftTag = 'Shift';
 type TagTypes = typeof shiftTag;
@@ -48,6 +49,16 @@ type ShiftResponse = {
   result: Shift;
 };
 
+type ShiftCountByDateResponse = {
+  totalShiftCount: number;
+  dayShiftsCount: number;
+  nightShiftsCount: number;
+};
+
+type GetShiftCountQuery = {
+  date: string;
+};
+
 export const endpoints = <Tags extends string>(
   builder: EndpointBuilder<
     BaseQueryFn<
@@ -65,6 +76,17 @@ export const endpoints = <Tags extends string>(
     providesTags: [shiftTag],
     query: (params: GetShiftsEndpointParams) => ({
       url: '/Shift',
+      method: 'GET',
+      params,
+    }),
+  }),
+  getShiftCountByDate: builder.query<
+    ShiftCountByDateResponse,
+    GetShiftCountQuery
+  >({
+    providesTags: [shiftTag],
+    query: (params: GetShiftCountQuery) => ({
+      url: '/Shift/GetCountByDate',
       method: 'GET',
       params,
     }),

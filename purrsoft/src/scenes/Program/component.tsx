@@ -14,6 +14,7 @@ import { useVisibility } from '../../hooks/useVisibility';
 import {
   useAccountQuery,
   useAddShiftMutation,
+  useGetShiftCountByDateQuery,
   useGetShiftsQuery,
   useRemoveShiftMutation,
 } from '../../store';
@@ -150,7 +151,21 @@ export const Program = () => {
 
     return false; // Placeholder return value
   };
+  //when date is selected set th enumber of shifts
+  const { data: shiftCountData, refetch: refetchShiftCount } =
+    useGetShiftCountByDateQuery({
+      date: selectedDate || '',
+    });
 
+  const totalShiftCount = shiftCountData?.totalShiftCount || 0;
+  const dayShiftsCount = shiftCountData?.dayShiftsCount || 0;
+  const nightShiftsCount = shiftCountData?.nightShiftsCount || 0;
+
+  useEffect(() => {
+    if (selectedDate) {
+      refetchShiftCount();
+    }
+  }, [selectedDate, refetchShiftCount]);
   return isUserLoading || isShiftsLoading ? (
     <CircularProgress />
   ) : (
@@ -181,13 +196,13 @@ export const Program = () => {
               <Typography
                 variant="h6"
                 sx={{
-                  backgroundColor: theme.palette.error.main,
+                  backgroundColor: theme.palette.accent?.darkGreen,
                   color: 'white',
                   padding: '10px 20px',
                   borderRadius: '16px',
                 }}
               >
-                Eveniment
+                Numărul de persoane: {totalShiftCount}
               </Typography>
             </Grid>
 
@@ -201,7 +216,7 @@ export const Program = () => {
                   borderRadius: '16px',
                 }}
               >
-                Tura de zi
+                Numar tura de zi: {dayShiftsCount}
               </Typography>
             </Grid>
             <Grid item>
@@ -214,7 +229,7 @@ export const Program = () => {
                   borderRadius: '16px',
                 }}
               >
-                Tura de seară
+                Numar tura de noapte: {nightShiftsCount}
               </Typography>
             </Grid>
           </Grid>
