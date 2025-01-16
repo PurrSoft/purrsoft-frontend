@@ -18,7 +18,7 @@ export type Eveniment = {
     date: string;
     location: string;
     description: string;
-    volunteers: string[];
+    attendingVolunteers: string[];
 }
 
 export type EventsPaginatedResponse = {
@@ -64,7 +64,7 @@ export const endpoints = <Tags extends string> (
                 date: event.date,
                 location: event.location,
                 description: event.description,
-                volunteers: event.volunteers
+                volunteers: event.attendingVolunteers
               }
             }
         }),

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   Box,
   Button,
@@ -8,49 +8,19 @@ import {
   Grid,
   InputAdornment,
   Typography,
-  // CircularProgress,
+  CircularProgress,
 } from '@mui/material';
 import { Search, Mic } from '@mui/icons-material';
 import { CustomCard } from '../../../components/CustomCard';
 import { useTheme } from '@mui/material/styles';
-// import { useGetEventsQuery } from '../../../store';
+import { useGetEventsQuery } from '../../../store';
 import { useNavigate } from 'react-router-dom';
-import { Eveniment } from '../../../store/api/events/slice';
 import { AdaugaEventForm } from '../AdaugaEventForm';
-
-const mockEvents: Eveniment[] = [
-  {
-    id: "1",
-    title: "Animal Shelter Cleanup",
-    subtitle: "A day to make the shelter clean and cozy",
-    location: "123 Green Road, Cityville",
-    date: "2025-01-20T10:00:00Z", // ISO format from C# backend
-    description: "Join us in cleaning up the animal shelter to provide a better environment for the animals.",
-    volunteers: ["John Doe", "Jane Smith", "Emily Davis"],
-  },
-  {
-    id: "2",
-    title: "Adoption Day Event",
-    subtitle: "Find loving homes for rescued animals",
-    location: "Community Park, Center Square",
-    date: "2025-02-15T09:00:00Z",
-    description: "Help us find loving homes for our rescued animals at this adoption event.",
-    volunteers: ["Alice Brown", "Michael Johnson"],
-  },
-  {
-    id: "3",
-    title: "Fundraising Marathon",
-    subtitle: "Run for a cause",
-    location: "Central High School Track",
-    date: "2025-03-10T08:30:00Z",
-    description: "Participate in our marathon to raise funds for animal medical care.",
-    volunteers: ["Chris Martin", "Sophia Taylor", "Liam Wilson"],
-  },
-];
+import dayjs from 'dayjs';
 
 export const ListaEvenimente = () => {
   const [searchTerm, setSearchTerm] = useState('');
-//   const { data, error, isLoading } = useGetAnimalsQuery();
+  const { data, error, isLoading } = useGetEventsQuery();
   const [open, setOpen] = useState(false);
 
 
@@ -68,19 +38,8 @@ export const ListaEvenimente = () => {
     setSearchTerm(event.target.value);
   };
 
-  const formatDate = (isoDate: string) => {
-    const date = new Date(isoDate);
-    return date.toLocaleString("en-US", {
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  };
 
-  const filteredEvents = mockEvents.filter(event =>
+  const filteredEvents = data?.records.filter(event =>
     event.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -92,6 +51,10 @@ export const ListaEvenimente = () => {
     setOpen(false);
   };
 
+  const formatDate = (dateString: string): string => {
+    return dateString ? dayjs(dateString).format('DD MMMM YYYY, HH:mm'): '';
+  };
+  
   return (
     <Container>
       {/* Sticky Search Bar */}
@@ -153,19 +116,17 @@ export const ListaEvenimente = () => {
       </Box>
 
       {/* Event Cards */}
-      {/* {(isLoading) && <CircularProgress />}
+      {(isLoading) && <CircularProgress />}
   
-      {(error) && <Typography>Eroare la incarcarea datelor</Typography>} */}
+      {(error) && <Typography>Eroare la incarcarea datelor</Typography>}
 
       <Box sx={{ ml: 2, mr: 1 }}>
         <Grid container spacing={6}>
-          {filteredEvents.map((event) => (
+          {filteredEvents?.map((event) => (
             <Grid item xs={12} key={event.id}>
               <CustomCard
                 width="100%"
                 height="100%"
-                align="flex-start"
-                justify="space-between"
                 title={
                   <Typography 
                     variant="h4"
@@ -175,12 +136,13 @@ export const ListaEvenimente = () => {
                   </Typography>
                 }
               >
-                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: 2 }}>              
-                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, justifyContent: 'space-between' }}>
+                <Grid container>
+                  <Grid container spacing={2}>              
+                    <Grid item xs={4}>
                       <Typography 
                         variant="body1"
                         sx={typographyStyle}
+                        mb={2}
                       >
                         <strong>Cand:</strong> {formatDate(event.date)}
                       </Typography>
@@ -190,29 +152,30 @@ export const ListaEvenimente = () => {
                       >
                         <strong>Unde:</strong> {event.location}
                       </Typography>
-                    </Box>
+                    </Grid>
 
-                    <Typography 
-                      variant="body1"
-                      sx={{ ...typographyStyle, flex: 1 }}
-                    >
-                      <strong>Descriere:</strong> {event.description}
-                    </Typography>
+                    <Grid item xs={8}>
+                      <Typography 
+                        variant="body1"
+                        sx={typographyStyle}
+                      >
+                        <strong>Descriere:</strong> {event.description}
+                      </Typography>
+                    </Grid>
+                  </Grid>
 
-                  </Box>
-
-                  <Box 
+                  <Grid 
+                    container 
+                    spacing={1}
                     sx={{ 
                       mt: 2,
-                      display: 'flex',
+                      ml: 0,
                     }}
                   >
-                    <Box
+                    <Grid item xs={8}
                       sx={{
                         backgroundColor: theme.palette.accent?.mutedGreen,
                         borderRadius: 1,
-                        flex: 2,
-                        p: 1,
                       }}
                     >
                       <Typography 
@@ -221,7 +184,7 @@ export const ListaEvenimente = () => {
                       >
                         <strong>Voluntari inscrisi:</strong>
                       </Typography>
-                      {event.volunteers.map((volunteer, index) => (
+                      {event.attendingVolunteers?.map((volunteer, index) => (
                         <Typography 
                           key={index} 
                           variant="body1"
@@ -230,13 +193,13 @@ export const ListaEvenimente = () => {
                           {volunteer}
                         </Typography>
                       ))}
-                    </Box>
-                    <Box
+                    </Grid>
+                    <Grid 
+                      item 
+                      xs={4}
                       sx={{
                         display: 'flex',
-                        flex: 1,
                         justifyContent: 'flex-end',
-                        alignItems: 'flex-end',
                       }}
                     >
                       <Button
@@ -251,15 +214,14 @@ export const ListaEvenimente = () => {
                       >
                         Modifica
                       </Button>
-                    </Box>
-                  </Box>
-                </Box>
+                    </Grid>
+                  </Grid>
+                </Grid>
               </CustomCard>
             </Grid>
-          ))}
-        </Grid>
-      </Box>
-
+            ))}
+          </Grid>
+        </Box>
       <AdaugaEventForm open={open} onClose={handleClose} />
     </Container>
   );
