@@ -3,13 +3,12 @@ import {
   authEndpoints,
   animalProfilesEndpoints,
   animalsEndpoints,
+  fostersEndpoints,
+  requestsEndpoints,
+  volunteersEndpoints,
+  shiftsEndpoints,
+  eventsEndpoints
 } from './api';
-import { fostersEndpoints } from './api';
-import { requestsEndpoints } from './api';
-import { volunteersEndpoints } from './api';
-import { shiftsEndpoints } from './api';
-import { eventsEndpoints } from './api';
-
 import {
   combineReducers,
   configureStore,
