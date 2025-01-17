@@ -18,7 +18,7 @@ export const UserProfile = (props: Props) => {
     isLoading: shiftsLoading,
     error: shiftsError,
   } = useGetShiftsQuery(
-    { volunteerId: userId },
+    { VolunteerId: userId },
     {
       skip: !userId, // This prevents the query from running if there's no userId
     },
