@@ -15,7 +15,9 @@ declare module '@mui/material/styles' {
       white: string;
       softSageGreen: string;
       error: string;
+      lavenderBlue: string;
     };
+
     background: TypeBackground; // For Palette, background is TypeBackground
   }
 
@@ -32,6 +34,7 @@ declare module '@mui/material/styles' {
       white: string;
       softSageGreen: string;
       error: string;
+      lavenderBlue: string;
     };
     background?: Partial<TypeBackground>; // For PaletteOptions, background is Partial<TypeBackground> | undefined
   }
@@ -43,7 +46,7 @@ export const appTheme = createTheme({
     values: {
       xs: 0,
       sm: 600,
-      md: 800,
+      md: 950,
       lg: 1200,
       xl: 1920,
     },
@@ -60,7 +63,16 @@ export const appTheme = createTheme({
       black: '#000',
       white: '#FFF',
       softSageGreen: '#BEC4B2',
-      error: '#9E5448',
+      error: '#FF0000',
+      lavenderBlue: '#9daac8',
+    },
+    error: {
+      main: '#9e5448',
+      light: '#ed9081',
+    },
+    warning: {
+      main: '#eccc7a',
+      light: '#eccc7a',
     },
     background: {
       default: '#EBE7E0',

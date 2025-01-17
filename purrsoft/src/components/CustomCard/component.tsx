@@ -55,7 +55,7 @@ export const CustomCard = ({
       }}
     >
       {/* Shadow Layer */}
-      {shadow && 
+      {shadow && (
         <Box
           sx={{
             position: 'absolute',
@@ -69,7 +69,7 @@ export const CustomCard = ({
             zIndex: 1,
           }}
         ></Box>
-      }
+      )}
 
       {/* Main Card */}
       <Card
@@ -102,7 +102,7 @@ export const CustomCard = ({
           }}
         >
           {/* Close Button (X) */}
-          {closeButton &&
+          {closeButton && (
             <Box
               sx={{
                 width: '20px',
@@ -119,7 +119,7 @@ export const CustomCard = ({
                 style={{ width: '100%', height: '100%' }}
               />
             </Box>
-          } 
+          )}
 
           {/* Title */}
           <Box
@@ -156,6 +156,8 @@ export const CustomCard = ({
             gap: '8px',
             borderRadius: '0 0 15px 15px',
             border: `2px solid #000`,
+            overflowY: 'auto',
+            maxHeight: '400px',
           }}
         >
           {subtitle && <Typography variant="h6">{subtitle}</Typography>}

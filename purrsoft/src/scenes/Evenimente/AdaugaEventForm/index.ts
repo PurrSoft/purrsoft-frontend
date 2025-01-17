@@ -1,0 +1,1 @@
+export { AdaugaEventForm } from './component';

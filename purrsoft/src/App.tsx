@@ -12,6 +12,7 @@ import { Program } from './scenes/Program';
 import { updateToken, useAppDispatch, useAppStateSelector } from './store';
 import { Login } from './scenes/Login';
 import { DespreNoi } from './scenes/DespreNoi';
+import { DespreNoiNou } from './scenes/DespreNoiNou';
 import { AccountOverview } from './scenes/AccountOverview/component';
 import { ContulMeu } from './scenes/AccountOverview/ContulMeu';
 import { RolurileMele } from './scenes/AccountOverview/RolurileMele';
@@ -21,6 +22,8 @@ import { Fosteri } from './scenes/Fosteri';
 import { Cereri } from './scenes/Cereri';
 import { ModificaAnimal } from './scenes/Animalute/ModificaAnimal';
 import { Voluntari } from './scenes/Voluntari';
+import { ListaEvenimente } from './scenes/Evenimente/ListaEvenimente';
+import { ModificaEveniment } from './scenes/Evenimente/ModificaEveniment';
 
 // Define the base routes for public access - we need for the auth to have access to the public route
 const publicRoutes = [
@@ -38,7 +41,7 @@ const publicRoutes = [
   },
   {
     path: '/DespreNoi',
-    element: <DespreNoi />,
+    element: <DespreNoiNou />,
   },
 ];
 
@@ -72,12 +75,26 @@ const authenticatedRoutesConfig = [
           {
             path: ':id',
             element: <ModificaAnimal />,
-          }
-        ]
+          },
+        ],
       },
       {
         path: 'evenimente',
         element: <Evenimente />,
+        children: [
+          {
+            index: true,
+            element: <Navigate replace to="lista" />,
+          },
+          {
+            path: 'lista',
+            element: <ListaEvenimente />,
+          },
+          {
+            path: ':id',
+            element: <ModificaEveniment />,
+          }
+        ]
       },
       {
         path: 'fosteri',
