@@ -14,28 +14,28 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 export type Eveniment = {
     title: string;
-    subtitle: string;
-    where: string;
-    when: string; // ISO string format
-    description: string;
-    volunteers?: string[];
+    subtitle?: string;
+    date: string;
+    location: string;
+    description?: string;
+    attendingVolunteers?: string[];
 };
 
 const initialValues: Eveniment = {
     title: '',
     subtitle: '',
-    where: '',
-    when: '',
+    date: '',
+    location: '',
     description: '',
-    volunteers: [],
+    attendingVolunteers: [],
 };
 
 const eventFormSchema = yup.object({
-    title: yup.string().required('Title is required'),
-    subtitle: yup.string().required('Subtitle is required'),
-    where: yup.string().required('Location is required'),
-    when: yup.string().required('Date and time are required'),
-    description: yup.string().required('Description is required'),
+    title: yup.string().required('Titlul este obligatoriu'),
+    subtitle: yup.string(),
+    location: yup.string().required('Locatia este obligatorie'),
+    date: yup.string().required('Data si ora sunt obligatorii'),
+    description: yup.string(),
 }).required();
 
 export const AdaugaEventForm = ({ open, onClose }: { open: boolean; onClose: () => void }) => {
@@ -55,7 +55,7 @@ export const AdaugaEventForm = ({ open, onClose }: { open: boolean; onClose: () 
         try {
             await addEvent({
                 ...data,
-                volunteers,
+                attendingVolunteers: volunteers,
             }).unwrap();
             onClose();
         } catch (error) {
@@ -155,14 +155,14 @@ export const AdaugaEventForm = ({ open, onClose }: { open: boolean; onClose: () 
                         </Grid>
                         <Grid item xs={8}>
                             <Controller
-                                name="where"
+                                name="location"
                                 control={control}
                                 render={({ field }) => (
                                     <TextField
                                         fullWidth
                                         variant="outlined"
-                                        error={!!errors.where}
-                                        helperText={errors.where?.message}
+                                        error={!!errors.location}
+                                        helperText={errors.location?.message}
                                         {...field}
                                     />
                                 )}
@@ -173,7 +173,7 @@ export const AdaugaEventForm = ({ open, onClose }: { open: boolean; onClose: () 
                         </Grid>
                         <Grid item xs={8}>
                             <Controller
-                                name="when"
+                                name="date"
                                 control={control}
                                 render={({ field }) => (
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -185,8 +185,8 @@ export const AdaugaEventForm = ({ open, onClose }: { open: boolean; onClose: () 
                                                 textField: {
                                                     fullWidth: true,
                                                     variant: 'outlined',
-                                                    error: !!errors.when,
-                                                    helperText: errors.when?.message,
+                                                    error: !!errors.date,
+                                                    helperText: errors.date?.message,
                                                 },
                                             }}
                                         />

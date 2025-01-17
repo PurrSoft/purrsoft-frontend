@@ -20,7 +20,10 @@ import dayjs from 'dayjs';
 
 export const ListaEvenimente = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const { data, error, isLoading } = useGetEventsQuery();
+  const { data, error, isLoading } = useGetEventsQuery({
+    Skip: 0,
+    Take: 1000,
+  });
   const [open, setOpen] = useState(false);
 
 
