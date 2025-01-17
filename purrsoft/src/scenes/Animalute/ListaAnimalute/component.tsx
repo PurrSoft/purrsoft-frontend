@@ -8,6 +8,7 @@ import {
   Grid,
   InputAdornment,
   Typography,
+  CircularProgress
 } from '@mui/material';
 import { Search, Mic } from '@mui/icons-material';
 import { CustomCard } from '../../../components/CustomCard';
@@ -28,14 +29,6 @@ export const ListaAnimalute = () => {
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
   };
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error fetching animals!</div>;
-  }
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -106,6 +99,10 @@ export const ListaAnimalute = () => {
       </Box>
 
       {/* Animal Cards */}
+      {(isLoading) && <CircularProgress />}
+        
+      {(error) && <Typography>Eroare la incarcarea datelor</Typography>}
+
       <Box sx={{ ml: 2, mr: 1 }}>
         <Grid container spacing={6}>
           {data?.records.map((animal) => (
@@ -129,7 +126,7 @@ export const ListaAnimalute = () => {
                     Nume: {animal.name}
                   </Typography>
                   <img
-                    src={animal.imageUrl ? animal.imageUrl : defaultPhoto}
+                    src={animal.imageUrls && animal.imageUrls.length > 0 ? animal.imageUrls[0] : defaultPhoto}
                     style={{ width: '80%', height: 'auto', borderRadius: '8px' }}
                   />
                   <Button

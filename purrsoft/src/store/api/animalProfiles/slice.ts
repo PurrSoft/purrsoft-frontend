@@ -11,13 +11,13 @@ type TagTypes = typeof animalProfileTag;
 
 export type AnimalProfile = {
     animalId: string;
+    contract?: string;
+    contractState?: string;
+    shelterCheckIn?: string;
     currentDisease?: string;
     currentMedication?: string;
     pastDisease?: string;
-    //passport and microchip are required on BE
-    passport?: string;
     microchip?: string;
-    
     externalDeworming?: string;
     internalDeworming?: string;
     currentTreatment?: string;
