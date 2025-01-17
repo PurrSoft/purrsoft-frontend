@@ -1,16 +1,36 @@
 import { Box, Button, Paper, Typography, useTheme } from '@mui/material';
 import { DatePicker } from '../../components/DatePicker';
 import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useAccountQuery, useGetShiftsQuery } from '../../store';
 
 type Props = {};
 
 export const UserProfile = (props: Props) => {
   const theme = useTheme();
-  const specialDates = [
-    new Date('December 17, 2024 03:24:00'),
-    new Date('November 7, 2024 03:24:00'),
-    new Date('December 25, 2024'),
-  ];
+  const [specialDates, setSpecialDates] = useState<Date[]>([]);
+
+  const accountQuery = useAccountQuery();
+  const userId = accountQuery.data?.id;
+  
+  const {
+    data: shiftsData,
+    isLoading: shiftsLoading,
+    error: shiftsError,
+  } = useGetShiftsQuery(
+    { VolunteerId: userId },
+    {
+      skip: !userId, // This prevents the query from running if there's no userId
+    },
+  );
+
+  useEffect(() => {
+    if (shiftsData && !shiftsLoading && !shiftsError) {
+      setSpecialDates(
+        shiftsData.records.map((record) => new Date(record.start)),
+      );
+    }
+  }, [shiftsData, shiftsLoading, shiftsError]);
 
   const navigate = useNavigate();
   const today = new Date();
@@ -78,7 +98,7 @@ export const UserProfile = (props: Props) => {
           zIndex: 1,
         }}
       >
-        <DatePicker specialDates={specialDates} />
+        <DatePicker specialDates={specialDates}/>
       </Box>
       <Box
         sx={{
