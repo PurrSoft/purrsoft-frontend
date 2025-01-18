@@ -7,6 +7,8 @@ import {
   IconButton,
   useMediaQuery,
   Badge,
+  CircularProgress,
+  Typography,
 } from '@mui/material';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { useLocation, Link, useNavigate } from 'react-router-dom';
@@ -35,6 +37,8 @@ export const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   // eslint-disable-next-line react-hooks/exhaustive-deps
+  const { data: accountData, isLoading, error } = useAccountQuery();
+
   const routes: RouteObject[] = [
     {
       label: 'Program',
@@ -53,28 +57,24 @@ export const Navbar = () => {
     },
   ];
 
-  if (useAccountQuery().data?.roles?.includes('Manager')) {
-    routes.push({
-      label: 'Voluntari',
-      value: '/management/voluntari',
-      url: '/management/voluntari',
-    });
-  }
-
-  if (useAccountQuery().data?.roles?.includes('Manager')) {
-    routes.push({
-      label: 'Fosteri',
-      value: '/management/fosteri',
-      url: '/management/fosteri',
-    });
-  }
-
-  if (useAccountQuery().data?.roles?.includes('Manager')) {
-    routes.push({
-      label: 'Cereri',
-      value: '/management/cereri',
-      url: '/management/cereri',
-    });
+  if (accountData?.roles?.includes('Manager')) {
+    routes.push(
+      {
+        label: 'Voluntari',
+        value: '/management/voluntari',
+        url: '/management/voluntari',
+      },
+      {
+        label: 'Fosteri',
+        value: '/management/fosteri',
+        url: '/management/fosteri',
+      },
+      {
+        label: 'Cereri',
+        value: '/management/cereri',
+        url: '/management/cereri',
+      },
+    );
   }
 
   const [activeTab, setActiveTab] = useState<string>(
@@ -96,6 +96,18 @@ export const Navbar = () => {
       setActiveTab(activeRoute!.value);
     }
   }, [location.pathname, navigate, routes]);
+
+  if (isLoading) {
+    return <CircularProgress sx={{ margin: '20px auto', display: 'block' }} />;
+  }
+
+  if (error) {
+    return (
+      <Typography color="error">
+        A apărut o eroare. Vă rugăm să reîncercați.
+      </Typography>
+    );
+  }
 
   return (
     <AppBar
