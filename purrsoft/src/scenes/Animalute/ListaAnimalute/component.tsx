@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Box,
   Button,
@@ -13,7 +13,7 @@ import {
 import { Search, Mic } from '@mui/icons-material';
 import { CustomCard } from '../../../components/CustomCard';
 import { useTheme } from '@mui/material/styles';
-import { useGetAnimalsQuery } from '../../../store';
+import { useGetAnimalsQuery, useAccountQuery } from '../../../store';
 import { useNavigate } from 'react-router-dom';
 import { AddAnimalForm } from '../AddAnimalForm';
 import defaultPhoto from '/defaultPhoto.jpeg';
@@ -21,7 +21,16 @@ import defaultPhoto from '/defaultPhoto.jpeg';
 export const ListaAnimalute = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const { data, error, isLoading } = useGetAnimalsQuery();
+  const { data: accountData, isLoading: accountLoading } = useAccountQuery();
+  
   const [open, setOpen] = useState(false);
+  const [isFoster, setIsFoster] = useState(false);
+
+  useEffect(() => {
+    if (accountData?.roles) {
+      setIsFoster(accountData.roles?.includes('Foster') || false);
+    }
+  }, [accountData, accountLoading]);
 
   const theme = useTheme();
   const navigate = useNavigate();
@@ -80,26 +89,28 @@ export const ListaAnimalute = () => {
               ),
             }}
           />
-          <Button 
-            variant="contained"
-            sx={{
-              backgroundColor: theme.palette.accent?.lightGreen,
-              color: theme.palette.accent?.white,
-              borderRadius: '50px',
-              '&:hover': {
-                backgroundColor: theme.palette.accent?.darkGreen,
-              },
-              ml: 2,
-            }} 
-            onClick={handleClickOpen}
-          >
-            Adauga animal
-          </Button>
+          {!isFoster && 
+            <Button 
+              variant="contained"
+              sx={{
+                backgroundColor: theme.palette.accent?.lightGreen,
+                color: theme.palette.accent?.white,
+                borderRadius: '50px',
+                '&:hover': {
+                  backgroundColor: theme.palette.accent?.darkGreen,
+                },
+                ml: 2,
+              }} 
+              onClick={handleClickOpen}
+            >
+              Adauga animal
+            </Button>
+          }
         </Box>
       </Box>
 
       {/* Animal Cards */}
-      {(isLoading) && <CircularProgress />}
+      {(isLoading || accountLoading) && <CircularProgress />}
         
       {(error) && <Typography>Eroare la incarcarea datelor</Typography>}
 
@@ -129,18 +140,20 @@ export const ListaAnimalute = () => {
                     src={animal.imageUrls && animal.imageUrls.length > 0 ? animal.imageUrls[0] : defaultPhoto}
                     style={{ width: '80%', height: 'auto', borderRadius: '8px' }}
                   />
-                  <Button
-                    variant="contained"
-                    sx={{
-                      mt: 2,
-                      backgroundColor: theme.palette.accent?.tealGreen,
-                    }}
-                    onClick={() => {
-                      navigate(`/management/animalute/${animal.id}`, { state: { animal } });
-                    }}
-                  >
-                    Modifica
-                  </Button>
+                  {!isFoster && 
+                    <Button
+                      variant="contained"
+                      sx={{
+                        mt: 2,
+                        backgroundColor: theme.palette.accent?.tealGreen,
+                      }}
+                      onClick={() => {
+                        navigate(`/management/animalute/${animal.id}`, { state: { animal } });
+                      }}
+                    >
+                      Modifica
+                    </Button>
+                  }
                 </Box>
               </CustomCard>
             </Grid>
