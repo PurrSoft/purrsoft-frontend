@@ -89,7 +89,7 @@ const Notification = ({ id, type, message, isRead }: NotificationProps) => {
 
 export const NotificationsBar = () => {
   const { data: user } = useAccountQuery();
-  const { data, isLoading, isError } = useGetNotificationsQuery({
+  const { data, isLoading, isError, refetch } = useGetNotificationsQuery({
     userId: user?.id,
   });
 
