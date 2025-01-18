@@ -25,7 +25,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import dayjs from 'dayjs';
-import ImageUploader from '../ImageUploader';
+import { ImageUploader } from '../ImageUploader';
 import { AppSnackbar } from '../../../components/AppSnackbar';
 import { useVisibility } from '../../../hooks/useVisibility';
 
@@ -312,8 +312,8 @@ export const AddAnimalForm = ({ open, onClose }: { open: boolean; onClose: () =>
           }}
         >
             <form onSubmit={handleSubmit(onSubmit)}>
-                {requiredFields.map((requiredField) => (
-                  <Grid container spacing={2} alignItems="center">
+                {requiredFields.map((requiredField, index) => (
+                  <Grid container key={index} spacing={2} alignItems="center">
                     <Grid item xs={4}>
                       <Typography variant="h4" sx={typographyStyles}>{requiredField.label}*</Typography>
                     </Grid>
@@ -357,8 +357,8 @@ export const AddAnimalForm = ({ open, onClose }: { open: boolean; onClose: () =>
                 </Button>
 
                 <Collapse in={showOptionalFields}>
-                  {optionalFields.map((optionalField) => (
-                    <Grid container spacing={2} alignItems="center">
+                  {optionalFields.map((optionalField, index) => (
+                    <Grid container key={index} spacing={2} alignItems="center">
                       <Grid item xs={4}>
                         <Typography variant="h4" sx={typographyStyles}>{optionalField.label}</Typography>
                       </Grid>
@@ -479,14 +479,14 @@ export const AddAnimalForm = ({ open, onClose }: { open: boolean; onClose: () =>
                     </Button>
                   </Grid>
                 </Grid>
-              <Typography variant="body1" color={theme.palette.accent?.error} sx={{ mt: 2 }}>
+              <Typography variant="body1" color={theme.palette.error.main} sx={{ mt: 2 }}>
                 * camp obligatoriu
               </Typography>
               <DialogActions>
                 <Button
                   onClick={onClose}
                   sx={{
-                    color: theme.palette.accent?.error,
+                    color: theme.palette.error.main,
                   }}
                 >
                   Anulează

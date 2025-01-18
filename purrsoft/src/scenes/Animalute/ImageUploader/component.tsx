@@ -10,7 +10,7 @@ type ImageUploaderProps = {
   errors?: any;
 };
 
-const ImageUploader = ({ name, control, errors }: ImageUploaderProps) => {
+export const ImageUploader = ({ name, control, errors }: ImageUploaderProps) => {
   const { fields, append, remove } = useFieldArray({
     control,
     name,
@@ -98,9 +98,8 @@ const ImageUploader = ({ name, control, errors }: ImageUploaderProps) => {
             <Button
               variant="contained"
               onClick={() => {
-                const url = document.getElementById("image-url") as HTMLInputElement;
-                handleAddUrl(url.value);
-                url.value = "";
+                handleAddUrl(urlInput);
+                setUrlInput("");
               }}
               sx={{ backgroundColor: theme.palette.accent?.mutedGreen }}
             >
