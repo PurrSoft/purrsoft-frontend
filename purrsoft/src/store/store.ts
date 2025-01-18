@@ -7,7 +7,8 @@ import {
   requestsEndpoints,
   volunteersEndpoints,
   shiftsEndpoints,
-  eventsEndpoints
+  eventsEndpoints,
+  notificationsEndpoints,
 } from './api';
 import {
   combineReducers,
@@ -18,6 +19,7 @@ import {
 } from '@reduxjs/toolkit';
 import { useSelector, useDispatch } from 'react-redux';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { signalRMiddleware } from './signalr';
 export const API_PATH = import.meta.env.VITE_API_PATH as string;
 //verify in what state u are
 const isRootState = (state: unknown): state is RootState =>
@@ -67,6 +69,9 @@ export const api = createApi({
   })
   .injectEndpoints({
     endpoints: eventsEndpoints,
+  })
+  .injectEndpoints({
+    endpoints: notificationsEndpoints,
   });
 
 //root reducer
@@ -79,7 +84,7 @@ export const setupStore = (preloadedState?: Partial<RootState>) =>
   configureStore({
     reducer: rootReducer,
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(api.middleware),
+      getDefaultMiddleware().concat(api.middleware, signalRMiddleware),
     preloadedState,
   });
 //store
@@ -126,6 +131,7 @@ export const {
   useAddEventMutation,
   useAddAnimalMutation,
   useAddAnimalProfileMutation,
+  useGetNotificationsQuery,
 } = api;
 
 export { resetAuth, updateToken } from './auth';

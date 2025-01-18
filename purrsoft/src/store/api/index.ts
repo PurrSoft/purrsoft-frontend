@@ -8,6 +8,7 @@ export { endpoints as requestsEndpoints } from './requests';
 export { endpoints as shiftsEndpoints } from './shifts';
 export { endpoints as animalProfilesEndpoints } from './animalProfiles';
 export { endpoints as eventsEndpoints } from './events';
+export { endpoints as notificationsEndpoints } from './notifications';
 // rename the endpoints for each slice
 type ApiSuccessResponse<TExpectedResponse> = {
   data: TExpectedResponse;
