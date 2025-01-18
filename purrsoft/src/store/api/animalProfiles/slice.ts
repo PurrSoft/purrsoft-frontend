@@ -11,10 +11,12 @@ type TagTypes = typeof animalProfileTag;
 
 export type AnimalProfile = {
     animalId: string;
+    contract?: string;
+    contractState?: string;
+    shelterCheckIn?: string;
     currentDisease?: string;
     currentMedication?: string;
     pastDisease?: string;
-    passport?: string;
     microchip?: string;
     externalDeworming?: string;
     internalDeworming?: string;
@@ -63,6 +65,14 @@ export const endpoints = <Tags extends string> (
       query: (profile) => ({
         url: `/AnimalProfile`,
         method: 'PUT',
+        body: profile
+      }),
+    }),
+    addAnimalProfile: builder.mutation<void, AnimalProfile>({
+      invalidatesTags: [animalProfileTag],
+      query: (profile) => ({
+        url: `/AnimalProfile`,
+        method: 'POST',
         body: profile
       }),
     }),

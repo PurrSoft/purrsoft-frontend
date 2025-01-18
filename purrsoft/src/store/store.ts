@@ -124,6 +124,8 @@ export const {
   useGetShiftVolunteersQuery,
   useGetEventsQuery,
   useAddEventMutation,
+  useAddAnimalMutation,
+  useAddAnimalProfileMutation,
 } = api;
 
 export { resetAuth, updateToken } from './auth';

@@ -83,6 +83,7 @@ export const UserProfile = (props: Props) => {
           variant="body1"
           sx={{
             fontSize: { xs: '0.8rem', sm: '1rem' },
+            color: theme.palette.accent?.beige
           }}
         >
           Username
@@ -112,6 +113,7 @@ export const UserProfile = (props: Props) => {
           variant="body1"
           sx={{
             fontSize: { xs: '0.8rem', sm: '1rem' },
+            color: theme.palette.accent?.beige,
           }}
         >
           Urmatorul Shift
@@ -139,6 +141,7 @@ export const UserProfile = (props: Props) => {
         <Typography
           sx={{
             fontSize: { xs: '0.8rem', sm: '1rem' },
+            color: theme.palette.accent?.beige,
           }}
         >
           Locatie: La Casuta
@@ -152,7 +155,7 @@ export const UserProfile = (props: Props) => {
         sx={{
           backgroundColor: theme.palette.accent?.darkGreen,
           width: '100%',
-          color: 'black',
+          color: theme.palette.accent?.beige,
           fontSize: { xs: '0.8rem', sm: '1rem' },
           marginBottom: theme.spacing(3),
         }}
