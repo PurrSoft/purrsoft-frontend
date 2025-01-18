@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Box,
   Button,
@@ -13,18 +13,26 @@ import {
 import { Search, Mic } from '@mui/icons-material';
 import { CustomCard } from '../../../components/CustomCard';
 import { useTheme } from '@mui/material/styles';
-import { useGetEventsQuery } from '../../../store';
+import { useGetEventsQuery, useAccountQuery } from '../../../store';
 import { useNavigate } from 'react-router-dom';
 import { AdaugaEventForm } from '../AdaugaEventForm';
 import dayjs from 'dayjs';
 
 export const ListaEvenimente = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const { data: accountData, isLoading: accountLoading } = useAccountQuery();
   const { data, error, isLoading } = useGetEventsQuery({
     Skip: 0,
     Take: 1000,
   });
   const [open, setOpen] = useState(false);
+  const [viewAdd, setViewAdd] = useState(false);
+
+  useEffect(() => {
+    if (accountData?.roles) {
+      setViewAdd(accountData.roles?.includes('Manager') || accountData.roles?.includes('Admin') || false);
+    }
+  }, [accountData, accountLoading]);
 
 
   const theme = useTheme();
@@ -100,26 +108,28 @@ export const ListaEvenimente = () => {
               ),
             }}
           />
-          <Button 
-            variant="contained"
-            sx={{
-              backgroundColor: theme.palette.accent?.lightGreen,
-              color: theme.palette.accent?.white,
-              borderRadius: '50px',
-              '&:hover': {
-                backgroundColor: theme.palette.accent?.darkGreen,
-              },
-              ml: 2,
-            }} 
-            onClick={handleClickOpen}
-          >
-            Adauga eveniment
-          </Button>
+          {viewAdd && 
+            <Button 
+              variant="contained"
+              sx={{
+                backgroundColor: theme.palette.accent?.lightGreen,
+                color: theme.palette.accent?.white,
+                borderRadius: '50px',
+                '&:hover': {
+                  backgroundColor: theme.palette.accent?.darkGreen,
+                },
+                ml: 2,
+              }} 
+              onClick={handleClickOpen}
+            >
+              Adauga eveniment
+            </Button>
+          }
         </Box>
       </Box>
 
       {/* Event Cards */}
-      {(isLoading) && <CircularProgress />}
+      {(isLoading || accountLoading) && <CircularProgress />}
   
       {(error) && <Typography>Eroare la incarcarea datelor</Typography>}
 
