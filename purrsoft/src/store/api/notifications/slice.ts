@@ -80,10 +80,10 @@ export const endpoints = <Tags extends string>(
     NotificationResponse,
     NotificationUpdate
   >({
-    query: ({ notificationId, ...data }) => ({
-      url: `/notifications/${notificationId}`,
+    query: (params) => ({
+      url: `/notifications`,
       method: 'PUT',
-      body: data,
+      body: params,
     }),
     invalidatesTags: [{ type: notificationTag }],
   }),
