@@ -78,7 +78,7 @@ export const endpoints = <Tags extends string>(
           date: event.date,
           location: event.location,
           description: event.description,
-          attendingVolunteers: event.attendingVolunteers,
+          volunteers: event.attendingVolunteers,
         },
       },
     }),

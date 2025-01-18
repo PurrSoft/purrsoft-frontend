@@ -17,7 +17,8 @@ export type Animal = {
     yearOfBirth: number;
     gender: string;
     sterilized?: boolean;
-    imageUrl?: string;
+    passport?: string;
+    imageUrls?: string[];
 }
 
 export type AnimalResponse = {
@@ -71,7 +72,8 @@ export const endpoints = <Tags extends string> (
             yearOfBirth: animal.yearOfBirth,
             gender: animal.gender,
             sterilized: animal.sterilized,
-            imageUrl: animal.imageUrl
+            passport: animal.passport,
+            imageUrls: animal.imageUrls
           }
         }
       }),
@@ -88,7 +90,8 @@ export const endpoints = <Tags extends string> (
             yearOfBirth: animal.yearOfBirth,
             gender: animal.gender,
             sterilized: animal.sterilized,
-            imageUrl: animal.imageUrl
+            passport: animal.passport,
+            imageUrls: animal.imageUrls
           }
         }
       }),
