@@ -2,9 +2,7 @@ import { Middleware } from "@reduxjs/toolkit";
 import * as signalR from "@microsoft/signalr";
 import { api } from "../store";
 
-const apiPath = import.meta.env.VITE_SERVER_PATH as string;
-
-const hubUrl = apiPath + '/hubs/general';
+const hubUrl = import.meta.env.VITE_HUB_PATH as string;
 
 export const signalRMiddleware: Middleware = (store) => {
     let connection: signalR.HubConnection | null = null;
@@ -53,6 +51,24 @@ export const signalRMiddleware: Middleware = (store) => {
                     }
                     break;
 
+                case 'Event':
+                    store.dispatch(
+                        api.util.updateQueryData('getEvents', {Skip: 0,Take: 1000,}, (draft) => {
+                            if (operationType === 'Add') {
+                                console.log('Adding event:', payload);
+                                draft.records.push(payload);
+                            } else if (operationType === 'Update') {
+                                const index = draft.records.findIndex((event) => event.id === payload.id);
+                                if (index >= 0) {
+                                    Object.assign(draft.records[index], payload);
+                                }
+                            } else if (operationType === 'Delete') {
+                                draft.records = draft.records.filter((event) => event.id !== payload);
+                            }
+                        }) as any
+                    );
+                    break;
+
                 case 'Foster':
                     store.dispatch(
                         api.util.updateQueryData('getFosters', undefined, (draft) => {
@@ -87,6 +103,23 @@ export const signalRMiddleware: Middleware = (store) => {
                     );
                     break;
 
+                    case "Shift":
+                        store.dispatch(
+                            api.util.updateQueryData('getShifts', {}, (draft) => {
+                                if (operationType === 'Add') {
+                                    draft.records.push(payload);
+                                } else if (operationType === 'Update') {
+                                    const index = draft.records.findIndex((shift) => shift.id === payload.id);
+                                    if (index >= 0) {
+                                        draft.records[index] = payload;
+                                    }
+                                } else if (operationType === 'Delete') {
+                                    draft.records = draft.records.filter((shift) => shift.id !== payload);
+                                }
+                            }) as any
+                        );
+                        break;
+
                     case 'Volunteer':
                         store.dispatch(
                             api.util.updateQueryData('getVolunteers', undefined, (draft) => {
@@ -103,7 +136,7 @@ export const signalRMiddleware: Middleware = (store) => {
                             }) as any
                         );
                         break;
-                
+
                 default:
                     console.warn('Unknown entity type:', entityType);
             }
