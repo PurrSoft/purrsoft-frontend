@@ -7,7 +7,8 @@ import {
   requestsEndpoints,
   volunteersEndpoints,
   shiftsEndpoints,
-  eventsEndpoints
+  eventsEndpoints,
+  notificationsEndpoints,
 } from './api';
 import {
   combineReducers,
@@ -67,6 +68,9 @@ export const api = createApi({
   })
   .injectEndpoints({
     endpoints: eventsEndpoints,
+  })
+  .injectEndpoints({
+    endpoints: notificationsEndpoints,
   });
 
 //root reducer
@@ -126,6 +130,9 @@ export const {
   useAddEventMutation,
   useAddAnimalMutation,
   useAddAnimalProfileMutation,
+  useGetNotificationsQuery,
+  useGetNotificationByIdQuery,
+  useUpdateNotificationMutation,
 } = api;
 
 export { resetAuth, updateToken } from './auth';
