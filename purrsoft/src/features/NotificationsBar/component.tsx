@@ -9,7 +9,6 @@ import {
   Popover,
   Icon,
   useTheme,
-  Button,
   Chip,
 } from '@mui/material';
 import NotificationsIcon from '@mui/icons-material/Notifications';

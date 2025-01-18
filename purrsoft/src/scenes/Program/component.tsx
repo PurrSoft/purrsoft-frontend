@@ -57,8 +57,6 @@ export const Program = () => {
         setHighestRole('volunteer');
       }
     }
-    console.log('highestRole', highestRole);
-    console.log(user?.roles);
   }, [user, highestRole]);
   const [mode, setMode] = useState<'admin' | 'volunteer'>('volunteer');
 
@@ -121,7 +119,6 @@ export const Program = () => {
           tooltip: 'Eveniment',
         };
       });
-      console.log(metadata);
 
       setShiftMetadata(metadata);
     }
@@ -160,7 +157,6 @@ export const Program = () => {
         },
       }).unwrap();
 
-      console.log(`Shift (${shiftType}) added for ${date}`);
       setSnackbarMessage(`Shift (${shiftType}) added for ${date}`);
       setSnackbarSeverity('success');
       onSnackbarOpen();
@@ -177,7 +173,6 @@ export const Program = () => {
 
   const handleUpdateShiftType = async () => {
     const shiftId = selectedShift?.id;
-    console.log('shiftId', shiftId);
     if (!shiftId) return;
     const shiftType = selectedShift?.shiftType;
     const newShiftType = shiftType === 'Day' ? 'Night' : 'Day';
@@ -190,7 +185,6 @@ export const Program = () => {
           volunteerId: selectedShift.volunteerId || '',
         },
       }).unwrap();
-      console.log(`Shift (${newShiftType}) updated for ${selectedShift?.date}`);
       setSnackbarMessage(
         `Shift (${newShiftType}) updated for ${selectedShift?.date}`,
       );
@@ -212,7 +206,6 @@ export const Program = () => {
 
     try {
       await removeShift(shiftId).unwrap();
-      console.log(`Shift (${shiftType}) removed for ${date}`);
       setSnackbarMessage(`Shift (${shiftType}) removed for ${date}`);
       setSnackbarSeverity('success');
       onSnackbarOpen();
@@ -230,7 +223,6 @@ export const Program = () => {
 
     try {
       await removeShift(shiftId).unwrap();
-      console.log(`Shift removed for ${selectedShift?.date}`);
       setSnackbarMessage(`Shift removed for ${selectedShift?.date}`);
       setSnackbarSeverity('success');
       onSnackbarOpen();
@@ -243,7 +235,6 @@ export const Program = () => {
   };
 
   const hasShift = (date: string, shiftType: ShiftType): boolean => {
-    console.log(date, shiftType);
     // Implement the actual logic to check if the shift exists
     if (shiftsData?.records) {
       return shiftsData.records.some(
@@ -257,9 +248,10 @@ export const Program = () => {
 
   //when date is selected set th enumber of shifts
   const { data: shiftCountData, refetch: refetchShiftCount } =
-    useGetShiftCountByDateQuery({
-      date: selectedDate || '',
-    });
+    useGetShiftCountByDateQuery(
+      { date: selectedDate || '' },
+      { skip: !selectedDate },
+    );
 
   const totalShiftCount = shiftCountData?.totalShiftCount || 0;
   const dayShiftsCount = shiftCountData?.dayShiftsCount || 0;
@@ -282,7 +274,6 @@ export const Program = () => {
         },
       }).unwrap();
 
-      console.log(`Shift (${shiftChangeType}) added for ${selectedDate}`);
       setSnackbarMessage(
         `Shift (${shiftChangeType}) added for ${selectedDate}`,
       );
