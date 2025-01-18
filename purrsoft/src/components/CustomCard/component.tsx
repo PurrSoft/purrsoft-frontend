@@ -27,7 +27,7 @@ export const CustomCard = ({
   align = 'center',
   justify = 'center',
   title,
-  padding = '16px',
+  padding = 'auto',
   subtitle = '',
   shadow = true,
   closeButton = true,

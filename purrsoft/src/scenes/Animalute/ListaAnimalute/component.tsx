@@ -21,16 +21,28 @@ import defaultPhoto from '/defaultPhoto.jpeg';
 export const ListaAnimalute = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const { data, error, isLoading } = useGetAnimalsQuery();
-  const { data: accountData, isLoading: accountLoading } = useAccountQuery();
+  const { data: user, isLoading: accountLoading } = useAccountQuery();
   
   const [open, setOpen] = useState(false);
-  const [isFoster, setIsFoster] = useState(false);
+  const [highestRole, setHighestRole] = useState('');
 
   useEffect(() => {
-    if (accountData?.roles) {
-      setIsFoster(accountData.roles?.includes('Foster') || false);
+    if (user?.roles) {
+      const roles = user.roles;
+      if (roles.includes('Foster')) {
+        setHighestRole('foster');
+      }
+      if (roles.includes('Admin')) {
+        setHighestRole('other');
+      }
+      if (roles.includes('Manager')) {
+        setHighestRole('other');
+      }
+      if (roles.includes('Volunteer')) {
+        setHighestRole('other');
+      }
     }
-  }, [accountData, accountLoading]);
+  }, [user, highestRole]);
 
   const theme = useTheme();
   const navigate = useNavigate();
@@ -46,6 +58,12 @@ export const ListaAnimalute = () => {
   const handleClose = () => {
     setOpen(false);
   };
+
+  const filteredAnimals = 
+    data?.records.filter(
+      (animal) => 
+        animal.name.toLowerCase().includes(searchTerm.toLowerCase())
+    ) || [];
 
   return (
     <Container>
@@ -89,7 +107,7 @@ export const ListaAnimalute = () => {
               ),
             }}
           />
-          {!isFoster && 
+          {highestRole === 'other' && 
             <Button 
               variant="contained"
               sx={{
@@ -116,48 +134,62 @@ export const ListaAnimalute = () => {
 
       <Box sx={{ ml: 2, mr: 1 }}>
         <Grid container spacing={6}>
-          {data?.records.map((animal) => (
-            <Grid item xs={12} sm={6} md={4} lg={3} key={animal.id}>
-              <CustomCard
-                width="100%"
-                height="100%"
-                align="center"
-                justify="center"
-              >
-                <Box sx={{ textAlign: 'center' }}>
-                  <Typography
-                    sx={{
-                      backgroundColor: theme.palette.accent?.lightGreen,
-                      borderRadius: '8px',
-                      mb: 1,
-                      color: theme.palette.accent?.white,
-                      fontSize: '20px',
-                    }}
-                  >
-                    Nume: {animal.name}
-                  </Typography>
-                  <img
-                    src={animal.imageUrls && animal.imageUrls.length > 0 ? animal.imageUrls[0] : defaultPhoto}
-                    style={{ width: '80%', height: 'auto', borderRadius: '8px' }}
-                  />
-                  {!isFoster && 
-                    <Button
-                      variant="contained"
+          {filteredAnimals.length > 0 ? (
+            filteredAnimals.map((animal) => (
+              <Grid item xs={12} sm={6} md={4} lg={3} key={animal.id}>
+                <CustomCard
+                  width="100%"
+                  height="100%"
+                  align="center"
+                  justify="center"
+                >
+                  <Box sx={{ textAlign: 'center' }}>
+                    <Typography
                       sx={{
-                        mt: 2,
-                        backgroundColor: theme.palette.accent?.tealGreen,
-                      }}
-                      onClick={() => {
-                        navigate(`/management/animalute/${animal.id}`, { state: { animal } });
+                        backgroundColor: theme.palette.accent?.lightGreen,
+                        borderRadius: '8px',
+                        mb: 1,
+                        color: theme.palette.accent?.white,
+                        fontSize: '20px',
                       }}
                     >
-                      Modifica
-                    </Button>
-                  }
-                </Box>
-              </CustomCard>
-            </Grid>
-          ))}
+                      Nume: {animal.name}
+                    </Typography>
+                    <img
+                      src={animal.imageUrls && animal.imageUrls.length > 0 ? animal.imageUrls[0] : defaultPhoto}
+                      style={{ width: '80%', height: 'auto', borderRadius: '8px' }}
+                    />
+                    {highestRole === "other" && 
+                      <Button
+                        variant="contained"
+                        sx={{
+                          mt: 2,
+                          backgroundColor: theme.palette.accent?.tealGreen,
+                        }}
+                        onClick={() => {
+                          navigate(`/management/animalute/${animal.id}`, { state: { animal } });
+                        }}
+                      >
+                        Modifica
+                      </Button>
+                    }
+                  </Box>
+                </CustomCard>
+              </Grid>
+            ))
+          ) : (
+            !error &&
+              <Typography
+                sx={{
+                  textAlign: 'center',
+                  width: '100%',
+                  mt: 8,
+                  color: theme.palette.text.primary,
+                }}
+              >
+                Nu s-au gasit animalute.
+              </Typography>
+          )}
         </Grid>
       </Box>
 
