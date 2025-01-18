@@ -1,38 +1,90 @@
-import { BaseQueryFn, EndpointBuilder, FetchArgs, FetchBaseQueryError, FetchBaseQueryMeta } from "@reduxjs/toolkit/query";
+import {
+  BaseQueryFn,
+  EndpointBuilder,
+  FetchArgs,
+  FetchBaseQueryError,
+  FetchBaseQueryMeta,
+} from '@reduxjs/toolkit/query';
 
-const notificationsTag = 'Notifications';
-type TagTypes = typeof notificationsTag;
+const notificationTag = 'Notification';
+type TagTypes = typeof notificationTag;
 
-export type Notifications = {
-    id: string;
-    type: string;
-    message: string;
-    isRead: boolean;
-}
+// i will have just get notifications
 
-export type NotificationsResponse = {
-  records: Array<Omit<Notifications, 'notificationsTags'> & { tags: string[] }>;
+type NotificationDto = {
+  id: string;
+  type: string;
+  message: string;
+  isRead: boolean;
+};
+
+type GetNotificationsQuery = Partial<{
+  userId: string;
+  type: string;
+  isRead: boolean;
+}>;
+
+type GetNotificationByIdQuery = {
+  notificationId: string;
+};
+
+type NotificationUpdate = {
+  notificationId: string;
+  type: string;
+  message: string;
+  isRead: boolean;
+};
+
+type NotificationResponse = {
+  errors: Record<string, string[]>;
+  isValid: boolean;
+  result: NotificationDto;
+};
+
+type NotificationsResponse = {
+  records: Array<NotificationDto>;
   totalNumbersOfRecords: number;
-}
+};
 
-export const endpoints = <Tags extends string> (
-    builder: EndpointBuilder<
-      BaseQueryFn<
-        string | FetchArgs,
-        unknown,
-        FetchBaseQueryError,
-        object,
-        FetchBaseQueryMeta
-      >,
-      Tags | TagTypes,
-      'api'
+export const endpoints = <Tags extends string>(
+  builder: EndpointBuilder<
+    BaseQueryFn<
+      string | FetchArgs,
+      unknown,
+      FetchBaseQueryError,
+      object,
+      FetchBaseQueryMeta
     >,
-  ) => ({
-    getNotifications: builder.query<NotificationsResponse, void>({
-      providesTags: [notificationsTag],  
-      query: () => ({
-            url: '/Notifications',
-            method: 'GET'
-        }),
+    Tags | TagTypes,
+    'api'
+  >,
+) => ({
+  getNotifications: builder.query<NotificationsResponse, GetNotificationsQuery>(
+    {
+      query: (params) => ({
+        url: `/notifications`,
+        params,
+      }),
+      providesTags: [notificationTag],
+    },
+  ),
+  getNotificationById: builder.query<
+    NotificationResponse,
+    GetNotificationByIdQuery
+  >({
+    query: ({ notificationId }) => ({
+      url: `/notifications/${notificationId}`,
     }),
-  });
+  }),
+  updateNotification: builder.mutation<
+    NotificationResponse,
+    NotificationUpdate
+  >({
+    query: (params) => ({
+      url: `/notifications`,
+      method: 'PUT',
+      body: params,
+    }),
+    invalidatesTags: [{ type: notificationTag }],
+  }),
+});
