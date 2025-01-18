@@ -154,6 +154,7 @@ export const Program = () => {
           start: dayjs(date).format(),
           shiftType,
           volunteerId: user?.id || '',
+          shiftStatus: 'Upcoming',
         },
       }).unwrap();
 
@@ -183,6 +184,7 @@ export const Program = () => {
           shiftType: newShiftType,
           start: selectedShift?.date,
           volunteerId: selectedShift.volunteerId || '',
+          shiftStatus: 'Upcoming',
         },
       }).unwrap();
       setSnackbarMessage(
@@ -271,6 +273,7 @@ export const Program = () => {
           start: dayjs(selectedDate).format(),
           shiftType: shiftChangeType,
           volunteerId,
+          shiftStatus: 'Upcoming',
         },
       }).unwrap();
 

@@ -24,6 +24,7 @@ type Shift = {
   start: string;
   shiftType: ShiftType;
   volunteerId: string;
+  shiftStatus: string;
 };
 
 type GetShiftsEndpointParams = Partial<{
