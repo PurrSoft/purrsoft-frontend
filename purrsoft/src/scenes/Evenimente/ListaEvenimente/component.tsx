@@ -26,11 +26,11 @@ export const ListaEvenimente = () => {
     Take: 1000,
   });
   const [open, setOpen] = useState(false);
-  const [viewAdd, setViewAdd] = useState(false);
+  const [adminView, setAdminView] = useState(false);
 
   useEffect(() => {
     if (accountData?.roles) {
-      setViewAdd(accountData.roles?.includes('Manager') || accountData.roles?.includes('Admin') || false);
+      setAdminView(accountData.roles?.includes('Manager') || accountData.roles?.includes('Admin') || false);
     }
   }, [accountData, accountLoading]);
 
@@ -110,7 +110,7 @@ export const ListaEvenimente = () => {
               ),
             }}
           />
-          {viewAdd && 
+          {adminView && 
             <Button 
               variant="contained"
               sx={{
@@ -218,18 +218,20 @@ export const ListaEvenimente = () => {
                           justifyContent: 'flex-end',
                         }}
                       >
-                        <Button
-                          variant="contained"
-                          sx={{
-                            backgroundColor: theme.palette.accent?.lightGreen,
-                          }}
-                          onClick={() => {
-                            console.log(event.id);
-                            navigate(`/management/evenimente/${event.id}`, { state: { event } });
-                          }}
-                        >
-                          Modifica
-                        </Button>
+                        {adminView &&
+                          <Button
+                            variant="contained"
+                            sx={{
+                              backgroundColor: theme.palette.accent?.lightGreen,
+                            }}
+                            onClick={() => {
+                              console.log(event.id);
+                              navigate(`/management/evenimente/${event.id}`, { state: { event } });
+                            }}
+                          >
+                            Modifica
+                          </Button>
+                        }
                       </Grid>
                     </Grid>
                   </Grid>
