@@ -6,16 +6,13 @@ import {
   Grid,
   IconButton,
   useMediaQuery,
-  Badge,
   CircularProgress,
   Typography,
 } from '@mui/material';
-import NotificationsIcon from '@mui/icons-material/Notifications';
 import { useLocation, Link, useNavigate } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
 import HouseIcon from '@mui/icons-material/House';
 import { useAccountQuery } from '../../store';
-import { useVisibility } from '../../hooks/useVisibility';
 import { NotificationsBar } from '../NotificationsBar';
 
 type RouteLabel =
@@ -57,7 +54,7 @@ export const Navbar = () => {
     },
   ];
 
-  if (accountData?.roles?.includes('Manager')) {
+  if (!isLoading && accountData?.roles?.includes('Manager')) {
     routes.push(
       {
         label: 'Voluntari',
@@ -85,7 +82,6 @@ export const Navbar = () => {
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
   const isMediumScreen = useMediaQuery(theme.breakpoints.between('sm', 'md'));
-  const { visibility, onOpen, onClose } = useVisibility();
   useEffect(() => {
     if (location.pathname === '/management') {
       navigate('/management/program', { replace: true });
@@ -93,7 +89,7 @@ export const Navbar = () => {
       const activeRoute = routes.find((route) =>
         location.pathname.startsWith(route.value),
       );
-      setActiveTab(activeRoute!.value);
+      setActiveTab(activeRoute?.value || '/management/program');
     }
   }, [location.pathname, navigate, routes]);
 

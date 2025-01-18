@@ -18,7 +18,11 @@ import { Controller, useForm, useFieldArray } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useTheme } from '@mui/material/styles';
-import { useAddAnimalMutation, useAddAnimalProfileMutation, useDeleteAnimalMutation } from '../../../store';
+import {
+  useAddAnimalMutation,
+  useAddAnimalProfileMutation,
+  useDeleteAnimalMutation,
+} from '../../../store';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -35,7 +39,7 @@ type AnimalFormData = {
   yearOfBirth: number;
   gender: string;
   sterilized?: boolean;
-  imageUrls?: { filename: string, base64: string }[];
+  imageUrls?: { filename: string; base64: string }[];
   passport?: string;
   contract?: string;
   contractState?: string;
@@ -101,14 +105,17 @@ const animalFormSchema = yup
       .number()
       .required('Anul nasterii este obligatoriu')
       .min(2000, 'Anul nasterii nu poate fi mai mic de 2000')
-      .max(new Date().getFullYear(), 'Anul nasterii nu poate fi mai mare decat anul curent'),
+      .max(
+        new Date().getFullYear(),
+        'Anul nasterii nu poate fi mai mare decat anul curent',
+      ),
     gender: yup.string().required('Sexul este obligatoriu'),
     sterilized: yup.boolean(),
     imageUrls: yup.array().of(
       yup.object({
-        filename: yup.string().required(),
+        fileName: yup.string().required(),
         base64: yup.string().required(),
-      })
+      }),
     ),
     passport: yup.string(),
     microchip: yup.string(),
@@ -120,8 +127,11 @@ const animalFormSchema = yup
     multivalentVaccine: yup.string(),
     usefulLinks: yup.array().of(
       yup.object({
-        link: yup.string().url('URL invalid').required('URL-ul este obligatoriu'),
-      })
+        link: yup
+          .string()
+          .url('URL invalid')
+          .required('URL-ul este obligatoriu'),
+      }),
     ),
     contract: yup.string(),
     contractState: yup.string(),
@@ -142,14 +152,37 @@ const animalFormSchema = yup
 
 type fieldTypes = {
   label: string;
-  name: "animalType" | "name" | "yearOfBirth" | "gender" | "sterilized" | 
-  "passport" | "contract" | "contractState" | "microchip" | 
-  "externalDeworming" | "internalDeworming" | "currentDisease" | "currentMedication" | 
-  "pastDisease" | "currentTreatment" | "rabiesVaccine" | "multivalentVaccine" | 
-  "fivFeLVTest" | "coronavirusVaccine" | "giardiaTest" | "earMiteTreatment" | 
-  "intakeNotes" | "additionalMedicalInfo" | "additionalInfo" | "medicalAppointments" | 
-  "refillReminders" | "imageUrls" | "usefulLinks" | "shelterCheckIn";
-  type?: "number";
+  name:
+    | 'animalType'
+    | 'name'
+    | 'yearOfBirth'
+    | 'gender'
+    | 'sterilized'
+    | 'passport'
+    | 'contract'
+    | 'contractState'
+    | 'microchip'
+    | 'externalDeworming'
+    | 'internalDeworming'
+    | 'currentDisease'
+    | 'currentMedication'
+    | 'pastDisease'
+    | 'currentTreatment'
+    | 'rabiesVaccine'
+    | 'multivalentVaccine'
+    | 'fivFeLVTest'
+    | 'coronavirusVaccine'
+    | 'giardiaTest'
+    | 'earMiteTreatment'
+    | 'intakeNotes'
+    | 'additionalMedicalInfo'
+    | 'additionalInfo'
+    | 'medicalAppointments'
+    | 'refillReminders'
+    | 'imageUrls'
+    | 'usefulLinks'
+    | 'shelterCheckIn';
+  type?: 'number';
   select?: boolean;
   options?: string[];
   values?: string[];
@@ -158,39 +191,57 @@ type fieldTypes = {
 };
 
 const requiredFields: fieldTypes[] = [
-  {label: "Tip", name: "animalType", select: true,values: ["Cat", "Dog", "Other"], options: ["Pisica", "Caine", "Altceva"]},
-  {label: "Nume", name: "name"},
-  {label: "Anul nasterii", name: "yearOfBirth", type: "number"},
-  {label: "Sex", name: "gender", select: true, options: ["Mascul", "Femela"], values: ["Male", "Female"]},
-]
+  {
+    label: 'Tip',
+    name: 'animalType',
+    select: true,
+    values: ['Cat', 'Dog', 'Other'],
+    options: ['Pisica', 'Caine', 'Altceva'],
+  },
+  { label: 'Nume', name: 'name' },
+  { label: 'Anul nasterii', name: 'yearOfBirth', type: 'number' },
+  {
+    label: 'Sex',
+    name: 'gender',
+    select: true,
+    options: ['Mascul', 'Femela'],
+    values: ['Male', 'Female'],
+  },
+];
 
 const optionalFields: fieldTypes[] = [
-  {label: "Steril", name: "sterilized", checkbox: true},
-  {label: "Pasaport", name: "passport"},
-  {label: "Contract", name: "contract"},
+  { label: 'Steril', name: 'sterilized', checkbox: true },
+  { label: 'Pasaport', name: 'passport' },
+  { label: 'Contract', name: 'contract' },
   // {label: "Stare contract", name: "contractState", select: true, values: ["Adopted", "Fostered", "NotFostered"], options: ["Adoptat", "Fostered", "Not Fostered"]},
   // {label: "Data intrarii in adapost", name: "shelterCheckIn", date: true},
-  {label: "Microchip", name: "microchip"},
-  {label: "Dezparazitare externa", name: "externalDeworming"},
-  {label: "Dezparazitare interna", name: "internalDeworming"},
-  {label: "Boala curenta", name: "currentDisease"},
-  {label: "Medicatie curenta", name: "currentMedication"},
-  {label: "Boala anterioara", name: "pastDisease"},
-  {label: "Tratament curent", name: "currentTreatment"},
-  {label: "Vaccin antirabic", name: "rabiesVaccine"},
-  {label: "Vaccin multivalent", name: "multivalentVaccine"},
-  {label: "Test FIV/FeLV", name: "fivFeLVTest"},
-  {label: "Vaccin coronavirus", name: "coronavirusVaccine"},
-  {label: "Test Giardia", name: "giardiaTest"},
-  {label: "Tratament raie", name: "earMiteTreatment"},
-  {label: "Note internare", name: "intakeNotes"},
-  {label: "Informatii medicale aditionale", name: "additionalMedicalInfo"},
-  {label: "Informatii aditionale", name: "additionalInfo"},
-  {label: "Programari medicale", name: "medicalAppointments"},
-  {label: "Remindere refil", name: "refillReminders"},
-]
+  { label: 'Microchip', name: 'microchip' },
+  { label: 'Dezparazitare externa', name: 'externalDeworming' },
+  { label: 'Dezparazitare interna', name: 'internalDeworming' },
+  { label: 'Boala curenta', name: 'currentDisease' },
+  { label: 'Medicatie curenta', name: 'currentMedication' },
+  { label: 'Boala anterioara', name: 'pastDisease' },
+  { label: 'Tratament curent', name: 'currentTreatment' },
+  { label: 'Vaccin antirabic', name: 'rabiesVaccine' },
+  { label: 'Vaccin multivalent', name: 'multivalentVaccine' },
+  { label: 'Test FIV/FeLV', name: 'fivFeLVTest' },
+  { label: 'Vaccin coronavirus', name: 'coronavirusVaccine' },
+  { label: 'Test Giardia', name: 'giardiaTest' },
+  { label: 'Tratament raie', name: 'earMiteTreatment' },
+  { label: 'Note internare', name: 'intakeNotes' },
+  { label: 'Informatii medicale aditionale', name: 'additionalMedicalInfo' },
+  { label: 'Informatii aditionale', name: 'additionalInfo' },
+  { label: 'Programari medicale', name: 'medicalAppointments' },
+  { label: 'Remindere refil', name: 'refillReminders' },
+];
 
-export const AddAnimalForm = ({ open, onClose }: { open: boolean; onClose: () => void }) => {
+export const AddAnimalForm = ({
+  open,
+  onClose,
+}: {
+  open: boolean;
+  onClose: () => void;
+}) => {
   const theme = useTheme();
   const [addAnimal] = useAddAnimalMutation();
   const [addAnimalProfile] = useAddAnimalProfileMutation();
@@ -232,7 +283,7 @@ export const AddAnimalForm = ({ open, onClose }: { open: boolean; onClose: () =>
         gender: data.gender,
         sterilized: data.sterilized,
         passport: data.passport,
-        imageUrls: data.imageUrls?.map(imageObj => imageObj.base64),
+        imageUrls: data.imageUrls?.map((imageObj) => imageObj.base64),
       }).unwrap();
 
       console.log('form data:', data);
@@ -247,7 +298,7 @@ export const AddAnimalForm = ({ open, onClose }: { open: boolean; onClose: () =>
             currentTreatment: data.currentTreatment,
             rabiesVaccine: data.rabiesVaccine,
             multivalentVaccine: data.multivalentVaccine,
-            usefulLinks: data.usefulLinks?.map(linkObj => linkObj.link),
+            usefulLinks: data.usefulLinks?.map((linkObj) => linkObj.link),
             contract: data.contract,
             // contractState: data.contractState,
             // shelterCheckIn: data.shelterCheckIn,
@@ -265,7 +316,9 @@ export const AddAnimalForm = ({ open, onClose }: { open: boolean; onClose: () =>
           }).unwrap();
         } catch (profileError) {
           await deleteAnimal(animalResponse.result).unwrap();
-          setSnackbarMessage('A aparut o eroare la adaugarea profilului animalului');
+          setSnackbarMessage(
+            'A aparut o eroare la adaugarea profilului animalului',
+          );
           setSnackbarSeverity('error');
           onSnackbarOpen();
         }
@@ -282,7 +335,7 @@ export const AddAnimalForm = ({ open, onClose }: { open: boolean; onClose: () =>
   };
 
   const typographyStyles = {
-    color: theme.palette.accent?.green, 
+    color: theme.palette.accent?.green,
   };
 
   const textFieldStyles = {
@@ -295,221 +348,254 @@ export const AddAnimalForm = ({ open, onClose }: { open: boolean; onClose: () =>
   return (
     <>
       <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
-        <DialogTitle 
-          variant='h2' 
-          align='center'
+        <DialogTitle
+          variant="h2"
+          align="center"
           sx={{
             backgroundColor: theme.palette.background.paper,
           }}
         >
           Adauga Animalut
         </DialogTitle>
-        <DialogContent 
+        <DialogContent
           sx={{
             backgroundColor: theme.palette.background.paper,
             maxHeight: '70vh',
             overflowY: 'auto',
           }}
         >
-            <form onSubmit={handleSubmit(onSubmit)}>
-                {requiredFields.map((requiredField, index) => (
-                  <Grid container key={index} spacing={2} alignItems="center">
-                    <Grid item xs={4}>
-                      <Typography variant="h4" sx={typographyStyles}>{requiredField.label}*</Typography>
-                    </Grid>
-                    <Grid item xs={8}>
-                      <Controller
-                        name={requiredField.name}
-                        control={control}
-                        render={({ field }) => (
+          <form onSubmit={handleSubmit(onSubmit)}>
+            {requiredFields.map((requiredField, index) => (
+              <Grid container key={index} spacing={2} alignItems="center">
+                <Grid item xs={4}>
+                  <Typography variant="h4" sx={typographyStyles}>
+                    {requiredField.label}*
+                  </Typography>
+                </Grid>
+                <Grid item xs={8}>
+                  <Controller
+                    name={requiredField.name}
+                    control={control}
+                    render={({ field }) => (
+                      <TextField
+                        select={requiredField.select}
+                        fullWidth
+                        type={requiredField.type}
+                        variant="outlined"
+                        margin="normal"
+                        error={!!errors.animalType}
+                        helperText={errors.animalType?.message}
+                        {...field}
+                        sx={textFieldStyles}
+                      >
+                        {requiredField.select &&
+                          requiredField.options?.map((option, index) => (
+                            <MenuItem
+                              key={option}
+                              value={requiredField.values?.[index]}
+                            >
+                              {option}
+                            </MenuItem>
+                          ))}
+                      </TextField>
+                    )}
+                  />
+                </Grid>
+              </Grid>
+            ))}
+
+            <Button
+              onClick={() => setShowOptionalFields(!showOptionalFields)}
+              sx={{
+                color: theme.palette.accent?.green,
+                mt: 2,
+                mb: 2,
+              }}
+            >
+              {showOptionalFields ? 'Ascunde' : 'Arata'} campuri optionale
+            </Button>
+
+            <Collapse in={showOptionalFields}>
+              {optionalFields.map((optionalField, index) => (
+                <Grid container key={index} spacing={2} alignItems="center">
+                  <Grid item xs={4}>
+                    <Typography variant="h4" sx={typographyStyles}>
+                      {optionalField.label}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={8}>
+                    <Controller
+                      name={optionalField.name}
+                      control={control}
+                      render={({ field }) =>
+                        optionalField.checkbox ? (
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                checked={!!field.value}
+                                sx={{
+                                  '&.Mui-checked': {
+                                    color: theme.palette.accent?.green,
+                                  },
+                                }}
+                                onChange={field.onChange}
+                              />
+                            }
+                            label=""
+                          />
+                        ) : optionalField.date ? (
+                          <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DateTimePicker
+                              value={
+                                typeof field.value === 'string'
+                                  ? dayjs(field.value)
+                                  : null
+                              }
+                              onChange={(value) =>
+                                field.onChange(value?.toISOString() || '')
+                              }
+                              slots={{ textField: TextField }}
+                              slotProps={{
+                                textField: {
+                                  fullWidth: true,
+                                  variant: 'outlined',
+                                  error: !!errors[optionalField.name],
+                                  helperText:
+                                    errors[optionalField.name]?.message,
+                                },
+                              }}
+                              sx={{
+                                '& .MuiInputBase-root': {
+                                  backgroundColor: '#cec5b4',
+                                  color: theme.palette.accent?.mutedGreen,
+                                  mt: 2,
+                                  mb: 2,
+                                },
+                              }}
+                            />
+                          </LocalizationProvider>
+                        ) : (
                           <TextField
-                            select={requiredField.select}
+                            select={optionalField.select}
                             fullWidth
-                            type={requiredField.type}
                             variant="outlined"
                             margin="normal"
-                            error={!!errors.animalType}
-                            helperText={errors.animalType?.message}
+                            error={!!errors[optionalField.name]}
+                            helperText={errors[optionalField.name]?.message}
                             {...field}
                             sx={textFieldStyles}
                           >
-                            {requiredField.select && requiredField.options?.map((option, index) => (
-                              <MenuItem key={option} value={requiredField.values?.[index]}>
-                                {option}
-                              </MenuItem>
-                            ))}
+                            {optionalField.select &&
+                              optionalField.options?.map((option, index) => (
+                                <MenuItem
+                                  key={option}
+                                  value={optionalField.values?.[index]}
+                                >
+                                  {option}
+                                </MenuItem>
+                              ))}
                           </TextField>
+                        )
+                      }
+                    />
+                  </Grid>
+                </Grid>
+              ))}
+            </Collapse>
+            <Grid container spacing={2} alignItems="center">
+              <Grid item xs={12}>
+                <ImageUploader
+                  name="imageUrls"
+                  control={control}
+                  errors={errors}
+                />
+              </Grid>
+              <Grid item xs={4} alignSelf={'flex-start'} mt={1.5}>
+                <Typography variant="h4" sx={typographyStyles}>
+                  Link-uri utile
+                </Typography>
+              </Grid>
+              <Grid item xs={8}>
+                {fields.map((item, index) => (
+                  <Grid container key={item.id} alignItems="center">
+                    <Grid item xs={10}>
+                      <Controller
+                        name={`usefulLinks.${index}.link`}
+                        control={control}
+                        render={({ field }) => (
+                          <TextField
+                            fullWidth
+                            variant="outlined"
+                            margin="normal"
+                            error={!!errors.usefulLinks?.[index]?.link}
+                            helperText={
+                              errors.usefulLinks?.[index]?.link?.message
+                            }
+                            {...field}
+                            sx={textFieldStyles}
+                          />
                         )}
                       />
                     </Grid>
+                    <Grid item xs={2}>
+                      <IconButton onClick={() => remove(index)}>
+                        <RemoveIcon />
+                      </IconButton>
+                    </Grid>
                   </Grid>
                 ))}
-
                 <Button
-                  onClick={() => setShowOptionalFields(!showOptionalFields)}
-                  sx={{
-                    color: theme.palette.accent?.green,
-                    mt: 2,
-                    mb: 2,
-                  }}
-                >
-                  {showOptionalFields ? 'Ascunde' : 'Arata'} campuri optionale
-                </Button>
-
-                <Collapse in={showOptionalFields}>
-                  {optionalFields.map((optionalField, index) => (
-                    <Grid container key={index} spacing={2} alignItems="center">
-                      <Grid item xs={4}>
-                        <Typography variant="h4" sx={typographyStyles}>{optionalField.label}</Typography>
-                      </Grid>
-                      <Grid item xs={8}>
-                        <Controller
-                          name={optionalField.name}
-                          control={control}
-                          render={({ field }) => (
-                            optionalField.checkbox ? (
-                              <FormControlLabel
-                                control={<Checkbox 
-                                  checked={!!field.value}
-                                  sx={{ 
-                                      '&.Mui-checked': {
-                                          color: theme.palette.accent?.green,
-                                      },
-                                  }} 
-                                  onChange={field.onChange} 
-                                />}
-                                label=""
-                              />
-                            ) : optionalField.date ? (
-                              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <DateTimePicker
-                                  value={typeof field.value === 'string' ? dayjs(field.value) : null}
-                                  onChange={(value) => field.onChange(value?.toISOString() || '')}
-                                  slots={{ textField: TextField }}
-                                  slotProps={{
-                                    textField: {
-                                    fullWidth: true,
-                                    variant: 'outlined',
-                                    error: !!errors[optionalField.name],
-                                    helperText: errors[optionalField.name]?.message,
-                                    },
-                                  }}
-                                  sx={
-                                    {
-                                      '& .MuiInputBase-root': {
-                                        backgroundColor: '#cec5b4',
-                                        color: theme.palette.accent?.mutedGreen,
-                                        mt: 2,
-                                        mb: 2
-                                      },
-                                    }
-                                  }
-                                />
-                              </LocalizationProvider>
-                            ) : (
-                              <TextField
-                                select={optionalField.select}
-                                fullWidth
-                                variant="outlined"
-                                margin="normal"
-                                error={!!errors[optionalField.name]}
-                                helperText={errors[optionalField.name]?.message}
-                                {...field}
-                                sx={textFieldStyles}
-                              >
-                                {optionalField.select && optionalField.options?.map((option, index) => (
-                                  <MenuItem key={option} value={optionalField.values?.[index]}>
-                                    {option}
-                                  </MenuItem>
-                                ))}
-                              </TextField>
-                            )
-                          )}
-                        />
-                      </Grid>
-                    </Grid>
-                  ))}
-                </Collapse>
-                <Grid container spacing={2} alignItems="center">
-                  <Grid item xs={12}>
-                    <ImageUploader name="imageUrls" control={control} errors={errors}/>
-                  </Grid>
-                  <Grid item xs={4} alignSelf={'flex-start'} mt={1.5}>
-                    <Typography variant="h4" sx={typographyStyles}>Link-uri utile</Typography>
-                  </Grid>
-                  <Grid item xs={8}>
-                    {fields.map((item, index) => (
-                      <Grid container key={item.id} alignItems="center">
-                        <Grid item xs={10}>
-                          <Controller
-                            name={`usefulLinks.${index}.link`}
-                            control={control}
-                            render={({ field }) => (
-                              <TextField
-                                fullWidth
-                                variant="outlined"
-                                margin="normal"
-                                error={!!errors.usefulLinks?.[index]?.link}
-                                helperText={errors.usefulLinks?.[index]?.link?.message}
-                                {...field}
-                                sx={textFieldStyles}
-                              />
-                            )}
-                          />
-                        </Grid>
-                        <Grid item xs={2}>
-                          <IconButton onClick={() => remove(index)}>
-                            <RemoveIcon />
-                          </IconButton>
-                        </Grid>
-                      </Grid>
-                    ))}
-                    <Button
-                      onClick={() => append({ link: '' })}
-                      startIcon={<AddIcon 
-                        sx={{
-                          color: theme.palette.accent?.green
-                        }}
-                        />}
+                  onClick={() => append({ link: '' })}
+                  startIcon={
+                    <AddIcon
                       sx={{
                         color: theme.palette.accent?.green,
                       }}
-                    >
-                      Add Link
-                    </Button>
-                  </Grid>
-                </Grid>
-              <Typography variant="body1" color={theme.palette.error.main} sx={{ mt: 2 }}>
-                * camp obligatoriu
-              </Typography>
-              <DialogActions>
-                <Button
-                  onClick={onClose}
-                  sx={{
-                    color: theme.palette.error.main,
-                  }}
-                >
-                  Anulează
-                </Button>
-                <Button
-                  type="submit"
+                    />
+                  }
                   sx={{
                     color: theme.palette.accent?.green,
                   }}
-                  disabled={!isValid}
                 >
-                  Salvează
+                  Add Link
                 </Button>
-              </DialogActions>
-            </form>
+              </Grid>
+            </Grid>
+            <Typography
+              variant="body1"
+              color={theme.palette.error.main}
+              sx={{ mt: 2 }}
+            >
+              * camp obligatoriu
+            </Typography>
+            <DialogActions>
+              <Button
+                onClick={onClose}
+                sx={{
+                  color: theme.palette.error.main,
+                }}
+              >
+                Anulează
+              </Button>
+              <Button
+                type="submit"
+                sx={{
+                  color: theme.palette.accent?.green,
+                }}
+                disabled={!isValid}
+              >
+                Salvează
+              </Button>
+            </DialogActions>
+          </form>
         </DialogContent>
       </Dialog>
       <AppSnackbar
-      open={snackbarOpen}
-      onClose={onSnackbarClose}
-      severity={snackbarSeverity}
-    >
-      {snackbarMessage}
+        open={snackbarOpen}
+        onClose={onSnackbarClose}
+        severity={snackbarSeverity}
+      >
+        {snackbarMessage}
       </AppSnackbar>
     </>
   );
