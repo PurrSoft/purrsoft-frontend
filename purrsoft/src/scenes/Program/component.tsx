@@ -50,14 +50,14 @@ export const Program = () => {
       if (roles.includes('Foster')) {
         setHighestRole('foster');
       }
+      if (roles.includes('Volunteer')) {
+        setHighestRole('volunteer');
+      }
       if (roles.includes('Admin')) {
         setHighestRole('admin');
       }
       if (roles.includes('Manager')) {
         setHighestRole('admin');
-      }
-      if (roles.includes('Volunteer')) {
-        setHighestRole('volunteer');
       }
     }
   }, [user, highestRole]);
@@ -81,7 +81,7 @@ export const Program = () => {
     }
   }, [user, lowkeyRole]);
   console.log(lowkeyRole);
-  const [mode, setMode] = useState<'admin' | 'volunteer' | 'foster'>(null);
+  const [mode, setMode] = useState<'admin' | 'volunteer' | 'foster'>('foster');
 
   useEffect(() => {
     if (lowkeyRole) {
