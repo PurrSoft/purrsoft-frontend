@@ -127,7 +127,6 @@ export const NotificationsBar = () => {
   }
 
   const { records } = data;
-
   return (
     <>
       {/* Notifications Button */}
@@ -138,7 +137,7 @@ export const NotificationsBar = () => {
       >
         <Badge
           badgeContent={records.filter((n) => !n.isRead).length}
-          color="secondary"
+          color="error"
         >
           <NotificationsIcon />
         </Badge>
@@ -186,15 +185,17 @@ export const NotificationsBar = () => {
             }}
           >
             {records.length > 0 ? (
-              records.map((notification) => (
-                <Notification
-                  key={notification.id}
-                  id={notification.id}
-                  type={notification.type}
-                  message={notification.message}
-                  isRead={notification.isRead}
-                />
-              ))
+              [...records]
+                .reverse()
+                .map((notification) => (
+                  <Notification
+                    key={notification.id}
+                    id={notification.id}
+                    type={notification.type}
+                    message={notification.message}
+                    isRead={notification.isRead}
+                  />
+                ))
             ) : (
               <Typography variant="body2">
                 No notifications available.
