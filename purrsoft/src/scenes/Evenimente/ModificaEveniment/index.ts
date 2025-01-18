@@ -1,0 +1,1 @@
+export { ModificaEveniment } from './component';

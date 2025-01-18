@@ -14,7 +14,14 @@ import { useTheme } from '@mui/material/styles';
 import HouseIcon from '@mui/icons-material/House';
 import { useAccountQuery } from '../../store';
 
-type RouteLabel = 'Home' | 'Program' | 'Animalute' | 'Evenimente' | 'Voluntari' | 'Fosteri' | 'Cereri';
+type RouteLabel =
+  | 'Home'
+  | 'Program'
+  | 'Animalute'
+  | 'Evenimente'
+  | 'Voluntari'
+  | 'Fosteri'
+  | 'Cereri';
 
 type RouteObject = {
   label: RouteLabel;
@@ -25,6 +32,7 @@ type RouteObject = {
 export const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const { data: accountData, isLoading, error } = useAccountQuery();
   
   const routes: RouteObject[] = [

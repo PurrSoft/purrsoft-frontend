@@ -6,6 +6,8 @@ import {
   fostersEndpoints,
   requestsEndpoints,
   volunteersEndpoints,
+  shiftsEndpoints,
+  eventsEndpoints,
   notificationsEndpoints,
 } from './api';
 import {
@@ -46,8 +48,9 @@ export const api = createApi({
   })
   .injectEndpoints({
     endpoints: animalsEndpoints,
-}).injectEndpoints({
-  endpoints: volunteersEndpoints,
+  })
+  .injectEndpoints({
+    endpoints: volunteersEndpoints,
   })
   .injectEndpoints({
     endpoints: fostersEndpoints,
@@ -56,11 +59,21 @@ export const api = createApi({
     endpoints: animalProfilesEndpoints,
   })
   .injectEndpoints({
+    endpoints: shiftsEndpoints,
+  })
+  .injectEndpoints({
     endpoints: requestsEndpoints,
+  })
+  .injectEndpoints({
+    endpoints: shiftsEndpoints,
+  })
+  .injectEndpoints({
+    endpoints: eventsEndpoints,
   })
   .injectEndpoints({
     endpoints: notificationsEndpoints,
   });
+
 //root reducer
 const rootReducer = combineReducers({
   [api.reducerPath]: api.reducer,
@@ -88,6 +101,7 @@ export const useAppStateSelector = <StoreFragment>(
   equalityFn?: (left: StoreFragment, right: StoreFragment) => boolean,
 ) => useSelector<RootState, StoreFragment>(selector, equalityFn);
 //export function to use the store
+
 export const {
   useAccountQuery,
   useLoginMutation,
@@ -105,6 +119,18 @@ export const {
   useRolesAndStatusQuery,
   useRolesAndDatesQuery,
   useGetRequestsQuery,
+  useGetShiftQuery,
+  useGetShiftsQuery,
+  useAddShiftMutation,
+  useUpdateShiftMutation,
+  useRemoveShiftMutation,
+  useGetShiftCountByDateQuery,
+  useGetVolunteersPaginatedQuery,
+  useGetShiftVolunteersQuery,
+  useGetEventsQuery,
+  useAddEventMutation,
+  useAddAnimalMutation,
+  useAddAnimalProfileMutation,
   useGetNotificationsQuery,
 } = api;
 

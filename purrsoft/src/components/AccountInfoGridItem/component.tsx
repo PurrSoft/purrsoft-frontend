@@ -5,17 +5,20 @@ import {
   TextField,
   IconButton,
   Box,
+  MenuItem,
+  Checkbox,
 } from '@mui/material';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import EditIcon from '@mui/icons-material/Edit';
 import CheckIcon from '@mui/icons-material/Check';
+import { useTheme } from '@mui/material/styles';
 
 type AccountInfoGridItemProps = {
   title: string;
   subtitle?: string;
   value?: string;
-  type?: 'text' | 'password' | 'email';
+  type?: 'text' | 'password' | 'email' | 'number';
   isDisabled?: boolean;
   isValueEditable?: boolean;
   onEditValue?: (newValue: string) => void;
@@ -26,6 +29,10 @@ type AccountInfoGridItemProps = {
   showDivider?: boolean;
   usesButtonForEdit?: boolean;
   editButtonColor?: string;
+  isSelect?: boolean;
+  selectOptions?: string[];
+  selectValues?: string[];
+  isCheckbox?: boolean;
 };
 
 export const AccountInfoGridItem = ({
@@ -42,9 +49,14 @@ export const AccountInfoGridItem = ({
   onClickedActionButton,
   showDivider = true,
   usesButtonForEdit = true,
-  editButtonColor = 'accent.beige'
+  editButtonColor = 'accent.beige',
+  isSelect = false,
+  selectOptions = [],
+  selectValues = [],
+  isCheckbox = false,
 }: AccountInfoGridItemProps) => {
   const [isEditing, setIsEditing] = useState(false);
+  const theme = useTheme();
 
   return (
     <Formik
@@ -69,6 +81,7 @@ export const AccountInfoGridItem = ({
         handleChange,
         handleBlur,
         handleSubmit,
+        setFieldValue,
       }) => (
         <Form>
           <Grid
@@ -95,6 +108,39 @@ export const AccountInfoGridItem = ({
 
             <Grid item xs={5}>
               {isEditing && isValueEditable && !isDisabled ? (
+                isSelect ? (
+                  <TextField
+                    name="value"
+                    fullWidth
+                    select
+                    value={values.value}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    error={touched.value && !!errors.value}
+                    helperText={touched.value && errors.value}
+                    inputProps={{
+                      style: { backgroundColor: 'transparent' },
+                    }}
+                  >
+                    {selectOptions.map((option, index) => (
+                      <MenuItem value={selectValues[index]}>
+                        {option}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                ) :
+                isCheckbox ? (
+                  <Checkbox 
+                      name="value"
+                      checked={values.value === 'true'}
+                      sx={{ 
+                        '&.Mui-checked': {
+                          color: theme.palette.accent?.green,
+                        },
+                      }} 
+                      onChange={(e) => setFieldValue('value', e.target.checked ? 'true' : 'false')} 
+                    />
+                ) : (
                 <TextField
                   name="value"
                   fullWidth
@@ -108,18 +154,33 @@ export const AccountInfoGridItem = ({
                     style: { backgroundColor: 'transparent' },
                   }}
                 />
+                )
               ) : (
-                <Typography
-                  variant="body1"
-                  color={isDisabled ? 'gray' : 'black'}
-                  sx={{
-                    fontFamily: type === 'password' ? 'monospace' : 'inherit',
-                  }}
-                >
-                  {type === 'password'
-                    ? value.replace(/./g, '●') || '●●●●●●'
-                    : value || ''}
-                </Typography>
+                isCheckbox ? (
+                  <Checkbox 
+                      checked={values.value === 'true'}
+                      sx={{ 
+                        '&.Mui-checked': {
+                          color: theme.palette.accent?.green,
+                        },
+                      }} 
+                      disabled
+                    />
+                ) : (
+                  <Typography
+                    variant="body1"
+                    color={isDisabled ? 'gray' : 'black'}
+                    sx={{
+                      fontFamily: type === 'password' ? 'monospace' : 'inherit',
+                    }}
+                  >
+                    {type === 'password'
+                      ? value.replace(/./g, '●') || '●●●●●●'
+                      : isSelect 
+                        ? selectOptions[selectValues.indexOf(value)]
+                        : value || ''}
+                  </Typography>
+                )
               )}
             </Grid>
 

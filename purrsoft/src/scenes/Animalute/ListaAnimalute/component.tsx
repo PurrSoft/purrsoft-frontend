@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   Box,
   Button,
@@ -8,16 +8,20 @@ import {
   Grid,
   InputAdornment,
   Typography,
+  CircularProgress
 } from '@mui/material';
 import { Search, Mic } from '@mui/icons-material';
 import { CustomCard } from '../../../components/CustomCard';
 import { useTheme } from '@mui/material/styles';
 import { useGetAnimalsQuery } from '../../../store';
 import { useNavigate } from 'react-router-dom';
+import { AddAnimalForm } from '../AddAnimalForm';
+import defaultPhoto from '/defaultPhoto.jpeg';
 
 export const ListaAnimalute = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const { data, error, isLoading } = useGetAnimalsQuery();
+  const [open, setOpen] = useState(false);
 
   const theme = useTheme();
   const navigate = useNavigate();
@@ -26,13 +30,13 @@ export const ListaAnimalute = () => {
     setSearchTerm(event.target.value);
   };
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
 
-  if (error) {
-    return <div>Error fetching animals!</div>;
-  }
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   return (
     <Container>
@@ -45,10 +49,10 @@ export const ListaAnimalute = () => {
           zIndex: 9,
         }}
       >
-        <Box sx={{ display: 'flex', justifyContent: 'left', my: 2 }}>
+        <Box sx={{ display: 'flex', my: 2 }}>
           <TextField
             variant="outlined"
-            placeholder="Search animals"
+            placeholder="Cauta animalut"
             value={searchTerm}
             onChange={handleSearchChange}
             sx={{
@@ -76,10 +80,29 @@ export const ListaAnimalute = () => {
               ),
             }}
           />
+          <Button 
+            variant="contained"
+            sx={{
+              backgroundColor: theme.palette.accent?.lightGreen,
+              color: theme.palette.accent?.white,
+              borderRadius: '50px',
+              '&:hover': {
+                backgroundColor: theme.palette.accent?.darkGreen,
+              },
+              ml: 2,
+            }} 
+            onClick={handleClickOpen}
+          >
+            Adauga animal
+          </Button>
         </Box>
       </Box>
 
       {/* Animal Cards */}
+      {(isLoading) && <CircularProgress />}
+        
+      {(error) && <Typography>Eroare la incarcarea datelor</Typography>}
+
       <Box sx={{ ml: 2, mr: 1 }}>
         <Grid container spacing={6}>
           {data?.records.map((animal) => (
@@ -103,9 +126,7 @@ export const ListaAnimalute = () => {
                     Nume: {animal.name}
                   </Typography>
                   <img
-                    // src={`https://via.placeholder.com/150?text=${animal.name}`} // for testing purposes
-                    src={animal.imageUrl}
-                    alt={animal.name}
+                    src={animal.imageUrls && animal.imageUrls.length > 0 ? animal.imageUrls[0] : defaultPhoto}
                     style={{ width: '80%', height: 'auto', borderRadius: '8px' }}
                   />
                   <Button
@@ -115,7 +136,6 @@ export const ListaAnimalute = () => {
                       backgroundColor: theme.palette.accent?.tealGreen,
                     }}
                     onClick={() => {
-                      console.log(animal.id);
                       navigate(`/management/animalute/${animal.id}`, { state: { animal } });
                     }}
                   >
@@ -127,6 +147,8 @@ export const ListaAnimalute = () => {
           ))}
         </Grid>
       </Box>
+
+      <AddAnimalForm open={open} onClose={handleClose} />
     </Container>
   );
 };
