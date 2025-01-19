@@ -11,8 +11,9 @@ export const UserProfile = (props: Props) => {
   const [specialDates, setSpecialDates] = useState<Date[]>([]);
 
   const accountQuery = useAccountQuery();
+  const username = accountQuery.data?.email;
   const userId = accountQuery.data?.id;
-  
+
   const {
     data: shiftsData,
     isLoading: shiftsLoading,
@@ -83,10 +84,10 @@ export const UserProfile = (props: Props) => {
           variant="body1"
           sx={{
             fontSize: { xs: '0.8rem', sm: '1rem' },
-            color: theme.palette.accent?.beige
+            color: theme.palette.accent?.beige,
           }}
         >
-          Username
+          {username}
         </Typography>
       </Box>
       <Box
@@ -98,7 +99,7 @@ export const UserProfile = (props: Props) => {
           zIndex: 1,
         }}
       >
-        <DatePicker specialDates={specialDates}/>
+        <DatePicker specialDates={specialDates} />
       </Box>
       <Box
         sx={{

@@ -17,6 +17,7 @@ type CustomCardProps = {
   shadow?: boolean;
   closeButton?: boolean;
   headerRight?: React.ReactNode;
+  leftButton?: React.ReactNode;
   maxHeight?: string;
   children: React.ReactNode;
 };
@@ -27,7 +28,7 @@ export const CustomCard = ({
   align = 'center',
   justify = 'center',
   title,
-  padding = '0px',
+  padding = 'auto',
   subtitle = '',
   shadow = true,
   closeButton = true,
@@ -42,6 +43,7 @@ export const CustomCard = ({
       }}
     />
   ),
+  leftButton = null,
   maxHeight = '400px',
   children,
 }: CustomCardProps) => {
@@ -115,11 +117,15 @@ export const CustomCard = ({
                 cursor: 'pointer',
               }}
             >
-              <img
-                src={'/x.svg'}
-                alt="close"
-                style={{ width: '100%', height: '100%' }}
-              />
+              {leftButton ? (
+                leftButton
+              ) : (
+                <img
+                  src={'/x.svg'}
+                  alt="close"
+                  style={{ width: '100%', height: '100%' }}
+                />
+              )}
             </Box>
           )}
 
@@ -151,7 +157,7 @@ export const CustomCard = ({
         {/* Content Section */}
         <CardContent
           sx={{
-            padding: '16px',
+            padding: padding,
             flexGrow: 1,
             display: 'flex',
             flexDirection: 'column',

@@ -49,6 +49,7 @@ export const AccountOverview = () => {
             size="large"
             edge="end"
             sx={{ color: theme.palette.accent?.lightGreen }}
+            onClick={() => navigate('/management')}
           >
             <OtherHousesOutlined />
           </IconButton>
@@ -72,7 +73,7 @@ export const AccountOverview = () => {
         <CustomCard
           width={{ xs: '100%', sm: '90%', md: '350px', lg: '400px' }}
           height="100%"
-          title= {
+          title={
             <Typography
               variant="h6"
               sx={{

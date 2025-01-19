@@ -131,6 +131,8 @@ export const {
   useAddEventMutation,
   useAddAnimalMutation,
   useAddAnimalProfileMutation,
+  useGetNotificationByIdQuery,
+  useUpdateNotificationMutation,
   useGetNotificationsQuery,
   useDeleteVolunteerMutation,
   useUpdateVolunteerMutation,

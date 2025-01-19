@@ -42,25 +42,57 @@ export const Program = () => {
   const theme = useTheme();
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [highestRole, setHighestRole] = useState<string | null>(null);
-
+  const [lowkeyRole, setLowkeyRole] = useState<string | null>(null);
   const { data: user, isLoading: isUserLoading } = useAccountQuery();
   useEffect(() => {
     if (user?.roles) {
       const roles = user.roles;
+      if (roles.includes('Foster')) {
+        setHighestRole('foster');
+      }
+      if (roles.includes('Volunteer')) {
+        setHighestRole('volunteer');
+      }
       if (roles.includes('Admin')) {
         setHighestRole('admin');
       }
       if (roles.includes('Manager')) {
         setHighestRole('admin');
       }
+    }
+  }, [user, highestRole]);
+  //set lowest role
+  useEffect(() => {
+    if (user?.roles) {
+      const roles = user.roles;
+      if (roles.includes('Manager')) {
+        setLowkeyRole('admin');
+      }
+      if (roles.includes('Admin')) {
+        setLowkeyRole('admin');
+      }
+
       if (roles.includes('Volunteer')) {
-        setHighestRole('volunteer');
+        setLowkeyRole('volunteer');
+      }
+      if (roles.includes('Foster')) {
+        setLowkeyRole('foster');
       }
     }
-    console.log('highestRole', highestRole);
-    console.log(user?.roles);
-  }, [user, highestRole]);
-  const [mode, setMode] = useState<'admin' | 'volunteer'>('volunteer');
+  }, [user, lowkeyRole]);
+  console.log(lowkeyRole);
+  const [mode, setMode] = useState<'admin' | 'volunteer' | 'foster'>('foster');
+
+  useEffect(() => {
+    if (lowkeyRole) {
+      setMode(lowkeyRole as 'admin' | 'volunteer' | 'foster');
+    }
+    if (lowkeyRole === 'admin') {
+      setMode('volunteer');
+    }
+  }, [lowkeyRole]);
+
+  console.log(mode);
 
   const { data: shiftsData, isLoading: isShiftsLoading } = useGetShiftsQuery({
     Skip: 0,
@@ -99,32 +131,32 @@ export const Program = () => {
     Take: 1000,
   });
   useEffect(() => {
-    if (shiftsData) {
-      const metadata: ShiftMetadata = {};
-      shiftsData.records?.forEach((shift) => {
-        const shiftDate = shift.start.split('T')[0]; // Extract YYYY-MM-DD
-        const color =
-          shift.shiftType === 'Day'
-            ? theme.palette.warning.main
-            : theme.palette.accent?.lavenderBlue;
-        metadata[shiftDate] = {
-          color,
-          tooltip: shift.shiftType === 'Day' ? 'Tura de zi' : 'Tura de seară',
-        };
-      });
-      //also add the events to the metadata
-      eventsData?.records?.forEach((event) => {
-        const eventDate = dayjs(event.date).format('YYYY-MM-DD');
+    const metadata: ShiftMetadata = {};
 
-        metadata[eventDate] = {
-          color: theme.palette.error.main,
-          tooltip: 'Eveniment',
-        };
-      });
-      console.log(metadata);
+    // Add shift data to metadata
+    shiftsData?.records?.forEach((shift) => {
+      const shiftDate = shift.start.split('T')[0]; // Extract YYYY-MM-DD
+      const color =
+        shift.shiftType === 'Day'
+          ? theme.palette.warning.main
+          : theme.palette.accent?.lavenderBlue;
+      metadata[shiftDate] = {
+        color,
+        tooltip: shift.shiftType === 'Day' ? 'Tura de zi' : 'Tura de seară',
+      };
+    });
 
-      setShiftMetadata(metadata);
-    }
+    // Add event data to metadata
+    eventsData?.records?.forEach((event) => {
+      const eventDate = dayjs(event.date).format('YYYY-MM-DD');
+      metadata[eventDate] = {
+        color: theme.palette.error.main,
+        tooltip: 'Eveniment',
+      };
+    });
+
+    console.log(metadata);
+    setShiftMetadata(metadata);
   }, [shiftsData, eventsData, theme]);
 
   const [shiftChangeType, setShiftChangeType] = useState<ShiftType | null>(
@@ -157,10 +189,10 @@ export const Program = () => {
           start: dayjs(date).format(),
           shiftType,
           volunteerId: user?.id || '',
+          shiftStatus: 'Upcoming',
         },
       }).unwrap();
 
-      console.log(`Shift (${shiftType}) added for ${date}`);
       setSnackbarMessage(`Shift (${shiftType}) added for ${date}`);
       setSnackbarSeverity('success');
       onSnackbarOpen();
@@ -177,7 +209,6 @@ export const Program = () => {
 
   const handleUpdateShiftType = async () => {
     const shiftId = selectedShift?.id;
-    console.log('shiftId', shiftId);
     if (!shiftId) return;
     const shiftType = selectedShift?.shiftType;
     const newShiftType = shiftType === 'Day' ? 'Night' : 'Day';
@@ -188,9 +219,9 @@ export const Program = () => {
           shiftType: newShiftType,
           start: selectedShift?.date,
           volunteerId: selectedShift.volunteerId || '',
+          shiftStatus: 'Upcoming',
         },
       }).unwrap();
-      console.log(`Shift (${newShiftType}) updated for ${selectedShift?.date}`);
       setSnackbarMessage(
         `Shift (${newShiftType}) updated for ${selectedShift?.date}`,
       );
@@ -212,7 +243,6 @@ export const Program = () => {
 
     try {
       await removeShift(shiftId).unwrap();
-      console.log(`Shift (${shiftType}) removed for ${date}`);
       setSnackbarMessage(`Shift (${shiftType}) removed for ${date}`);
       setSnackbarSeverity('success');
       onSnackbarOpen();
@@ -230,7 +260,6 @@ export const Program = () => {
 
     try {
       await removeShift(shiftId).unwrap();
-      console.log(`Shift removed for ${selectedShift?.date}`);
       setSnackbarMessage(`Shift removed for ${selectedShift?.date}`);
       setSnackbarSeverity('success');
       onSnackbarOpen();
@@ -243,7 +272,6 @@ export const Program = () => {
   };
 
   const hasShift = (date: string, shiftType: ShiftType): boolean => {
-    console.log(date, shiftType);
     // Implement the actual logic to check if the shift exists
     if (shiftsData?.records) {
       return shiftsData.records.some(
@@ -257,9 +285,10 @@ export const Program = () => {
 
   //when date is selected set th enumber of shifts
   const { data: shiftCountData, refetch: refetchShiftCount } =
-    useGetShiftCountByDateQuery({
-      date: selectedDate || '',
-    });
+    useGetShiftCountByDateQuery(
+      { date: selectedDate || '' },
+      { skip: !selectedDate },
+    );
 
   const totalShiftCount = shiftCountData?.totalShiftCount || 0;
   const dayShiftsCount = shiftCountData?.dayShiftsCount || 0;
@@ -279,10 +308,10 @@ export const Program = () => {
           start: dayjs(selectedDate).format(),
           shiftType: shiftChangeType,
           volunteerId,
+          shiftStatus: 'Upcoming',
         },
       }).unwrap();
 
-      console.log(`Shift (${shiftChangeType}) added for ${selectedDate}`);
       setSnackbarMessage(
         `Shift (${shiftChangeType}) added for ${selectedDate}`,
       );
@@ -537,7 +566,7 @@ export const Program = () => {
             )}
 
             {/* Selected Day and Shifts for volunteer mode */}
-            {mode !== 'admin' && (
+            {mode !== 'admin' && mode !== 'foster' && (
               <Grid
                 item
                 container

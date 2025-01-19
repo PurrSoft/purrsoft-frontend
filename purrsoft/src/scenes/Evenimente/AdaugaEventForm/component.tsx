@@ -270,14 +270,14 @@ export const AdaugaEventForm = ({ open, onClose }: { open: boolean; onClose: () 
                                 </Button>
                             </Grid>
                         </Grid>
-                            <Typography variant="body1" color={theme.palette.accent?.error} sx={{ mt: 2 }}>
+                            <Typography variant="body1" color={theme.palette.error.main} sx={{ mt: 2 }}>
                                 * camp obligatoriu
                             </Typography>
                         <DialogActions>
                             <Button
                                 onClick={onClose}
                                 sx={{
-                                    color: theme.palette.accent?.error,
+                                    color: theme.palette.error.main,
                                 }}
                             >
                                 Anuleaza
