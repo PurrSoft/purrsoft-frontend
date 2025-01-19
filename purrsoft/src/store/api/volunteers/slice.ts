@@ -17,6 +17,21 @@ export type Volunteer = {
   status: string;
   tier: string;
 };
+
+export type VolunteerDto = {
+  userId: string;
+  startDate: string;
+  endDate?: string;
+  status: string;
+  tier: string;
+  lastShiftDate?: string;
+  tasks?: string[];
+  availableHours: string;
+  trainingStartDate?: string;
+  supervisorId?: string;
+  trainersId?: string[];
+}
+
 type GetVolunteersEndpointParams = Partial<{
   Skip: number;
   Take: number;
@@ -61,6 +76,42 @@ export const endpoints = <Tags extends string>(
       url: '/Volunteer',
       method: 'GET',
       params,
+    }),
+  }),
+  getVolunteer: builder.query<VolunteerDto, string>({
+    providesTags: [volunteerTag],
+    query: (id) => ({
+      url: `/Volunteer/${id}`,
+      method: 'GET',
+    }),
+  }),
+  deleteVolunteer: builder.mutation<void, string>({
+    invalidatesTags: [volunteerTag],
+    query: (id) => ({
+      url: `/Volunteer/${id}`,
+      method: 'DELETE',
+    }),
+  }),
+  updateVolunteer: builder.mutation<void, VolunteerDto>({
+    invalidatesTags: [volunteerTag],
+    query: (volunteer) => ({
+      url: `/Volunteer`,
+      method: 'PUT',
+      body: {
+        volunteerDto: {
+          userId: volunteer.userId,
+          startDate: volunteer.startDate,
+          endDate: volunteer.endDate,
+          status: volunteer.status,
+          tier: volunteer.tier,
+          lastShiftDate: volunteer.lastShiftDate,
+          tasks: volunteer.tasks,
+          availableHours: volunteer.availableHours,
+          trainingStartDate: volunteer.trainingStartDate,
+          supervisorId: volunteer.supervisorId,
+          trainersId: volunteer.trainersId,
+        },
+      },
     }),
   }),
 });

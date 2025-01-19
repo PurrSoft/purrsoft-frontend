@@ -1,0 +1,1 @@
+export { ModificaVoluntar } from './component';

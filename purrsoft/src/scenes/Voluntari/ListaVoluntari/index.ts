@@ -1,0 +1,1 @@
+export { ListaVoluntari } from './component';

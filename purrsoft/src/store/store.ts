@@ -132,6 +132,9 @@ export const {
   useAddAnimalMutation,
   useAddAnimalProfileMutation,
   useGetNotificationsQuery,
+  useDeleteVolunteerMutation,
+  useUpdateVolunteerMutation,
+  useGetVolunteerQuery,
 } = api;
 
 export { resetAuth, updateToken } from './auth';
