@@ -56,21 +56,9 @@ export const Navbar = () => {
 
   if (!isLoading && accountData?.roles?.includes('Manager')) {
     routes.push(
-      {
-        label: 'Voluntari',
-        value: '/management/voluntari',
-        url: '/management/voluntari',
-      },
-      {
-        label: 'Fosteri',
-        value: '/management/fosteri',
-        url: '/management/fosteri',
-      },
-      {
-        label: 'Cereri',
-        value: '/management/cereri',
-        url: '/management/cereri',
-      },
+      { label: 'Voluntari', value: '/management/voluntari', url: '/management/voluntari/lista'},
+      { label: 'Fosteri', value: '/management/fosteri', url: '/management/fosteri' },
+      { label: 'Cereri', value: '/management/cereri', url: '/management/cereri' },
     );
   }
 

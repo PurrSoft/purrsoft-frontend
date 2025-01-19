@@ -18,6 +18,7 @@ type CustomCardProps = {
   closeButton?: boolean;
   headerRight?: React.ReactNode;
   leftButton?: React.ReactNode;
+  maxHeight?: string;
   children: React.ReactNode;
 };
 
@@ -43,6 +44,7 @@ export const CustomCard = ({
     />
   ),
   leftButton = null,
+  maxHeight = '400px',
   children,
 }: CustomCardProps) => {
   const theme = useTheme();
@@ -163,7 +165,7 @@ export const CustomCard = ({
             borderRadius: '0 0 15px 15px',
             border: `2px solid #000`,
             overflowY: 'auto',
-            maxHeight: '400px',
+            maxHeight: maxHeight,
           }}
         >
           {subtitle && <Typography variant="h6">{subtitle}</Typography>}
